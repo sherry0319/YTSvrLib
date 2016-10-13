@@ -109,7 +109,7 @@ namespace YTSvrLib
 		DelLogManager();
 	}
 
-	void CServerApplication::GlobalInit()
+	void CServerApplication::GlobalInit(int nEventCount)
 	{
 #ifdef LIB_WINDOWS
 		GetModuleFileNameA(NULL, m_szModuleName, MAX_PATH);
@@ -155,9 +155,10 @@ namespace YTSvrLib
 		_set_purecall_handler(PureCallHandler);
 #endif // LIB_WINDOWS
 
+		Init(nEventCount);
 	}
 
-	bool CServerApplication::Init(int nEventCount, const char*)
+	bool CServerApplication::Init(int nEventCount)
 	{
 		//设置事件个数
 		if (nEventCount > USER_EVENT_MAX_COUNT)
@@ -216,13 +217,13 @@ namespace YTSvrLib
 			return false;
 		if (m_ayEventHandle[dwEventIndex].Proc)
 		{
-			LOG("重复设置事件，ID：%d", dwEventIndex);
-			//return false;
+			LOG("Event ID repeated=%d", dwEventIndex);
+			return false;
 		}
 		return true;
 	}
 
-	bool CServerApplication::SetEventInfo(DWORD dwEventIndex, HANDLE, EventProc Proc)
+	bool CServerApplication::SetEventInfo(DWORD dwEventIndex,EventProc Proc)
 	{
 		if (dwEventIndex >= APPLICATION_EVENT_MAX_COUNT)
 			return false;
@@ -238,7 +239,7 @@ namespace YTSvrLib
 		if (!CheckEventIndex(dwEventIndex))
 			return false;
 
-		return SetEventInfo(dwEventIndex, 0, Proc);
+		return SetEventInfo(dwEventIndex, Proc);
 	}
 
 	void CServerApplication::SetEvent(DWORD dwEventIndex)

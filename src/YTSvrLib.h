@@ -37,6 +37,10 @@ SOFTWARE.*/
 #define TODO(x)         message(__FILE__ "(" TOSTR2(__LINE__) "): TODO " x)
 #define ATTENTION(x)    message(__FILE__ "(" TOSTR2(__LINE__) "): ATTENTION " x)
 
+extern "C" {
+	double get_version_code();
+}
+
 #if defined(_WIN32) || defined(_WIN64)
 #define LIB_WINDOWS
 #else
