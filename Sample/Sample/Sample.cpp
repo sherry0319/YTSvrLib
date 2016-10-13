@@ -66,18 +66,14 @@ int main(int argc, char* argv[])
 	SetConsoleCtrlHandler(signal_handle_function);
 #endif // LIB_WINDOWS
 
-	gApp.GlobalInit();
-
-	CConfig::GetInstance();
-
-	gApp.Init( EAppEvent::eAppEventCount, "" );
+	gApp.GlobalInit(EAppEvent::eAppEventCount);
 	//×¢²áÊÂ¼þ
 	gApp.RegisterEvent( EAppEvent::eAppGWSvrSocketEvent, CGWSvrParser::OnMsgRecv );
 	gApp.RegisterEvent( EAppEvent::eAppGWSvrSocketDisconnectEvent, CGWSvrParser::OnDisconnectMsgRecv );
 	gApp.RegisterEvent( EAppEvent::eAppGameDB, CDBManager::OnDataRecv );
 	gApp.RegisterEvent( EAppEvent::eAppTimerMgrOnTimer, CTimerMgr::OnTimer );
 
-
+	CConfig::GetInstance();
 	CDBManager::GetInstance()->SetConnection(	CConfig::GetInstance()->m_sDBConnectInfo.m_strMySQLDB.c_str(),
 												CConfig::GetInstance()->m_sDBConnectInfo.m_strMySQLHost.c_str(),
 												CConfig::GetInstance()->m_sDBConnectInfo.m_strMySQLUser.c_str(),
