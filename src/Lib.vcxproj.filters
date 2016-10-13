@@ -1,0 +1,1020 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Global">
+      <UniqueIdentifier>{255b0240-7995-47b3-ab56-9a604ff6d846}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Socket">
+      <UniqueIdentifier>{cfab6f6e-597c-4b41-9bb6-34a52fe7e88a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Service">
+      <UniqueIdentifier>{b9c7891f-0da5-4927-90b7-56ca10c86d2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base64">
+      <UniqueIdentifier>{a3bce6a1-bde6-4858-bbf8-7d803167eb41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="md5">
+      <UniqueIdentifier>{6875a453-cf2b-4622-bda3-7596e29ecd67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="BugReport">
+      <UniqueIdentifier>{e2c2282b-76d7-429f-8011-c7ef3c198f49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="XCPTHLR">
+      <UniqueIdentifier>{c866947b-2477-4757-b2f6-18553b0c6c76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="stl">
+      <UniqueIdentifier>{6641691f-6239-4b5f-9de9-c412cd06ea70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tinyXML">
+      <UniqueIdentifier>{fa901bf0-7951-467a-b007-dc98245b5fc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="zlib">
+      <UniqueIdentifier>{e4f0d239-2d7d-4927-b71e-5cd20cc09339}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Single">
+      <UniqueIdentifier>{86b47d07-ee5e-448b-939f-d5712b852790}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="curl">
+      <UniqueIdentifier>{29f5b2ec-5ba1-45dc-b47f-2baa2d5a6cbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MySQL">
+      <UniqueIdentifier>{47eec7b4-f2be-4013-a963-e85e70c5e6ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MySQL\include">
+      <UniqueIdentifier>{85913943-00e9-4d97-89a0-6682515fad29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MySQL\include\mysql">
+      <UniqueIdentifier>{6e26dae5-d23b-4092-a684-ee3879cd6b25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MySQL\include\mysql\psi">
+      <UniqueIdentifier>{9f695bce-24bc-40b6-8d1a-65146abab833}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="urlwriter">
+      <UniqueIdentifier>{efd05ff4-1bc1-471f-9faf-23933be9026a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="iconv">
+      <UniqueIdentifier>{0e6b00c9-991d-42ff-bcb3-9e2f3b29a6ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="jsoncpp">
+      <UniqueIdentifier>{fa45537c-d86f-459d-af25-6f373c18ed99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="redis">
+      <UniqueIdentifier>{64dc2c95-f810-4c40-911f-3ad683d36ee5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="redis\hiredis">
+      <UniqueIdentifier>{5c9689c7-94d1-47f3-91b7-fe6a8dd0e200}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="redis\hiredis\adapters">
+      <UniqueIdentifier>{d3b80485-4c6e-4ead-ab47-ae70d2eecf16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Filter">
+      <UniqueIdentifier>{d78dbd08-ce6c-4d4f-a552-de464a5213d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LOG">
+      <UniqueIdentifier>{d2c49cd4-69f4-4d6f-aa57-6f6f93210155}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Application">
+      <UniqueIdentifier>{2125688c-de04-45a7-9eb9-bc2b72d6acb1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Timer">
+      <UniqueIdentifier>{a8cd2c71-eba4-4600-8019-4ea077f1080b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Thread">
+      <UniqueIdentifier>{b6c7c688-33d1-4b75-8b29-0244f31607ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Perfermance">
+      <UniqueIdentifier>{d672d4b1-0fab-45e3-8464-108c64f9b18c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Socket\libevent">
+      <UniqueIdentifier>{5e10d9dd-1be7-4f8d-af90-7816c550179b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Socket\libevent\event2">
+      <UniqueIdentifier>{2a729929-4c48-479f-b198-85cc022cf2f8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Global\GlobalServer.cpp">
+      <Filter>Global</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket\SendBuffer.cpp">
+      <Filter>Socket</Filter>
+    </ClCompile>
+    <ClCompile Include="Service\PkgParserBase.cpp">
+      <Filter>Service</Filter>
+    </ClCompile>
+    <ClCompile Include="Service\Utility.cpp">
+      <Filter>Service</Filter>
+    </ClCompile>
+    <ClCompile Include="Base64\Base64.cpp">
+      <Filter>Base64</Filter>
+    </ClCompile>
+    <ClCompile Include="md5\md5.cpp">
+      <Filter>md5</Filter>
+    </ClCompile>
+    <ClCompile Include="XCPTHLR\ExceptHandler.cpp">
+      <Filter>XCPTHLR</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxml\tinystr.cpp">
+      <Filter>tinyXML</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxml\tinyxml.cpp">
+      <Filter>tinyXML</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxml\tinyxmlerror.cpp">
+      <Filter>tinyXML</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxml\tinyxmlparser.cpp">
+      <Filter>tinyXML</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxml\XMLParser.cpp">
+      <Filter>tinyXML</Filter>
+    </ClCompile>
+    <ClCompile Include="mysql\MYSQLCommand.cpp">
+      <Filter>MySQL</Filter>
+    </ClCompile>
+    <ClCompile Include="mysql\MYSQLDBClient.cpp">
+      <Filter>MySQL</Filter>
+    </ClCompile>
+    <ClCompile Include="mysql\MYSQLDBSys.cpp">
+      <Filter>MySQL</Filter>
+    </ClCompile>
+    <ClCompile Include="mysql\MYSQLManagerBase.cpp">
+      <Filter>MySQL</Filter>
+    </ClCompile>
+    <ClCompile Include="urlwriter\urlwriter.cpp">
+      <Filter>urlwriter</Filter>
+    </ClCompile>
+    <ClCompile Include="Service\AutoCloseFile.cpp">
+      <Filter>Service</Filter>
+    </ClCompile>
+    <ClCompile Include="Service\SyncObj.cpp">
+      <Filter>Service</Filter>
+    </ClCompile>
+    <ClCompile Include="redis\RedisConnector.cpp">
+      <Filter>redis</Filter>
+    </ClCompile>
+    <ClCompile Include="redis\RedisConnectorPool.cpp">
+      <Filter>redis</Filter>
+    </ClCompile>
+    <ClCompile Include="redis\RedisConnectorCommand.cpp">
+      <Filter>redis</Filter>
+    </ClCompile>
+    <ClCompile Include="Filter\Filter.cpp">
+      <Filter>Filter</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket\YTSocketBase.cpp">
+      <Filter>Socket</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket\YTSocketClient.cpp">
+      <Filter>Socket</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket\YTSocketConnector.cpp">
+      <Filter>Socket</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket\YTSocketServer.cpp">
+      <Filter>Socket</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket\YTSocketThread.cpp">
+      <Filter>Socket</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket\YTSocketMutiClient.cpp">
+      <Filter>Socket</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket\YTSocketMutiClientController.cpp">
+      <Filter>Socket</Filter>
+    </ClCompile>
+    <ClCompile Include="Service\Log.cpp">
+      <Filter>LOG</Filter>
+    </ClCompile>
+    <ClCompile Include="Service\Application.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Service\TimerThread.cpp">
+      <Filter>Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="Service\YTThread.cpp">
+      <Filter>Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="Global\Perfermance.cpp">
+      <Filter>Perfermance</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="typedef.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Global\GlobalServer.h">
+      <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\SendBuffer.h">
+      <Filter>Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="Service\AutoCloseFile.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="Service\PkgParserBase.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="Service\SyncObj.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="Service\Utility.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="Base64\Base64.h">
+      <Filter>Base64</Filter>
+    </ClInclude>
+    <ClInclude Include="md5\md5.h">
+      <Filter>md5</Filter>
+    </ClInclude>
+    <ClInclude Include="BugReport\BugslayerUtil.h">
+      <Filter>BugReport</Filter>
+    </ClInclude>
+    <ClInclude Include="BugReport\BugslayerUtilMC.h">
+      <Filter>BugReport</Filter>
+    </ClInclude>
+    <ClInclude Include="BugReport\CrashHandler.h">
+      <Filter>BugReport</Filter>
+    </ClInclude>
+    <ClInclude Include="BugReport\CriticalSection.h">
+      <Filter>BugReport</Filter>
+    </ClInclude>
+    <ClInclude Include="BugReport\cvconst.h">
+      <Filter>BugReport</Filter>
+    </ClInclude>
+    <ClInclude Include="BugReport\DecodedType.h">
+      <Filter>BugReport</Filter>
+    </ClInclude>
+    <ClInclude Include="BugReport\DiagAssert.h">
+      <Filter>BugReport</Filter>
+    </ClInclude>
+    <ClInclude Include="BugReport\JButton.h">
+      <Filter>BugReport</Filter>
+    </ClInclude>
+    <ClInclude Include="BugReport\JComboBox.h">
+      <Filter>BugReport</Filter>
+    </ClInclude>
+    <ClInclude Include="BugReport\JFX.h">
+      <Filter>BugReport</Filter>
+    </ClInclude>
+    <ClInclude Include="BugReport\JGDI.h">
+      <Filter>BugReport</Filter>
+    </ClInclude>
+    <ClInclude Include="BugReport\JImageList.h">
+      <Filter>BugReport</Filter>
+    </ClInclude>
+    <ClInclude Include="BugReport\JListBox.h">
+      <Filter>BugReport</Filter>
+    </ClInclude>
+    <ClInclude Include="BugReport\JListView.h">
+      <Filter>BugReport</Filter>
+    </ClInclude>
+    <ClInclude Include="BugReport\JMenu.h">
+      <Filter>BugReport</Filter>
+    </ClInclude>
+    <ClInclude Include="BugReport\JModalDlg.h">
+      <Filter>BugReport</Filter>
+    </ClInclude>
+    <ClInclude Include="BugReport\JRegistry.h">
+      <Filter>BugReport</Filter>
+    </ClInclude>
+    <ClInclude Include="BugReport\JSimpleColl.h">
+      <Filter>BugReport</Filter>
+    </ClInclude>
+    <ClInclude Include="BugReport\JStatusBar.h">
+      <Filter>BugReport</Filter>
+    </ClInclude>
+    <ClInclude Include="BugReport\JString.h">
+      <Filter>BugReport</Filter>
+    </ClInclude>
+    <ClInclude Include="BugReport\JTabControl.h">
+      <Filter>BugReport</Filter>
+    </ClInclude>
+    <ClInclude Include="BugReport\JTrayNotification.h">
+      <Filter>BugReport</Filter>
+    </ClInclude>
+    <ClInclude Include="BugReport\JWinApp.h">
+      <Filter>BugReport</Filter>
+    </ClInclude>
+    <ClInclude Include="BugReport\JWnd.h">
+      <Filter>BugReport</Filter>
+    </ClInclude>
+    <ClInclude Include="BugReport\Layout.h">
+      <Filter>BugReport</Filter>
+    </ClInclude>
+    <ClInclude Include="BugReport\MemDumperValidator.h">
+      <Filter>BugReport</Filter>
+    </ClInclude>
+    <ClInclude Include="BugReport\MemStress.h">
+      <Filter>BugReport</Filter>
+    </ClInclude>
+    <ClInclude Include="BugReport\MiniDump.h">
+      <Filter>BugReport</Filter>
+    </ClInclude>
+    <ClInclude Include="BugReport\ResString.h">
+      <Filter>BugReport</Filter>
+    </ClInclude>
+    <ClInclude Include="BugReport\SuperAssert.h">
+      <Filter>BugReport</Filter>
+    </ClInclude>
+    <ClInclude Include="BugReport\SymbolEngine.h">
+      <Filter>BugReport</Filter>
+    </ClInclude>
+    <ClInclude Include="BugReport\VariableInfo.h">
+      <Filter>BugReport</Filter>
+    </ClInclude>
+    <ClInclude Include="XCPTHLR\ExceptHandler.h">
+      <Filter>XCPTHLR</Filter>
+    </ClInclude>
+    <ClInclude Include="stl\wqueue.h">
+      <Filter>stl</Filter>
+    </ClInclude>
+    <ClInclude Include="tinyxml\tinystr.h">
+      <Filter>tinyXML</Filter>
+    </ClInclude>
+    <ClInclude Include="tinyxml\tinyxml.h">
+      <Filter>tinyXML</Filter>
+    </ClInclude>
+    <ClInclude Include="tinyxml\XMLParser.h">
+      <Filter>tinyXML</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\zconf.h">
+      <Filter>zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\zlib.h">
+      <Filter>zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="Single\Single.h">
+      <Filter>Single</Filter>
+    </ClInclude>
+    <ClInclude Include="libcurl\curl.h">
+      <Filter>curl</Filter>
+    </ClInclude>
+    <ClInclude Include="libcurl\curlbuild.h">
+      <Filter>curl</Filter>
+    </ClInclude>
+    <ClInclude Include="libcurl\curlrules.h">
+      <Filter>curl</Filter>
+    </ClInclude>
+    <ClInclude Include="libcurl\curlver.h">
+      <Filter>curl</Filter>
+    </ClInclude>
+    <ClInclude Include="libcurl\easy.h">
+      <Filter>curl</Filter>
+    </ClInclude>
+    <ClInclude Include="libcurl\mprintf.h">
+      <Filter>curl</Filter>
+    </ClInclude>
+    <ClInclude Include="libcurl\multi.h">
+      <Filter>curl</Filter>
+    </ClInclude>
+    <ClInclude Include="libcurl\stdcheaders.h">
+      <Filter>curl</Filter>
+    </ClInclude>
+    <ClInclude Include="libcurl\typecheck-gcc.h">
+      <Filter>curl</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\MYSQLCommand.h">
+      <Filter>MySQL</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\MYSQLDBSys.h">
+      <Filter>MySQL</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\MYSQLManagerBase.h">
+      <Filter>MySQL</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\autoflag.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\beemutex.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\big_endian.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\byte_order_generic.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\byte_order_generic_x86.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\cmdline.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\common.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\comparable.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\connection.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\cpool.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\datetime.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\dbdriver.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\decimal.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\errmsg.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\exceptions.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\field.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\field_names.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\field_types.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\insertpolicy.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\keycache.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\little_endian.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\m_ctype.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\m_string.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\manip.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\my_alloc.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\my_byteorder.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\my_compiler.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\my_config.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\my_dbug.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\my_dir.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\my_getopt.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\my_global.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\my_list.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\my_net.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\my_pthread.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\my_sys.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\my_xml.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\myset.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql++.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql_com.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql_com_server.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql_embed.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql_time.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql_version.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysqld_ername.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysqld_error.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mystring.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\noexceptions.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\null.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\options.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\qparms.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\query.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\querydef.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\refcounted.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\result.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\row.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\scopedconnection.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\sql_buffer.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\sql_common.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\sql_state.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\sql_types.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\sqlstream.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\sslopt-case.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\sslopt-longopts.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\sslopt-vars.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\ssqls.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\ssqls2.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\stadapter.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\stream2string.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\tcp_connection.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\tiny_int.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\transaction.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\type_info.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\typelib.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\uds_connection.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\utility.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\vallist.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\wnp_connection.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\client_authentication.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\client_plugin.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\get_password.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\plugin_auth_common.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\plugin_trace.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\service_mysql_alloc.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\psi\mysql_file.h">
+      <Filter>MySQL\include\mysql\psi</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\psi\mysql_idle.h">
+      <Filter>MySQL\include\mysql\psi</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\psi\mysql_mdl.h">
+      <Filter>MySQL\include\mysql\psi</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\psi\mysql_memory.h">
+      <Filter>MySQL\include\mysql\psi</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\psi\mysql_ps.h">
+      <Filter>MySQL\include\mysql\psi</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\psi\mysql_socket.h">
+      <Filter>MySQL\include\mysql\psi</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\psi\mysql_sp.h">
+      <Filter>MySQL\include\mysql\psi</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\psi\mysql_stage.h">
+      <Filter>MySQL\include\mysql\psi</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\psi\mysql_statement.h">
+      <Filter>MySQL\include\mysql\psi</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\psi\mysql_table.h">
+      <Filter>MySQL\include\mysql\psi</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\psi\mysql_thread.h">
+      <Filter>MySQL\include\mysql\psi</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\psi\mysql_transaction.h">
+      <Filter>MySQL\include\mysql\psi</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\psi\psi.h">
+      <Filter>MySQL\include\mysql\psi</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\psi\psi_base.h">
+      <Filter>MySQL\include\mysql\psi</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\psi\psi_memory.h">
+      <Filter>MySQL\include\mysql\psi</Filter>
+    </ClInclude>
+    <ClInclude Include="urlwriter\urlwriter.h">
+      <Filter>urlwriter</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\bufferevent-internal.h">
+      <Filter>Socket\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\changelist-internal.h">
+      <Filter>Socket\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\defer-internal.h">
+      <Filter>Socket\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\evbuffer-internal.h">
+      <Filter>Socket\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\evdns.h">
+      <Filter>Socket\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\event.h">
+      <Filter>Socket\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\event-internal.h">
+      <Filter>Socket\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\evmap-internal.h">
+      <Filter>Socket\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\evrpc.h">
+      <Filter>Socket\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\evrpc-internal.h">
+      <Filter>Socket\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\evsignal-internal.h">
+      <Filter>Socket\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\evthread-internal.h">
+      <Filter>Socket\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\evutil.h">
+      <Filter>Socket\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\ht-internal.h">
+      <Filter>Socket\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\http-internal.h">
+      <Filter>Socket\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\iocp-internal.h">
+      <Filter>Socket\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\ipv6-internal.h">
+      <Filter>Socket\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\log-internal.h">
+      <Filter>Socket\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\minheap-internal.h">
+      <Filter>Socket\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\mm-internal.h">
+      <Filter>Socket\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\ratelim-internal.h">
+      <Filter>Socket\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\strlcpy-internal.h">
+      <Filter>Socket\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\util-internal.h">
+      <Filter>Socket\libevent</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\event2\buffer.h">
+      <Filter>Socket\libevent\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\event2\buffer_compat.h">
+      <Filter>Socket\libevent\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\event2\bufferevent.h">
+      <Filter>Socket\libevent\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\event2\bufferevent_compat.h">
+      <Filter>Socket\libevent\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\event2\bufferevent_ssl.h">
+      <Filter>Socket\libevent\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\event2\bufferevent_struct.h">
+      <Filter>Socket\libevent\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\event2\dns.h">
+      <Filter>Socket\libevent\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\event2\dns_compat.h">
+      <Filter>Socket\libevent\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\event2\dns_struct.h">
+      <Filter>Socket\libevent\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\event2\event.h">
+      <Filter>Socket\libevent\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\event2\event_compat.h">
+      <Filter>Socket\libevent\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\event2\event_struct.h">
+      <Filter>Socket\libevent\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\event2\event-config.h">
+      <Filter>Socket\libevent\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\event2\http.h">
+      <Filter>Socket\libevent\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\event2\http_compat.h">
+      <Filter>Socket\libevent\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\event2\http_struct.h">
+      <Filter>Socket\libevent\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\event2\keyvalq_struct.h">
+      <Filter>Socket\libevent\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\event2\listener.h">
+      <Filter>Socket\libevent\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\event2\rpc.h">
+      <Filter>Socket\libevent\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\event2\rpc_compat.h">
+      <Filter>Socket\libevent\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\event2\rpc_struct.h">
+      <Filter>Socket\libevent\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\event2\tag.h">
+      <Filter>Socket\libevent\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\event2\tag_compat.h">
+      <Filter>Socket\libevent\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\event2\thread.h">
+      <Filter>Socket\libevent\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\event2\tree.h">
+      <Filter>Socket\libevent\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="libevent\event2\util.h">
+      <Filter>Socket\libevent\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="iconv\iconv.h">
+      <Filter>iconv</Filter>
+    </ClInclude>
+    <ClInclude Include="iconv\libcharset.h">
+      <Filter>iconv</Filter>
+    </ClInclude>
+    <ClInclude Include="iconv\localcharset.h">
+      <Filter>iconv</Filter>
+    </ClInclude>
+    <ClInclude Include="jsoncpp\json\assertions.h">
+      <Filter>jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="jsoncpp\json\autolink.h">
+      <Filter>jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="jsoncpp\json\config.h">
+      <Filter>jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="jsoncpp\json\features.h">
+      <Filter>jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="jsoncpp\json\forwards.h">
+      <Filter>jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="jsoncpp\json\json.h">
+      <Filter>jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="jsoncpp\json\reader.h">
+      <Filter>jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="jsoncpp\json\value.h">
+      <Filter>jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="jsoncpp\json\version.h">
+      <Filter>jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="jsoncpp\json\writer.h">
+      <Filter>jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="redis\hiredis\win32\async.h">
+      <Filter>redis\hiredis</Filter>
+    </ClInclude>
+    <ClInclude Include="redis\hiredis\win32\dict.h">
+      <Filter>redis\hiredis</Filter>
+    </ClInclude>
+    <ClInclude Include="redis\hiredis\win32\fmacros.h">
+      <Filter>redis\hiredis</Filter>
+    </ClInclude>
+    <ClInclude Include="redis\hiredis\win32\hiredis.h">
+      <Filter>redis\hiredis</Filter>
+    </ClInclude>
+    <ClInclude Include="redis\hiredis\win32\net.h">
+      <Filter>redis\hiredis</Filter>
+    </ClInclude>
+    <ClInclude Include="redis\hiredis\win32\sds.h">
+      <Filter>redis\hiredis</Filter>
+    </ClInclude>
+    <ClInclude Include="redis\hiredis\win32\adapters\ae.h">
+      <Filter>redis\hiredis\adapters</Filter>
+    </ClInclude>
+    <ClInclude Include="redis\hiredis\win32\adapters\libev.h">
+      <Filter>redis\hiredis\adapters</Filter>
+    </ClInclude>
+    <ClInclude Include="redis\hiredis\win32\adapters\libevent.h">
+      <Filter>redis\hiredis\adapters</Filter>
+    </ClInclude>
+    <ClInclude Include="redis\hiredis\win32\adapters\libuv.h">
+      <Filter>redis\hiredis\adapters</Filter>
+    </ClInclude>
+    <ClInclude Include="redis\hiredis\win32\config.h">
+      <Filter>redis\hiredis</Filter>
+    </ClInclude>
+    <ClInclude Include="redis\hiredis\win32\read.h">
+      <Filter>redis\hiredis</Filter>
+    </ClInclude>
+    <ClInclude Include="redis\hiredis\win32\win32.h">
+      <Filter>redis\hiredis</Filter>
+    </ClInclude>
+    <ClInclude Include="redis\hiredis\win32\adapters\glib.h">
+      <Filter>redis\hiredis\adapters</Filter>
+    </ClInclude>
+    <ClInclude Include="redis\hiredis\win32\adapters\ivykis.h">
+      <Filter>redis\hiredis\adapters</Filter>
+    </ClInclude>
+    <ClInclude Include="redis\hiredis\win32\adapters\macosx.h">
+      <Filter>redis\hiredis\adapters</Filter>
+    </ClInclude>
+    <ClInclude Include="redis\hiredis\win32\adapters\qt.h">
+      <Filter>redis\hiredis\adapters</Filter>
+    </ClInclude>
+    <ClInclude Include="redis\RedisConnector.h">
+      <Filter>redis</Filter>
+    </ClInclude>
+    <ClInclude Include="Filter\Filter.h">
+      <Filter>Filter</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\YTSocketBase.h">
+      <Filter>Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\YTSocketClient.h">
+      <Filter>Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\YTSocketConnector.h">
+      <Filter>Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\YTSocketServer.h">
+      <Filter>Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\YTSocketThread.h">
+      <Filter>Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\YTSocketMutiClient.h">
+      <Filter>Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\YTSocketMutiClientController.h">
+      <Filter>Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="Service\Log.h">
+      <Filter>LOG</Filter>
+    </ClInclude>
+    <ClInclude Include="Service\Application.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Service\TimerThread.h">
+      <Filter>Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="Service\YTThread.h">
+      <Filter>Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="Global\Perfermance.h">
+      <Filter>Perfermance</Filter>
+    </ClInclude>
+    <ClInclude Include="Service\Pool.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="YTSvrLib.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="BugReport\BugslayerUtil.lib">
+      <Filter>BugReport</Filter>
+    </Library>
+    <Library Include="libevent\libevent.lib">
+      <Filter>Socket\libevent</Filter>
+    </Library>
+    <Library Include="libevent\libevent_core.lib">
+      <Filter>Socket\libevent</Filter>
+    </Library>
+    <Library Include="libevent\libevent_extras.lib">
+      <Filter>Socket\libevent</Filter>
+    </Library>
+    <Library Include="zlib\zlibmt_x64.lib">
+      <Filter>zlib</Filter>
+    </Library>
+    <Library Include="zlib\zlibmt_x86.lib">
+      <Filter>zlib</Filter>
+    </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="libcurl\libcurl32.lib">
+      <Filter>curl</Filter>
+    </CustomBuild>
+    <CustomBuild Include="libcurl\libcurl64.lib">
+      <Filter>curl</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>

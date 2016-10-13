@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "YTSvrLib", "src\Lib.vcxproj", "{FB1A474C-D166-4CED-9F45-2769C40439F3}"
+EndProject
+Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug64|Win32 = Debug64|Win32
+		Debug64|x64 = Debug64|x64
+		Release64|Win32 = Release64|Win32
+		Release64|x64 = Release64|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FB1A474C-D166-4CED-9F45-2769C40439F3}.Debug64|Win32.ActiveCfg = Debug64|Win32
+		{FB1A474C-D166-4CED-9F45-2769C40439F3}.Debug64|Win32.Build.0 = Debug64|Win32
+		{FB1A474C-D166-4CED-9F45-2769C40439F3}.Debug64|x64.ActiveCfg = Debug64|x64
+		{FB1A474C-D166-4CED-9F45-2769C40439F3}.Debug64|x64.Build.0 = Debug64|x64
+		{FB1A474C-D166-4CED-9F45-2769C40439F3}.Release64|Win32.ActiveCfg = Release64|Win32
+		{FB1A474C-D166-4CED-9F45-2769C40439F3}.Release64|Win32.Build.0 = Release64|Win32
+		{FB1A474C-D166-4CED-9F45-2769C40439F3}.Release64|x64.ActiveCfg = Release64|x64
+		{FB1A474C-D166-4CED-9F45-2769C40439F3}.Release64|x64.Build.0 = Release64|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

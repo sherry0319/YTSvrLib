@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="global">
+      <UniqueIdentifier>{434c1ab3-86bf-478e-b599-c08aeecbf472}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="Config">
+      <UniqueIdentifier>{dee32988-d819-4b3b-8c91-5394fae277b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="main">
+      <UniqueIdentifier>{63502a26-99da-4c1b-9668-6dd101a16c3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Timer">
+      <UniqueIdentifier>{e8c1217b-8e8a-45b4-b21f-9ecbd4d85d95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DB">
+      <UniqueIdentifier>{8622af0f-081b-47f8-97d9-8e0f99820ab8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GWServerParser">
+      <UniqueIdentifier>{c4a02096-2fb0-4d06-b626-0c462641e46a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Common\GlobalDefine.h">
+      <Filter>global</Filter>
+    </ClInclude>
+    <ClInclude Include="Config\Config.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="timer\TimerFuncTable.h">
+      <Filter>Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="db\DBLogMgr.h">
+      <Filter>DB</Filter>
+    </ClInclude>
+    <ClInclude Include="db\DBManager.h">
+      <Filter>DB</Filter>
+    </ClInclude>
+    <ClInclude Include="db\DBParseTable.h">
+      <Filter>DB</Filter>
+    </ClInclude>
+    <ClInclude Include="GWServerParser\GWServerParser.h">
+      <Filter>GWServerParser</Filter>
+    </ClInclude>
+    <ClInclude Include="GWServerParser\GWServerSocket.h">
+      <Filter>GWServerParser</Filter>
+    </ClInclude>
+    <ClInclude Include="timer\TimerMgr.h">
+      <Filter>Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="global\ServerDefine.h">
+      <Filter>global</Filter>
+    </ClInclude>
+    <ClInclude Include="global\MessageDefine.h">
+      <Filter>global</Filter>
+    </ClInclude>
+    <ClInclude Include="Sample.h">
+      <Filter>main</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Config\Config.cpp">
+      <Filter>Config</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="timer\TimerMgr.cpp">
+      <Filter>Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="db\DBLogMgr.cpp">
+      <Filter>DB</Filter>
+    </ClCompile>
+    <ClCompile Include="db\DBManager.cpp">
+      <Filter>DB</Filter>
+    </ClCompile>
+    <ClCompile Include="GWServerParser\GWServerParser.cpp">
+      <Filter>GWServerParser</Filter>
+    </ClCompile>
+    <ClCompile Include="GWServerParser\GWServerSocket.cpp">
+      <Filter>GWServerParser</Filter>
+    </ClCompile>
+    <ClCompile Include="Sample.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="UserServer.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="configure">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="configure.ac">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="Makefile.am">
+      <Filter>资源文件</Filter>
+    </None>
+  </ItemGroup>
+</Project>

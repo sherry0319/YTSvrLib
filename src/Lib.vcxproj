@@ -1,0 +1,558 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug64|Win32">
+      <Configuration>Debug64</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug64|x64">
+      <Configuration>Debug64</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release64|Win32">
+      <Configuration>Release64</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release64|x64">
+      <Configuration>Release64</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>YTSvrLib</ProjectName>
+    <ProjectGuid>{FB1A474C-D166-4CED-9F45-2769C40439F3}</ProjectGuid>
+    <RootNamespace>Lib</RootNamespace>
+    <SccProjectName>Svn</SccProjectName>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccProvider>SubversionScc</SccProvider>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug64|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <UseOfMfc>Static</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release64|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <UseOfMfc>Static</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <UseOfMfc>Static</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release64|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <UseOfMfc>Static</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug64|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release64|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release64|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>12.0.30501.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release64|Win32'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)_x86</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release64|x64'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)_x64</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug64|Win32'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)_x86D</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)_x64D</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release64|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/D "_BIND_TO_CURRENT_VCLIBS_VERSION" %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>./mysql/include/;./libevent/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+    </ClCompile>
+    <Lib>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release64|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>/D "_BIND_TO_CURRENT_VCLIBS_VERSION" %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <AdditionalIncludeDirectories>./mysql/include/;./libevent/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WIN64;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Lib />
+    <PostBuildEvent>
+      <Command>xcopy /d /i /f /y $(TargetPath) $(SolutionDir)Lib\
+xcopy /d /i /e /r /f /y $(ProjectDir)*.h $(SolutionDir)Header\
+xcopy /d /i /e /r /f /y $(ProjectDir)*.dll $(SolutionDir)Header\
+svn ci $(SolutionDir)Header\ -m ""
+svn ci $(SolutionDir)Lib\ -m ""</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug64|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/D "_BIND_TO_CURRENT_VCLIBS_VERSION" %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;DEBUG64;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>./mysql/include/;./libevent/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <AssemblerOutput>All</AssemblerOutput>
+      <DisableSpecificWarnings>4275;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Lib>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>/D "_BIND_TO_CURRENT_VCLIBS_VERSION" %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <AdditionalIncludeDirectories>./mysql/include/;./libevent/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WIN64;DEBUG64;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <AssemblerOutput>All</AssemblerOutput>
+      <WarningLevel>Level4</WarningLevel>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4275;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <OmitFramePointers>false</OmitFramePointers>
+    </ClCompile>
+    <Lib />
+    <PostBuildEvent>
+      <Command>xcopy /F /Y $(TargetPath) $(SolutionDir)Lib\
+xcopy $(ProjectDir)*.h $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
+xcopy $(ProjectDir)*.dll $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
+xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k
+svn ci $(SolutionDir)Header\ -m ""
+svn ci $(SolutionDir)Lib\ -m ""</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Base64\Base64.cpp" />
+    <ClCompile Include="Filter\Filter.cpp" />
+    <ClCompile Include="Global\GlobalServer.cpp" />
+    <ClCompile Include="Global\Perfermance.cpp" />
+    <ClCompile Include="md5\md5.cpp" />
+    <ClCompile Include="mysql\MYSQLCommand.cpp" />
+    <ClCompile Include="mysql\MYSQLDBClient.cpp" />
+    <ClCompile Include="mysql\MYSQLDBSys.cpp" />
+    <ClCompile Include="mysql\MYSQLManagerBase.cpp" />
+    <ClCompile Include="redis\RedisConnector.cpp" />
+    <ClCompile Include="redis\RedisConnectorCommand.cpp" />
+    <ClCompile Include="redis\RedisConnectorPool.cpp" />
+    <ClCompile Include="Service\Application.cpp" />
+    <ClCompile Include="Service\AutoCloseFile.cpp" />
+    <ClCompile Include="Service\Log.cpp" />
+    <ClCompile Include="Service\PkgParserBase.cpp" />
+    <ClCompile Include="Service\SyncObj.cpp" />
+    <ClCompile Include="Service\TimerThread.cpp" />
+    <ClCompile Include="Service\YTThread.cpp" />
+    <ClCompile Include="Service\Utility.cpp" />
+    <ClCompile Include="Socket\SendBuffer.cpp" />
+    <ClCompile Include="Socket\YTSocketBase.cpp" />
+    <ClCompile Include="Socket\YTSocketClient.cpp" />
+    <ClCompile Include="Socket\YTSocketConnector.cpp" />
+    <ClCompile Include="Socket\YTSocketMutiClient.cpp" />
+    <ClCompile Include="Socket\YTSocketMutiClientController.cpp" />
+    <ClCompile Include="Socket\YTSocketServer.cpp" />
+    <ClCompile Include="Socket\YTSocketThread.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug64|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release64|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release64|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tinyxml\tinystr.cpp" />
+    <ClCompile Include="tinyxml\tinyxml.cpp" />
+    <ClCompile Include="tinyxml\tinyxmlerror.cpp" />
+    <ClCompile Include="tinyxml\tinyxmlparser.cpp" />
+    <ClCompile Include="tinyxml\XMLParser.cpp" />
+    <ClCompile Include="urlwriter\urlwriter.cpp" />
+    <ClCompile Include="XCPTHLR\ExceptHandler.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Base64\Base64.h" />
+    <ClInclude Include="BugReport\BugslayerUtil.h" />
+    <ClInclude Include="BugReport\BugslayerUtilMC.h" />
+    <ClInclude Include="BugReport\CrashHandler.h" />
+    <ClInclude Include="BugReport\CriticalSection.h" />
+    <ClInclude Include="BugReport\cvconst.h" />
+    <ClInclude Include="BugReport\DecodedType.h" />
+    <ClInclude Include="BugReport\DiagAssert.h" />
+    <ClInclude Include="BugReport\JButton.h" />
+    <ClInclude Include="BugReport\JComboBox.h" />
+    <ClInclude Include="BugReport\JFX.h" />
+    <ClInclude Include="BugReport\JGDI.h" />
+    <ClInclude Include="BugReport\JImageList.h" />
+    <ClInclude Include="BugReport\JListBox.h" />
+    <ClInclude Include="BugReport\JListView.h" />
+    <ClInclude Include="BugReport\JMenu.h" />
+    <ClInclude Include="BugReport\JModalDlg.h" />
+    <ClInclude Include="BugReport\JRegistry.h" />
+    <ClInclude Include="BugReport\JSimpleColl.h" />
+    <ClInclude Include="BugReport\JStatusBar.h" />
+    <ClInclude Include="BugReport\JString.h" />
+    <ClInclude Include="BugReport\JTabControl.h" />
+    <ClInclude Include="BugReport\JTrayNotification.h" />
+    <ClInclude Include="BugReport\JWinApp.h" />
+    <ClInclude Include="BugReport\JWnd.h" />
+    <ClInclude Include="BugReport\Layout.h" />
+    <ClInclude Include="BugReport\MemDumperValidator.h" />
+    <ClInclude Include="BugReport\MemStress.h" />
+    <ClInclude Include="BugReport\MiniDump.h" />
+    <ClInclude Include="BugReport\ResString.h" />
+    <ClInclude Include="BugReport\SuperAssert.h" />
+    <ClInclude Include="BugReport\SymbolEngine.h" />
+    <ClInclude Include="BugReport\VariableInfo.h" />
+    <ClInclude Include="YTSvrLib.h" />
+    <ClInclude Include="Filter\Filter.h" />
+    <ClInclude Include="Global\GlobalServer.h" />
+    <ClInclude Include="Global\Perfermance.h" />
+    <ClInclude Include="iconv\iconv.h" />
+    <ClInclude Include="iconv\libcharset.h" />
+    <ClInclude Include="iconv\localcharset.h" />
+    <ClInclude Include="jsoncpp\json\assertions.h" />
+    <ClInclude Include="jsoncpp\json\autolink.h" />
+    <ClInclude Include="jsoncpp\json\config.h" />
+    <ClInclude Include="jsoncpp\json\features.h" />
+    <ClInclude Include="jsoncpp\json\forwards.h" />
+    <ClInclude Include="jsoncpp\json\json.h" />
+    <ClInclude Include="jsoncpp\json\reader.h" />
+    <ClInclude Include="jsoncpp\json\value.h" />
+    <ClInclude Include="jsoncpp\json\version.h" />
+    <ClInclude Include="jsoncpp\json\writer.h" />
+    <ClInclude Include="libcurl\curl.h" />
+    <ClInclude Include="libcurl\curlbuild.h" />
+    <ClInclude Include="libcurl\curlrules.h" />
+    <ClInclude Include="libcurl\curlver.h" />
+    <ClInclude Include="libcurl\easy.h" />
+    <ClInclude Include="libcurl\mprintf.h" />
+    <ClInclude Include="libcurl\multi.h" />
+    <ClInclude Include="libcurl\stdcheaders.h" />
+    <ClInclude Include="libcurl\typecheck-gcc.h" />
+    <ClInclude Include="libevent\bufferevent-internal.h" />
+    <ClInclude Include="libevent\changelist-internal.h" />
+    <ClInclude Include="libevent\defer-internal.h" />
+    <ClInclude Include="libevent\evbuffer-internal.h" />
+    <ClInclude Include="libevent\evdns.h" />
+    <ClInclude Include="libevent\event-internal.h" />
+    <ClInclude Include="libevent\event.h" />
+    <ClInclude Include="libevent\event2\buffer.h" />
+    <ClInclude Include="libevent\event2\bufferevent.h" />
+    <ClInclude Include="libevent\event2\bufferevent_compat.h" />
+    <ClInclude Include="libevent\event2\bufferevent_ssl.h" />
+    <ClInclude Include="libevent\event2\bufferevent_struct.h" />
+    <ClInclude Include="libevent\event2\buffer_compat.h" />
+    <ClInclude Include="libevent\event2\dns.h" />
+    <ClInclude Include="libevent\event2\dns_compat.h" />
+    <ClInclude Include="libevent\event2\dns_struct.h" />
+    <ClInclude Include="libevent\event2\event-config.h" />
+    <ClInclude Include="libevent\event2\event.h" />
+    <ClInclude Include="libevent\event2\event_compat.h" />
+    <ClInclude Include="libevent\event2\event_struct.h" />
+    <ClInclude Include="libevent\event2\http.h" />
+    <ClInclude Include="libevent\event2\http_compat.h" />
+    <ClInclude Include="libevent\event2\http_struct.h" />
+    <ClInclude Include="libevent\event2\keyvalq_struct.h" />
+    <ClInclude Include="libevent\event2\listener.h" />
+    <ClInclude Include="libevent\event2\rpc.h" />
+    <ClInclude Include="libevent\event2\rpc_compat.h" />
+    <ClInclude Include="libevent\event2\rpc_struct.h" />
+    <ClInclude Include="libevent\event2\tag.h" />
+    <ClInclude Include="libevent\event2\tag_compat.h" />
+    <ClInclude Include="libevent\event2\thread.h" />
+    <ClInclude Include="libevent\event2\tree.h" />
+    <ClInclude Include="libevent\event2\util.h" />
+    <ClInclude Include="libevent\evmap-internal.h" />
+    <ClInclude Include="libevent\evrpc-internal.h" />
+    <ClInclude Include="libevent\evrpc.h" />
+    <ClInclude Include="libevent\evsignal-internal.h" />
+    <ClInclude Include="libevent\evthread-internal.h" />
+    <ClInclude Include="libevent\evutil.h" />
+    <ClInclude Include="libevent\ht-internal.h" />
+    <ClInclude Include="libevent\http-internal.h" />
+    <ClInclude Include="libevent\iocp-internal.h" />
+    <ClInclude Include="libevent\ipv6-internal.h" />
+    <ClInclude Include="libevent\log-internal.h" />
+    <ClInclude Include="libevent\minheap-internal.h" />
+    <ClInclude Include="libevent\mm-internal.h" />
+    <ClInclude Include="libevent\ratelim-internal.h" />
+    <ClInclude Include="libevent\strlcpy-internal.h" />
+    <ClInclude Include="libevent\util-internal.h" />
+    <ClInclude Include="md5\md5.h" />
+    <ClInclude Include="mysql\include\autoflag.h" />
+    <ClInclude Include="mysql\include\beemutex.h" />
+    <ClInclude Include="mysql\include\big_endian.h" />
+    <ClInclude Include="mysql\include\byte_order_generic.h" />
+    <ClInclude Include="mysql\include\byte_order_generic_x86.h" />
+    <ClInclude Include="mysql\include\cmdline.h" />
+    <ClInclude Include="mysql\include\common.h" />
+    <ClInclude Include="mysql\include\comparable.h" />
+    <ClInclude Include="mysql\include\connection.h" />
+    <ClInclude Include="mysql\include\cpool.h" />
+    <ClInclude Include="mysql\include\datetime.h" />
+    <ClInclude Include="mysql\include\dbdriver.h" />
+    <ClInclude Include="mysql\include\decimal.h" />
+    <ClInclude Include="mysql\include\errmsg.h" />
+    <ClInclude Include="mysql\include\exceptions.h" />
+    <ClInclude Include="mysql\include\field.h" />
+    <ClInclude Include="mysql\include\field_names.h" />
+    <ClInclude Include="mysql\include\field_types.h" />
+    <ClInclude Include="mysql\include\insertpolicy.h" />
+    <ClInclude Include="mysql\include\keycache.h" />
+    <ClInclude Include="mysql\include\little_endian.h" />
+    <ClInclude Include="mysql\include\manip.h" />
+    <ClInclude Include="mysql\include\myset.h" />
+    <ClInclude Include="mysql\include\mysql++.h" />
+    <ClInclude Include="mysql\include\mysql.h" />
+    <ClInclude Include="mysql\include\mysqld_ername.h" />
+    <ClInclude Include="mysql\include\mysqld_error.h" />
+    <ClInclude Include="mysql\include\mysql\client_authentication.h" />
+    <ClInclude Include="mysql\include\mysql\client_plugin.h" />
+    <ClInclude Include="mysql\include\mysql\get_password.h" />
+    <ClInclude Include="mysql\include\mysql\plugin_auth_common.h" />
+    <ClInclude Include="mysql\include\mysql\plugin_trace.h" />
+    <ClInclude Include="mysql\include\mysql\psi\mysql_file.h" />
+    <ClInclude Include="mysql\include\mysql\psi\mysql_idle.h" />
+    <ClInclude Include="mysql\include\mysql\psi\mysql_mdl.h" />
+    <ClInclude Include="mysql\include\mysql\psi\mysql_memory.h" />
+    <ClInclude Include="mysql\include\mysql\psi\mysql_ps.h" />
+    <ClInclude Include="mysql\include\mysql\psi\mysql_socket.h" />
+    <ClInclude Include="mysql\include\mysql\psi\mysql_sp.h" />
+    <ClInclude Include="mysql\include\mysql\psi\mysql_stage.h" />
+    <ClInclude Include="mysql\include\mysql\psi\mysql_statement.h" />
+    <ClInclude Include="mysql\include\mysql\psi\mysql_table.h" />
+    <ClInclude Include="mysql\include\mysql\psi\mysql_thread.h" />
+    <ClInclude Include="mysql\include\mysql\psi\mysql_transaction.h" />
+    <ClInclude Include="mysql\include\mysql\psi\psi.h" />
+    <ClInclude Include="mysql\include\mysql\psi\psi_base.h" />
+    <ClInclude Include="mysql\include\mysql\psi\psi_memory.h" />
+    <ClInclude Include="mysql\include\mysql\service_mysql_alloc.h" />
+    <ClInclude Include="mysql\include\mysql_com.h" />
+    <ClInclude Include="mysql\include\mysql_com_server.h" />
+    <ClInclude Include="mysql\include\mysql_embed.h" />
+    <ClInclude Include="mysql\include\mysql_time.h" />
+    <ClInclude Include="mysql\include\mysql_version.h" />
+    <ClInclude Include="mysql\include\mystring.h" />
+    <ClInclude Include="mysql\include\my_alloc.h" />
+    <ClInclude Include="mysql\include\my_byteorder.h" />
+    <ClInclude Include="mysql\include\my_compiler.h" />
+    <ClInclude Include="mysql\include\my_config.h" />
+    <ClInclude Include="mysql\include\my_dbug.h" />
+    <ClInclude Include="mysql\include\my_dir.h" />
+    <ClInclude Include="mysql\include\my_getopt.h" />
+    <ClInclude Include="mysql\include\my_global.h" />
+    <ClInclude Include="mysql\include\my_list.h" />
+    <ClInclude Include="mysql\include\my_net.h" />
+    <ClInclude Include="mysql\include\my_pthread.h" />
+    <ClInclude Include="mysql\include\my_sys.h" />
+    <ClInclude Include="mysql\include\my_xml.h" />
+    <ClInclude Include="mysql\include\m_ctype.h" />
+    <ClInclude Include="mysql\include\m_string.h" />
+    <ClInclude Include="mysql\include\noexceptions.h" />
+    <ClInclude Include="mysql\include\null.h" />
+    <ClInclude Include="mysql\include\options.h" />
+    <ClInclude Include="mysql\include\qparms.h" />
+    <ClInclude Include="mysql\include\query.h" />
+    <ClInclude Include="mysql\include\querydef.h" />
+    <ClInclude Include="mysql\include\refcounted.h" />
+    <ClInclude Include="mysql\include\result.h" />
+    <ClInclude Include="mysql\include\row.h" />
+    <ClInclude Include="mysql\include\scopedconnection.h" />
+    <ClInclude Include="mysql\include\sqlstream.h" />
+    <ClInclude Include="mysql\include\sql_buffer.h" />
+    <ClInclude Include="mysql\include\sql_common.h" />
+    <ClInclude Include="mysql\include\sql_state.h" />
+    <ClInclude Include="mysql\include\sql_types.h" />
+    <ClInclude Include="mysql\include\sslopt-case.h" />
+    <ClInclude Include="mysql\include\sslopt-longopts.h" />
+    <ClInclude Include="mysql\include\sslopt-vars.h" />
+    <ClInclude Include="mysql\include\ssqls.h" />
+    <ClInclude Include="mysql\include\ssqls2.h" />
+    <ClInclude Include="mysql\include\stadapter.h" />
+    <ClInclude Include="mysql\include\stream2string.h" />
+    <ClInclude Include="mysql\include\tcp_connection.h" />
+    <ClInclude Include="mysql\include\tiny_int.h" />
+    <ClInclude Include="mysql\include\transaction.h" />
+    <ClInclude Include="mysql\include\typelib.h" />
+    <ClInclude Include="mysql\include\type_info.h" />
+    <ClInclude Include="mysql\include\uds_connection.h" />
+    <ClInclude Include="mysql\include\utility.h" />
+    <ClInclude Include="mysql\include\vallist.h" />
+    <ClInclude Include="mysql\include\wnp_connection.h" />
+    <ClInclude Include="mysql\MYSQLCommand.h" />
+    <ClInclude Include="mysql\MYSQLDBSys.h" />
+    <ClInclude Include="mysql\MYSQLManagerBase.h" />
+    <ClInclude Include="redis\hiredis\win32\adapters\ae.h" />
+    <ClInclude Include="redis\hiredis\win32\adapters\glib.h" />
+    <ClInclude Include="redis\hiredis\win32\adapters\ivykis.h" />
+    <ClInclude Include="redis\hiredis\win32\adapters\libev.h" />
+    <ClInclude Include="redis\hiredis\win32\adapters\libevent.h" />
+    <ClInclude Include="redis\hiredis\win32\adapters\libuv.h" />
+    <ClInclude Include="redis\hiredis\win32\adapters\macosx.h" />
+    <ClInclude Include="redis\hiredis\win32\adapters\qt.h" />
+    <ClInclude Include="redis\hiredis\win32\async.h" />
+    <ClInclude Include="redis\hiredis\win32\config.h" />
+    <ClInclude Include="redis\hiredis\win32\dict.h" />
+    <ClInclude Include="redis\hiredis\win32\fmacros.h" />
+    <ClInclude Include="redis\hiredis\win32\hiredis.h" />
+    <ClInclude Include="redis\hiredis\win32\net.h" />
+    <ClInclude Include="redis\hiredis\win32\read.h" />
+    <ClInclude Include="redis\hiredis\win32\sds.h" />
+    <ClInclude Include="redis\hiredis\win32\win32.h" />
+    <ClInclude Include="redis\RedisConnector.h" />
+    <ClInclude Include="Service\Application.h" />
+    <ClInclude Include="Service\AutoCloseFile.h" />
+    <ClInclude Include="Service\Log.h" />
+    <ClInclude Include="Service\PkgParserBase.h" />
+    <ClInclude Include="Service\Pool.h" />
+    <ClInclude Include="Service\SyncObj.h" />
+    <ClInclude Include="Service\TimerThread.h" />
+    <ClInclude Include="Service\YTThread.h" />
+    <ClInclude Include="Service\Utility.h" />
+    <ClInclude Include="Single\Single.h" />
+    <ClInclude Include="Socket\SendBuffer.h" />
+    <ClInclude Include="Socket\YTSocketBase.h" />
+    <ClInclude Include="Socket\YTSocketClient.h" />
+    <ClInclude Include="Socket\YTSocketConnector.h" />
+    <ClInclude Include="Socket\YTSocketMutiClient.h" />
+    <ClInclude Include="Socket\YTSocketMutiClientController.h" />
+    <ClInclude Include="Socket\YTSocketServer.h" />
+    <ClInclude Include="Socket\YTSocketThread.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="stl\wqueue.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="tinyxml\tinystr.h" />
+    <ClInclude Include="tinyxml\tinyxml.h" />
+    <ClInclude Include="tinyxml\XMLParser.h" />
+    <ClInclude Include="typedef.h" />
+    <ClInclude Include="urlwriter\urlwriter.h" />
+    <ClInclude Include="XCPTHLR\ExceptHandler.h" />
+    <ClInclude Include="zlib\zconf.h" />
+    <ClInclude Include="zlib\zlib.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="BugReport\BugslayerUtil.lib">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release64|x64'">true</ExcludedFromBuild>
+    </Library>
+    <CustomBuild Include="libcurl\libcurl32.lib">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release64|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release64|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug64|Win32'">true</ExcludedFromBuild>
+    </CustomBuild>
+    <CustomBuild Include="libcurl\libcurl64.lib">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release64|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release64|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug64|Win32'">true</ExcludedFromBuild>
+    </CustomBuild>
+    <Library Include="libevent\libevent.lib">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release64|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug64|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release64|Win32'">true</ExcludedFromBuild>
+    </Library>
+    <Library Include="libevent\libevent_core.lib">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release64|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug64|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release64|Win32'">true</ExcludedFromBuild>
+    </Library>
+    <Library Include="libevent\libevent_extras.lib">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release64|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug64|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release64|Win32'">true</ExcludedFromBuild>
+    </Library>
+    <Library Include="zlib\zlibmt_x64.lib">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release64|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release64|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug64|Win32'">true</ExcludedFromBuild>
+    </Library>
+    <Library Include="zlib\zlibmt_x86.lib">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release64|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release64|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug64|Win32'">true</ExcludedFromBuild>
+    </Library>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
