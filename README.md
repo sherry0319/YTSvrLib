@@ -11,7 +11,7 @@ a simple game server library for linux/windows
 4.Use the .lib in your project.
 
 # Install Linux
-1.Install dependent libraries : libiconv libevent2 libcurl libhiredis libmysqlpp libmysqlclient libpthread libtcmalloc
+1.Install dependent libraries : libiconv libevent2 libcurl libhiredis libmysqlpp libmysqlclient libpthread libtcmalloc(The lib mysqlpp must use the version in the third_party/)
 
 2.cd src && ./configure && make install
 
@@ -32,7 +32,7 @@ See the project "Sample".
 4.在你的工程中链接lib
 
 # 在Linux下使用
-1.先安装以下依赖库 : libiconv libevent2 libcurl libhiredis libmysqlpp libmysqlclient libpthread libtcmalloc
+1.先安装以下依赖库 : libiconv libevent2 libcurl libhiredis libmysqlpp libmysqlclient libpthread libtcmalloc(mysqlpp 需要用项目中third_party里带的版本,因为本人对原本的库做了点小修改)
 
 2.cd src && ./configure && make install
 
