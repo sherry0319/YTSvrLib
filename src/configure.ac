@@ -3,7 +3,7 @@
 
 AC_PREREQ([2.69])
 AC_INIT([ytsvrlib], [1.0])
-AC_CONFIG_SRCDIR([DipanSvr.h])
+AC_CONFIG_SRCDIR([YTSvrLib.h])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE
 
