@@ -34,12 +34,9 @@ int _wcsupr_s(wchar_t* wzIn)
 		return 0;
 	}
 	wchar_t *pwzCur = wzIn;
-//	size_t nLen = wcslen(wzIn);
-// 	printf("wzIn : 0x%x\n",wzIn);
-// 	printf("pwzCur : 0x%x\n", pwzCur);
+
 	while ((*pwzCur) != L'\0')
 	{
-//		printf("Loop : 0x%x\n", pwzCur);
 		*pwzCur = towupper((*pwzCur));
 		pwzCur++;
 	}
@@ -54,9 +51,7 @@ int _strupr_s(char* szIn)
 		return 0;
 	}
 	char *pszCur = szIn;
-	//	size_t nLen = wcslen(wzIn);
-	// 	printf("wzIn : 0x%x\n",wzIn);
-	// 	printf("pwzCur : 0x%x\n", pwzCur);
+
 	while ((*pszCur) != '\0')
 	{
 		*pszCur = toupper((*pszCur));
@@ -113,8 +108,7 @@ namespace YTSvrLib
 			wchar_t wzKeys[33] = { 0 };
 			wcsncpy_s(wzKeys, pwzKeyWord, 32);
 			wzKeys[32] = L'\0';
-			//printf("pwzKeyWord : 0x%x\n", pwzKeyWord);
-			//printf("wzKeys : 0x%x\n", wzKeys);
+
 			_wcsupr_s(wzKeys);
 			m_vctKeyword.push_back(std::wstring(wzKeys));
 		}
@@ -133,10 +127,7 @@ namespace YTSvrLib
 		while (it != m_vctKeyword.end())
 		{
 			wchar_t Character = (*it).c_str()[0];
-			//         m_strCharacter.assign( 1, Character );
-			// 
-			//         std::vector< std::wstring >::iterator itLower = std::lower_bound( m_vctKeyword.begin(), m_vctKeyword.end(), m_strCharacter/*, KeywordLess()*/ );
-			//         std::vector< std::wstring >::iterator itUpper = std::upper_bound( m_vctKeyword.begin(), m_vctKeyword.end(), m_strCharacter/*, KeywordLess() */);
+
 			std::vector< std::wstring >::iterator itLower = it;
 			std::vector< std::wstring >::iterator itUpper = it++;
 			while (itUpper != m_vctKeyword.end() && (*itUpper).c_str()[0] == Character)

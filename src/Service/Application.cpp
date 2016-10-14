@@ -49,8 +49,6 @@ namespace YTSvrLib
 
 	CServerApplication::CServerApplication()
 	{
-		URL_Request::GlobalInitCURL();
-
 #ifdef LIB_WINDOWS
 		WSADATA      wsd;
 		::WSAStartup(MAKEWORD((BYTE) 2, (BYTE) 2), &wsd);

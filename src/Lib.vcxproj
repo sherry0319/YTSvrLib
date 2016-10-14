@@ -205,6 +205,7 @@ svn ci $(SolutionDir)Lib\ -m ""</Command>
     <ClCompile Include="Filter\Filter.cpp" />
     <ClCompile Include="Global\GlobalServer.cpp" />
     <ClCompile Include="Global\Perfermance.cpp" />
+    <ClCompile Include="Global\GlobalURLRequest.cpp" />
     <ClCompile Include="md5\md5.cpp" />
     <ClCompile Include="mysql\MYSQLCommand.cpp" />
     <ClCompile Include="mysql\MYSQLDBClient.cpp" />
@@ -277,6 +278,7 @@ svn ci $(SolutionDir)Lib\ -m ""</Command>
     <ClInclude Include="BugReport\SuperAssert.h" />
     <ClInclude Include="BugReport\SymbolEngine.h" />
     <ClInclude Include="BugReport\VariableInfo.h" />
+    <ClInclude Include="Global\GlobalURLRequest.h" />
     <ClInclude Include="YTSvrLib.h" />
     <ClInclude Include="Filter\Filter.h" />
     <ClInclude Include="Global\GlobalServer.h" />

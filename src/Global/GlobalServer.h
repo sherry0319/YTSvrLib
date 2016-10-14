@@ -238,6 +238,7 @@ struct timezone
 	int  tz_dsttime;     // type of dst correction
 };
 
+// Windows版gettimeofday
 int gettimeofday(struct timeval *tv, struct timezone *tz);
 
 #endif // LIB_WINDOWS
@@ -295,17 +296,5 @@ __time32_t MakeStrTimeToUTC_NoYear(LPCSTR lpwzTime, UINT nYear);
 void RemoveSpace(LPCWSTR pwzSrc, LPWSTR pwzDst, int nLen);
 void RemoveSpace(LPCSTR pszSrc, LPSTR pszDst, int nLen);
 
-namespace URL_Request
-{
-	void GlobalInitCURL();
-	void GetLocalIP(LPSTR lpsOut,DWORD dwOutLenMax);
-	void SendHTTPGETMessage(LPCWSTR lpwzBuffer,UINT nLen,BOOL bShow = TRUE);
-	void SendHTTPGETMessage(LPCSTR lpwzBuffer,BOOL bShow = TRUE);
-
-	void SendGSMMessage(LPCSTR lpszDstHost,LPCWSTR lpwzMessage);
-	void SendGSMMessage(LPCSTR lpszDstHost, LPCSTR lpszMessage);
-
-	void SendHttpPostMessage(LPCSTR lpszPostMsg,LPCSTR lpszDestHost);
-
-	void SendMobileNotice_Android(LPCSTR lpszDest,UINT nServerID,UINT nUserID,UINT nType,__time32_t tExpired,LPCWSTR lpwzNotice,...);
-}
+// 获取本机IP
+void GetLocalIP(vector<string>& vctIPList);

@@ -20,6 +20,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
 
+/////////////////////////////////////////////////////////////////////////////
+// CServerApplication : Core Instance.服务器进程的唯一入口以及事件主循环
+//
+
 #pragma once
 
 #define YTSVRLIB_VERSION_CODE	1.0

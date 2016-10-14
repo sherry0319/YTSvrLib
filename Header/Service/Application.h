@@ -20,32 +20,29 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
 
+/////////////////////////////////////////////////////////////////////////////
+// CServerApplication : Core Instance.服务器进程的唯一入口以及事件主循环
+//
+
 #pragma once
 
 #define YTSVRLIB_VERSION_CODE	1.0
 
-#define APPLICATION_EVENT_MAX_COUNT 16	//主线程最多处理事件个数，该值不能超过64
-#define APPLICATION_EVENT_MIN_COUNT 1	//主线程最少设置事件个数，预留用于通用事件
+#define APPLICATION_EVENT_MAX_COUNT 16	//main thread event max count.主线程事件最大数量
+#define APPLICATION_EVENT_MIN_COUNT 1	//main thread event min count.主线程事件最小数量
 
-#define USER_EVENT_MAX_COUNT	(APPLICATION_EVENT_MAX_COUNT-APPLICATION_EVENT_MIN_COUNT)	//用户最多可定义的事件个数
-#define EVENT_OVERTIME_CHECK_SPACE	50	//事件未触发时间超过该值时,会重新检测,单位毫秒
-
-extern "C" {
-	double get_version_code();
-}
+#define USER_EVENT_MAX_COUNT	(APPLICATION_EVENT_MAX_COUNT-APPLICATION_EVENT_MIN_COUNT)	//max user event count.用户可自定义的事件数量
 
 namespace YTSvrLib
 {
 
-	typedef void(*EventProc)();//事件处理函数类型定义
+	typedef void(*EventProc)();//event handle function define
 
 	typedef struct _EVENTINFO
 	{
-		EventProc	Proc;		//事件处理函数
-		DWORD		dwLastHandleTime;//最后一次处理时间
-
-		_EVENTINFO() :/*dwPeriod(0),*/ dwLastHandleTime(0)
-		{}
+		EventProc	Proc;		//event handler
+		DWORD		dwLastHandleTime;//last handle time.最后一次处理时间
+		_EVENTINFO() :dwLastHandleTime(0){}
 	}EVENTINFO, *PEVENTINFO;
 
 	class CServerApplication
@@ -53,32 +50,43 @@ namespace YTSvrLib
 	public:
 		explicit CServerApplication();
 		~CServerApplication();
-		//系统初始化，由main()调用，nEventCount为事件个数(必须不超过USER_EVENT_MAX_COUNT)， 返回false则系统启动失败
-		//pAppExitEventName: 关闭程序时,设置该名称的事件,由监控程序设置
-		void GlobalInit();
-		bool Init(int nEventCount, const char* pAppExitEventName);
-		void Run();//主线程进入阻塞状态，用于等待及处理事件，由main()调用
 
-		//================================注册事件及处理函数================================
-		bool RegisterEvent(DWORD dwEventIndex, EventProc Proc);//设置事件处理函数
-		void SetEvent(DWORD dwEventIndex);//激活事件，索引参数必须有效，尽量减少该函数的调用次数（比如有网络消息达到，尽量只在消息队列为空情况下调用）
+		// call it at the begining of main() to init the server.在main()函数的最开始调用以初始化服务器
+		void GlobalInit(int nEventCount);
+
+		// call it to enter event loop.waiting for event to handle.make sure all config has been prepaired.主线程进入阻塞状态，用于等待及处理事件，由main()调用.调用之前确保配置都已经准备完毕.
+		void Run();
+
+		// regist a event to event loop 设置事件处理函数
+		bool RegisterEvent(DWORD dwEventIndex, EventProc Proc);
+
+		// add a new event to event loop.and activate the event.
+		void SetEvent(DWORD dwEventIndex);
 	private:
-		bool InitEvent();//初始化事件，设置公共事件
-		bool CheckEventIndex(DWORD &dwEventIndex);//对dwEventIndex转换，并校验dwEventIndex的合法性，对已重复设置的句柄执行关闭操作
-		bool SetEventInfo(DWORD dwEventIndex, HANDLE hEventHandle, EventProc Proc);
+		// set the event count .init the event pool.
+		bool Init(int nEventCount);
+
+		// init event pool.
+		bool InitEvent();
+
+		// check the dwEventIndex available.
+		bool CheckEventIndex(DWORD &dwEventIndex);
+
+		// set the event.
+		bool SetEventInfo(DWORD dwEventIndex, EventProc Proc);
 	private:
-		int						m_nEventCount;	//事件个数
-		CHAR					m_szModuleName[MAX_PATH];//进程名称
-		EVENTINFO					m_ayEventHandle[APPLICATION_EVENT_MAX_COUNT];// 事件处理器
+		int						m_nEventCount;	//event count .事件个数
+		CHAR					m_szModuleName[MAX_PATH];//process name.进程名
+		EVENTINFO					m_ayEventHandle[APPLICATION_EVENT_MAX_COUNT];// event handle map. 事件表
 
 #ifdef LIB_WINDOWS
 		HMODULE					m_hException;
 		HMODULE					m_hZlib;
 #endif // LIB_WINDOWS
 
-		std::list<DWORD>		m_listEventQueue;// 事件队列
-		YTSvrLib::CLock			m_lockQueue;// 事件队列锁
-		YTSvrLib::CSemaphore	m_semQueue;// 事件队列信号量
+		std::list<DWORD>		m_listEventQueue;// event queue.事件队列
+		YTSvrLib::CLock			m_lockQueue;// lock for event queue.事件队列锁
+		YTSvrLib::CSemaphore	m_semQueue;// sem for event queue.事件队列信号量
 	};
 }
 

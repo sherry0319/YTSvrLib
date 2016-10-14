@@ -99,6 +99,9 @@
     <Filter Include="Socket\libevent\event2">
       <UniqueIdentifier>{2a729929-4c48-479f-b198-85cc022cf2f8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="URLRequest">
+      <UniqueIdentifier>{bc919df3-2219-432e-a9d6-3a83b394b9f9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -208,6 +211,9 @@
     </ClCompile>
     <ClCompile Include="Global\Perfermance.cpp">
       <Filter>Perfermance</Filter>
+    </ClCompile>
+    <ClCompile Include="Global\GlobalURLRequest.cpp">
+      <Filter>URLRequest</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -987,6 +993,9 @@
     </ClInclude>
     <ClInclude Include="YTSvrLib.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Global\GlobalURLRequest.h">
+      <Filter>URLRequest</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

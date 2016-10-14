@@ -553,6 +553,36 @@ __time32_t MakeStrTimeToUTC_NoYear(LPCSTR lpwzTime, UINT nYear)
 	return tTime;
 }
 
+void GetLocalIP(vector<string>& vctIPList)
+{
+	char szHostname[255] = { 0 };
+	//获取本地主机名称
+	if (gethostname(szHostname, sizeof(szHostname)) == SOCKET_ERROR)
+	{
+		LOG("Error in GetHostName : %d", GetLastError());
+		return;
+	}
+
+	//从主机名数据库中得到对应的“主机”
+	struct hostent *pHost = gethostbyname(szHostname);
+	if (pHost == NULL)
+	{
+		LOG("Error in gethostbyname : %d", GetLastError());
+		return;
+	}
+
+	//循环得出本地机器所有IP地址
+	int i = 0;
+	while (pHost->h_addr_list[i] != NULL && i < pHost->h_length)
+	{
+		struct in_addr addr;
+		memcpy(&addr, pHost->h_addr_list[i], sizeof(struct in_addr));
+
+		vctIPList.push_back(string(inet_ntoa(addr)));
+
+		i++;
+	}
+}
 
 void RemoveSpace(LPCWSTR pwzSrc, LPWSTR pwzDst, int nLen)
 {
@@ -733,173 +763,46 @@ void GetLocalTime(LPSYSTEMTIME lpSystemTime)
 }
 #endif // LIB_LINUX
 
+/*
 namespace URL_Request
 {
-static BOOL g_bCURLInit = FALSE;
-	void GetLocalIP(LPSTR lpsOut,DWORD dwOutLenMax)
-	{
-		ZeroMemory(lpsOut,dwOutLenMax);
-		char szHostname[255] = {0};
-		//获取本地主机名称
-		if (gethostname(szHostname, sizeof(szHostname)) == SOCKET_ERROR) 
-		{
-			LOG("Error in GetHostName : %d",GetLastError());
-			return;
-		}
+void SendGSMMessage(LPCSTR lpszDstHost,LPCWSTR lpwzMessage)
+{
+LPCSTR lpszFormat = "%s?MessageContent=%s&%d";
 
-		//从主机名数据库中得到对应的“主机”
-		struct hostent *pHost = gethostbyname(szHostname);
-		if (pHost == NULL) 
-		{
-			LOG("Error in gethostbyname : %d",GetLastError());
-			return;
-		}
+WCHAR wzMessage[512] = {0};
+CHAR szMessage[1024] = {0};
+CHAR szLocalIP[64] = {0};
 
-		//循环得出本地机器所有IP地址
-		if (pHost->h_addr_list[0] != NULL)
-		{
-			struct in_addr addr;
-			memcpy(&addr, pHost->h_addr_list[0], sizeof(struct in_addr));
-#ifdef LIB_WINDOWS
-			strncpy_s(lpsOut,dwOutLenMax,inet_ntoa(addr),dwOutLenMax);
-#else
-			strncpy_s(lpsOut,inet_ntoa(addr),dwOutLenMax);
-#endif // LIB_WINDOWS
-		}
-	}
+_snwprintf_s(wzMessage,511,L"%s",lpwzMessage);
 
-	void SendHTTPGETMessage(LPCWSTR lpwzBuffer,UINT nLen,BOOL bShow/* = TRUE*/)
-	{
-		CHAR* pBuffer = new CHAR[nLen*2];
-		ZeroMemory(pBuffer,nLen*2);
+unicodetoutf8(wzMessage,szMessage,1023);
 
-		WChar2Ansi(lpwzBuffer,pBuffer,nLen*2);
+std::string strMessageDecode = URLEncode(std::string(szMessage));
 
-		SendHTTPGETMessage(pBuffer,bShow);
+CHAR szUrl[2048] = {0};
 
-		delete[] pBuffer;
-		pBuffer = NULL;
- 	}
+_snprintf_s(szUrl,2047,lpszFormat,lpszDstHost,strMessageDecode.c_str(),Random2((UINT)time(NULL)));
 
-	void GlobalInitCURL()
-	{
-		if (g_bCURLInit == FALSE)
-		{
-			curl_global_init(CURL_GLOBAL_ALL);
-		}
-	}
-
-	void SendHTTPGETMessage(LPCSTR lpzBuffer,BOOL bShow /*= TRUE*/)
-	{
-		CURL* pReq = curl_easy_init();
-
-		curl_easy_setopt(pReq,CURLOPT_URL,lpzBuffer);
-		curl_easy_setopt(pReq,CURLOPT_NOSIGNAL,1);
-
-		if (bShow)
-		{
-			curl_easy_setopt(pReq,CURLOPT_VERBOSE,1);
-		}
-
-		CURLcode emCode =  curl_easy_perform(pReq);
-
-		if (CURLE_OK != emCode)
-		{
-			LOG("CURL Request Failed : %d\n%s",emCode,lpzBuffer);
-		}
-
-		curl_easy_cleanup(pReq);
-
-		curl_global_cleanup();
-	}
-
-	void SendGSMMessage(LPCSTR lpszDstHost,LPCWSTR lpwzMessage)
-	{
-		LPCSTR lpszFormat = "%s?MessageContent=%s&%d";
-
-		WCHAR wzMessage[512] = {0};
-		CHAR szMessage[1024] = {0};
-		CHAR szLocalIP[64] = {0};
-
-		_snwprintf_s(wzMessage,511,L"%s",lpwzMessage);
-
-		unicodetoutf8(wzMessage,szMessage,1023);
-
-		std::string strMessageDecode = URLEncode(std::string(szMessage));
-
-		CHAR szUrl[2048] = {0};
-
-		_snprintf_s(szUrl,2047,lpszFormat,lpszDstHost,strMessageDecode.c_str(),Random2((UINT)time(NULL)));
-
-		SendHTTPGETMessage(szUrl,FALSE);
-	}
-
-	void SendGSMMessage(LPCSTR lpszDstHost, LPCSTR lpszMessage)
-	{
-		LPCSTR lpszFormat = "%s?MessageContent=%s&%d";
-
-		CHAR szLocalIP[64] = { 0 };
-
-		std::string strMessageEncode = URLEncode(std::string(lpszMessage));
-
-		CHAR szUrl[2048] = { 0 };
-
-		_snprintf_s(szUrl, 2047, lpszFormat, lpszDstHost, strMessageEncode.c_str(), Random2((UINT) time(NULL)));
-
-		SendHTTPGETMessage(szUrl,FALSE);
-	}
-
-	void SendMobileNotice_Android(LPCSTR lpszDest,UINT nServerID,UINT nUserID,UINT nType,__time32_t tExpired,LPCWSTR lpwzNotice,...)
-	{
-		int nLen = (int)wcslen(lpwzNotice);
-
-		if (nLen >= 256)
-		{
-			return;
-		}
-
-		WCHAR wzNotice[512] = {0};
-
-		va_list va;
-		va_start(va,lpwzNotice);
-
-		_vsnwprintf_s(wzNotice,511,lpwzNotice,va);
-
-		va_end(va);
-
-		CHAR szNotice_UTF8[2048] = {0};
-		unicodetoutf8(wzNotice,szNotice_UTF8,2047);
-
-		CHAR szPostMsg[4096] = {0};
-		//act=2&serverid=1&userid=1000&type=0&notice=aaaaaaaaa&expired=1388956525
-		_snprintf_s(szPostMsg,4095,"act=2&serverid=%d&userid=%d&notice=%s&expired=%d&type=%d&seed=%d",nServerID,nUserID,szNotice_UTF8,tExpired,nType,Random((UINT)time(NULL)));
-
-		SendHttpPostMessage(szPostMsg,lpszDest);
-	}
-
-	void SendHttpPostMessage(LPCSTR lpszPostMsg,LPCSTR lpszDestHost)
-	{
-		int nPostLen = (int)strlen(lpszPostMsg);
-
-		curl_global_init(CURL_GLOBAL_ALL);
-
-		CURL* pReq = curl_easy_init();
-
-		curl_easy_setopt(pReq,CURLOPT_URL,lpszDestHost);
-		curl_easy_setopt(pReq,CURLOPT_POST,1);
-		curl_easy_setopt(pReq,CURLOPT_POSTFIELDS,lpszPostMsg);
-		curl_easy_setopt(pReq,CURLOPT_POSTFIELDSIZE,nPostLen);
-		curl_easy_setopt(pReq,CURLOPT_VERBOSE,1);
-
-		CURLcode emReqCode = curl_easy_perform(pReq);
-
-		LOG("Post Message To %s Message %s Return Code : %d",lpszDestHost,lpszPostMsg,emReqCode);
-
-		curl_easy_cleanup(pReq);
-
-		curl_global_cleanup();
-	}
+SendHTTPGETMessage(szUrl,FALSE);
 }
+
+void SendGSMMessage(LPCSTR lpszDstHost, LPCSTR lpszMessage)
+{
+LPCSTR lpszFormat = "%s?MessageContent=%s&%d";
+
+CHAR szLocalIP[64] = { 0 };
+
+std::string strMessageEncode = URLEncode(std::string(lpszMessage));
+
+CHAR szUrl[2048] = { 0 };
+
+_snprintf_s(szUrl, 2047, lpszFormat, lpszDstHost, strMessageEncode.c_str(), Random2((UINT) time(NULL)));
+
+SendHTTPGETMessage(szUrl,FALSE);
+}
+}
+*/
 
 #ifdef LIB_WINDOWS
 int gettimeofday(struct timeval *tv, struct timezone *tz) 
