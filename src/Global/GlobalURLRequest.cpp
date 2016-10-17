@@ -72,6 +72,7 @@ namespace YTSvrLib
 
 		m_lockCore.Lock();
 
+		curl_easy_reset(m_curlCore);
 		curl_easy_setopt(m_curlCore, CURLOPT_URL, url);
 		curl_easy_setopt(m_curlCore, CURLOPT_NOSIGNAL, 1);
 
@@ -107,6 +108,7 @@ namespace YTSvrLib
 
 		m_lockCore.Lock();
 
+		curl_easy_reset(m_curlCore);
 		curl_easy_setopt(m_curlCore, CURLOPT_URL, url);
 		curl_easy_setopt(m_curlCore, CURLOPT_POST, 1);
 		curl_easy_setopt(m_curlCore, CURLOPT_POSTFIELDS, postdata);
