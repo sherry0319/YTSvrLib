@@ -1,6 +1,6 @@
 /*MIT License
 
-Copyright (c) 2016 Zhe Xu
+Copyright (c) 2016 Archer Xu
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -98,6 +98,51 @@ int _strupr_s(char* szIn, int nSize)
 }
 #endif // LIB_WINDOWS
 
+const unsigned char kFirstBitMask = 128; // 1000000
+const unsigned char kSecondBitMask = 64; // 0100000
+const unsigned char kThirdBitMask = 32; // 0010000
+const unsigned char kFourthBitMask = 16; // 0001000
+const unsigned char kFifthBitMask = 8; // 0000100
+const unsigned char kSixthBitMask = 4; // 0000010
+int utf8_char_lenth(char firstByte)
+{
+	int offset = 1;
+
+	if (firstByte & kFirstBitMask) // This means the first byte has a value greater than 127, and so is beyond the ASCII range.
+	{
+		if (firstByte & kThirdBitMask) // This means that the first byte has a value greater than 224, and so it must be at least a three-octet code point.
+		{
+			if (firstByte & kFourthBitMask) // This means that the first byte has a value greater than 240, and so it must be a four-octet code point.
+			{
+				if (firstByte & kFifthBitMask)
+				{
+					if (firstByte & kSixthBitMask)
+					{
+						offset = 6;
+					}
+					else
+					{
+						offset = 5;
+					}
+				}
+				else
+				{
+					offset = 4;
+				}
+			}
+			else
+			{
+				offset = 3;
+			}
+		}
+		else
+		{
+			offset = 2;
+		}
+	}
+	return offset;
+}
+
 namespace YTSvrLib
 {
 
@@ -153,15 +198,13 @@ namespace YTSvrLib
 		wchar_t* pIndex = wzTemp;
 		wchar_t aCharacter = *pIndex;
 
-		wchar_t* pTmp = 0;
-
 		long nPattLen = 0;
 		long nLenLeft = nLen;//nTextLen;
 
 		while (*pIndex)
 		{
 			aCharacter = *pIndex;
-			std::map< wchar_t, ITPAIR>::iterator it = m_mpKeyword.find(aCharacter);
+			FilterIndex::iterator it = m_mpKeyword.find(aCharacter);
 			if (it != m_mpKeyword.end())
 			{
 				ITPAIR& aPair = it->second;
@@ -237,7 +280,7 @@ namespace YTSvrLib
 			}
 			aCharacter = wzStrNoSpace[l];
 			bFind = false;
-			std::map< wchar_t, ITPAIR>::iterator it = m_mpKeyword.find(aCharacter);
+			FilterIndex::iterator it = m_mpKeyword.find(aCharacter);
 			if (it != m_mpKeyword.end())
 			{
 				ITPAIR& aPair = it->second;
@@ -334,13 +377,16 @@ namespace YTSvrLib
 		char szStrNoSpace[2048] = { 0 };
 		int	nPosInSrcString[2048] = { 0 };
 		long nLen = 0;
-		for (long i = 0; i < nTextLen&&nLen < 1023; i++)
-		if (pstrContent[i] != ' ')
+		for (long i = 0; i < nTextLen&&nLen < 2047; i++)
 		{
-			szStrNoSpace[nLen] = pstrContent[i];
-			nPosInSrcString[nLen] = i;
-			nLen++;
+			if (pstrContent[i] != ' ')
+			{
+				szStrNoSpace[nLen] = pstrContent[i];
+				nPosInSrcString[nLen] = i;
+				nLen++;
+			}
 		}
+
 		szStrNoSpace[nLen] = '\0';
 		_strupr_s(szStrNoSpace, nLen + 1);
 
@@ -362,7 +408,7 @@ namespace YTSvrLib
 			}
 			aCharacter = szStrNoSpace[l];
 			bFind = false;
-			std::map< char, ITPAIR>::iterator it = m_mpKeyword.find(aCharacter);
+			FilterIndex::iterator it = m_mpKeyword.find(aCharacter);
 			if (it != m_mpKeyword.end())
 			{
 				ITPAIR& aPair = it->second;
@@ -376,8 +422,19 @@ namespace YTSvrLib
 					{
 						bFind = true;
 						nLenLeft -= nPattLen;
-						if (nPattLen == 1)
+
+						int nMaxCharlen = 0;
+						for (size_t i = 0; i < (*it).size();++i)
 						{
+							int nCharlen = utf8_char_lenth((*it)[i]);
+							if (nCharlen > nMaxCharlen)
+							{
+								nMaxCharlen = nCharlen;
+							}
+						}
+
+						if (nMaxCharlen > 1)
+						{// 这说明这个字符串包含了不属于ascii的字符,不能部分替换会导致字符串错误
 							for (long i = 0; i < nPattLen; ++i)
 							{
 								if (nPosInSrcString[l] < nTextLen)
@@ -385,26 +442,38 @@ namespace YTSvrLib
 								l++;
 							}
 						}
-						else if (nPattLen == 2)
+						else
 						{
-							for (long i = 0; i < nPattLen; ++i)
+							if (nPattLen == 1)
 							{
-								if (nPosInSrcString[l] < nTextLen && i != 0)
+								for (long i = 0; i < nPattLen; ++i)
 								{
-									pstrContent[nPosInSrcString[l]] = '*';
+									if (nPosInSrcString[l] < nTextLen)
+										pstrContent[nPosInSrcString[l]] = '*';
+									l++;
 								}
-								l++;
 							}
-						}
-						else if (nPattLen >= 3)
-						{
-							for (long i = 0; i < nPattLen; ++i)
+							else if (nPattLen == 2)
 							{
-								if (nPosInSrcString[l] < nTextLen && i != 0 && i != (nPattLen - 1))
+								for (long i = 0; i < nPattLen; ++i)
 								{
-									pstrContent[nPosInSrcString[l]] = '*';
+									if (nPosInSrcString[l] < nTextLen && i != 0)
+									{
+										pstrContent[nPosInSrcString[l]] = '*';
+									}
+									l++;
 								}
-								l++;
+							}
+							else if (nPattLen >= 3)
+							{
+								for (long i = 0; i < nPattLen; ++i)
+								{
+									if (nPosInSrcString[l] < nTextLen && i != 0 && i != (nPattLen - 1))
+									{
+										pstrContent[nPosInSrcString[l]] = '*';
+									}
+									l++;
+								}
 							}
 						}
 
@@ -437,15 +506,13 @@ namespace YTSvrLib
 		char* pIndex = szTemp;
 		char aCharacter = *pIndex;
 
-		char* pTmp = 0;
-
 		long nPattLen = 0;
 		long nLenLeft = nLen;//nTextLen;
 
 		while (*pIndex)
 		{
 			aCharacter = *pIndex;
-			std::map< char, ITPAIR>::iterator it = m_mpKeyword.find(aCharacter);
+			FilterIndex::iterator it = m_mpKeyword.find(aCharacter);
 			if (it != m_mpKeyword.end())
 			{
 				ITPAIR& aPair = it->second;

@@ -1,6 +1,6 @@
 /*MIT License
 
-Copyright (c) 2016 Zhe Xu
+Copyright (c) 2016 Archer Xu
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -145,7 +145,6 @@ __time32_t GetNextWeekDayTime(__time32_t tNow ,WORD wWeekDay, WORD wHour)
 	localtime_r(&tNow, &sTimeNow);
 #endif // LIB_WINDOWS
 
-	__time32_t tNextWRStart = tNow;
 	int nDaySpan = 0;
 
 	if (sTimeNow.tm_wday != wWeekDay)
@@ -573,7 +572,7 @@ void GetLocalIP(vector<string>& vctIPList)
 
 	//循环得出本地机器所有IP地址
 	int i = 0;
-	while (pHost->h_addr_list[i] != NULL && i < pHost->h_length)
+	while (i < pHost->h_length && pHost->h_addr_list[i] != NULL)
 	{
 		struct in_addr addr;
 		memcpy(&addr, pHost->h_addr_list[i], sizeof(struct in_addr));
@@ -970,3 +969,53 @@ void SafeTerminateProcess()
 #endif // LIB_WINDOWS
 }
 
+// 检查是否是debug版本
+bool CheckDebugVersion()
+{
+	char szPath[MAX_PATH] = { 0 };
+	GetModuleFilePath(szPath, MAX_PATH - 1);
+	char szDebugFile[MAX_PATH] = { 0 };
+	_snprintf_s(szDebugFile, MAX_PATH - 1, "%s" DIRECTORY_SEPARATOR "debug", szPath);
+	FILE* pFile = fopen(szDebugFile, "r");
+	if (pFile == NULL)
+	{
+		printf_s("DEBUG MODE need create file debug\n");
+		return false;
+	}
+
+	fclose(pFile);
+	return true;
+}
+
+// 检查是否是零时区
+bool CheckTimezoneZero()
+{
+#ifdef LIB_WINDOWS
+	TIME_ZONE_INFORMATION sTimeZone;
+	GetTimeZoneInformation(&sTimeZone);
+	if (sTimeZone.Bias != 0 || sTimeZone.DaylightBias != 0)
+	{
+		printf_s("!!!Cur Timezone is not 0,Are you sure???Please press (y/Y) to continue.......\n");
+		char cRet = (char)getchar();
+		if (cRet != 'y' && cRet != 'Y')
+		{
+			return false;
+		}
+	}
+#else
+	time_t tCur = 0;
+	struct tm tmCur;
+	time(&tCur);
+	localtime_r(&tCur, &tmCur);
+	if (tmCur.tm_gmtoff != 0 || strcmp(tmCur.tm_zone, "UTC") != 0)
+	{
+		perror("!!!Cur Timezone is not 0,Are you sure???Please press (y/Y) to continue.......\n");
+		char cRet = getchar();
+		if (cRet != 'y' && cRet != 'Y')
+		{
+			return false;
+		}
+	}
+#endif // LIB_WINDOWS
+	return true;
+}

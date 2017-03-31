@@ -1,6 +1,6 @@
 /*MIT License
 
-Copyright (c) 2016 Zhe Xu
+Copyright (c) 2016 Archer Xu
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,10 +27,10 @@ namespace YTSvrLib
 
 	void CMYSQLCommand::AddQueryText(LPCSTR lpszFormat, ...)
 	{
-		char szSQL[1024 * 16] = { 0 };
+		char szSQL[1024 X32] = { 0 };
 		va_list va;
 		va_start(va, lpszFormat);
-		_vsnprintf_s(szSQL, 1024 * 16, lpszFormat, va);
+		_vsnprintf_s(szSQL, 1024 X32, lpszFormat, va);
 		va_end(va);
 
 		m_QueryInfo = szSQL;
@@ -38,14 +38,14 @@ namespace YTSvrLib
 
 	void CMYSQLCommand::AddQueryText(LPCWSTR lpwzFormat, ...)
 	{
-		WCHAR wzSQL[1024 * 8] = { 0 };
+		WCHAR wzSQL[1024 X16] = { 0 };
 		va_list va;
 		va_start(va, lpwzFormat);
-		_vsnwprintf_s(wzSQL, 1024 * 8, lpwzFormat, va);
+		_vsnwprintf_s(wzSQL, 1024 X16, lpwzFormat, va);
 		va_end(va);
 
-		char szSQL[1024 * 16] = { 0 };
-		unicodetoutf8(wzSQL, szSQL, 1024 * 16);
+		char szSQL[1024 X32] = { 0 };
+		unicodetoutf8(wzSQL, szSQL, (1024 X32));
 
 		m_QueryInfo = szSQL;
 	}

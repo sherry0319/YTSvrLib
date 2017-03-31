@@ -1,6 +1,6 @@
 /*MIT License
 
-Copyright (c) 2016 Zhe Xu
+Copyright (c) 2016 Archer Xu
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -59,6 +59,7 @@ namespace YTSvrLib
 			Offset = OffsetHigh = 0;
 			hEvent = NULL;
 #endif
+			m_nSize = 0;
 		}
 		virtual ~CLogBuffer(){}
 

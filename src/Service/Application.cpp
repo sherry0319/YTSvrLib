@@ -1,6 +1,6 @@
 /*MIT License
 
-Copyright (c) 2016 Zhe Xu
+Copyright (c) 2016 Archer Xu
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -43,19 +43,27 @@ void InvalidParameterHandler(const wchar_t* , const wchar_t* , const wchar_t* , 
 }
 
 YTSvrLib::CServerApplication gApp;
+UINT  g_nGlobalErrorCode;// 全局错误
 
 namespace YTSvrLib
 {
+	void SetPrivateLastError(UINT nErrorCode)
+	{
+		g_nGlobalErrorCode = nErrorCode;
+	}
+
+	UINT GetPrivateLastError()
+	{
+		return g_nGlobalErrorCode;
+	}
 
 	CServerApplication::CServerApplication()
 	{
 #ifdef LIB_WINDOWS
 		WSADATA      wsd;
 		::WSAStartup(MAKEWORD((BYTE) 2, (BYTE) 2), &wsd);
-		CoInitialize(NULL);
 
 		m_hException = NULL;
-		m_hZlib = NULL;
 
 		m_hException = LoadLibraryA("XCPTHLR.dll");
 		if (NULL == m_hException)
@@ -65,25 +73,10 @@ namespace YTSvrLib
 			exit(0);
 		}
 
-#ifdef _WIN64
-		m_hZlib = LoadLibraryA("zlibwapi64.dll");
-#else
-		m_hZlib = LoadLibraryA("zlibwapi.dll");
-#endif
-		if (NULL == m_hZlib)
-		{
-			printf("LoadLibraryA zlibwapi.dll Error=%d", GetLastError());
-			getchar();
-			exit(0);
-		}
-
-		if (!AfxWinInit(::GetModuleHandle(NULL), NULL, ::GetCommandLine(), 0))
-		{
-			printf("AfxWinInit Error=%d", GetLastError());
-			getchar();
-			exit(0);
-		}
+		InitGenRandomFunction();
 #endif // LIB_WINDOWS
+
+		GlobalInit();
 	}
 
 	CServerApplication::~CServerApplication()
@@ -91,46 +84,22 @@ namespace YTSvrLib
 		LOG("Server Cleaning");
 #ifdef LIB_WINDOWS
 		::WSACleanup();
-		CoUninitialize();
 		if (m_hException)
 		{
 			FreeLibrary(m_hException);
 			m_hException = NULL;
 		}
-		if (m_hZlib)
-		{
-			FreeLibrary(m_hZlib);
-			m_hZlib = NULL;
-		}
+
+		ReleaseGenRandomFunction();
 #endif // LIB_WINDOWS
 
 		DelLogManager();
 	}
 
-	void CServerApplication::GlobalInit(int nEventCount)
+	void CServerApplication::GlobalInit()
 	{
-#ifdef LIB_WINDOWS
-		GetModuleFileNameA(NULL, m_szModuleName, MAX_PATH);
-		char cDelimiter = '\\';
-#else
-		readlink("/proc/self/exe", m_szModuleName, MAX_PATH);
-		char cDelimiter = '/';
-		printf("Module Name : %s\n", m_szModuleName);
-#endif // LIB_WINDOWS
+		GetModuleFileName(m_szModuleName, MAX_PATH-1);
 
-		int nLen = (int) strlen(m_szModuleName);
-		for (int i = nLen - 1; i > 0; --i)
-		{
-			if (m_szModuleName[i] == cDelimiter)
-			{
-				LPCSTR pStart = &(m_szModuleName[i]);
-				char szModuleName[64] = { 0 };
-				strncpy_s(szModuleName, pStart + 1, nLen - i - 1);
-				ZeroMemory(m_szModuleName, sizeof(m_szModuleName));
-				strncpy_s(m_szModuleName, szModuleName, 63);
-				break;
-			}
-		}
 #ifdef LIB_WINDOWS
 		char* pEnd = strrchr(m_szModuleName, '.');
 		if (pEnd)
@@ -153,17 +122,12 @@ namespace YTSvrLib
 		_set_purecall_handler(PureCallHandler);
 #endif // LIB_WINDOWS
 
-		Init(nEventCount);
+		Init();
 	}
 
-	bool CServerApplication::Init(int nEventCount)
+	bool CServerApplication::Init()
 	{
 		//设置事件个数
-		if (nEventCount > USER_EVENT_MAX_COUNT)
-			return false;
-		if (nEventCount < 0)
-			nEventCount = 0;
-		m_nEventCount = APPLICATION_EVENT_MIN_COUNT + nEventCount;
 		// _ASSERT(m_nEventCount<=APPLICATION_EVENT_MAX_COUNT);
 
 		m_semQueue.Create(NULL, 0, INT_MAX);
@@ -188,9 +152,6 @@ namespace YTSvrLib
 
 	void CServerApplication::Run()
 	{
-		if (m_nEventCount <= 0)
-			return;
-
 		while (true)
 		{
 			m_semQueue.Lock();

@@ -1,6 +1,6 @@
 /*MIT License
 
-Copyright (c) 2016 Zhe Xu
+Copyright (c) 2016 Archer Xu
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +24,7 @@ SOFTWARE.*/
 
 #ifndef LIB_WINDOWS
 #include <fcntl.h>
+#include <linux/tcp.h>
 #endif // !LIB_WINDOWS
 
 namespace YTSvrLib
@@ -121,6 +122,11 @@ namespace YTSvrLib
 		PostDisconnectMsg(eDisconnect);
 	}
 
+	void ITCPCLIENT::OnConnected()
+	{
+
+	}
+
 	BOOL ITCPCLIENT::CreateClient(const char* pszIP, int nPort)
 	{
 		if (m_bIsConnecting)
@@ -195,6 +201,11 @@ namespace YTSvrLib
 				m_fd = 0;
 				return FALSE;
 			}
+
+			int one = 1;
+			setsockopt(nSock, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(one));
+
+			setsockopt(nSock, IPPROTO_TCP, TCP_NODELAY, (void*) &one, sizeof(one));
 #endif // LIB_WINDOWS
 
 			if (::bind(nSock, (sockaddr*) &sAddrMy, sizeof(sockaddr_in)))
@@ -227,8 +238,6 @@ namespace YTSvrLib
 			bufferevent_setwatermark(m_pbufferevent, EV_READ, 0, 0);
 
 			bufferevent_setcb(m_pbufferevent, OnRead, NULL, ITCPBASE::OnError, this);
-
-			bufferevent_enable(m_pbufferevent, EV_READ | EV_SIGNAL | EV_PERSIST);
 		}
 
 		if (bufferevent_socket_connect(m_pbufferevent, (sockaddr*) &sAddrDst, sizeof(sAddrDst)))
@@ -255,6 +264,8 @@ namespace YTSvrLib
 		{
 			CreateThread();
 		}
+
+		bufferevent_enable(m_pbufferevent, EV_READ | EV_SIGNAL | EV_PERSIST);
 
 		return true;
 	}

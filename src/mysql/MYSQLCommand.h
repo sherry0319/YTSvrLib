@@ -1,6 +1,6 @@
 /*MIT License
 
-Copyright (c) 2016 Zhe Xu
+Copyright (c) 2016 Archer Xu
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,7 @@ SOFTWARE.*/
 
 #include <mysql.h>
 
-#define MAX_QUERY_SIZE 1024*64
+#define MAX_QUERY_SIZE 1024 X64
 
 namespace YTSvrLib
 {
@@ -62,7 +62,8 @@ namespace YTSvrLib
 	public:
 		CMYSQLCommand()
 		{
-
+			m_QueryInfo.clear();
+			m_bExcute = FALSE;
 		}
 
 		~CMYSQLCommand()

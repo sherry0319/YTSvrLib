@@ -1,6 +1,6 @@
 /*MIT License
 
-Copyright (c) 2016 Zhe Xu
+Copyright (c) 2016 Archer Xu
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -121,7 +121,7 @@ namespace YTSvrLib
 		}
 	protected:
 		CWQueue<evhttp_request*> m_qMsg;
-		std::map<string, CLTEVENTHTTPFUNC> m_mapMsgProcs;
+		std::unordered_map<string, CLTEVENTHTTPFUNC> m_mapMsgProcs;
 	};
 
 	typedef int(*CLTPSRFUNC)(YTSvrLib::ITCPBASE* pSocket, const char* pBuf, int nLen);
@@ -129,7 +129,7 @@ namespace YTSvrLib
 	class CPkgParserBase :public CParserBase
 	{
 	protected:
-		std::map<int, CLTPSRFUNC> m_CltMsgProcs;
+		std::unordered_map<int, CLTPSRFUNC> m_CltMsgProcs;
 	protected:
 		CPkgParserBase()
 		{
@@ -142,14 +142,14 @@ namespace YTSvrLib
 		}
 	};
 
-	typedef std::map<std::string, std::string> CMapString;
+	typedef std::unordered_map<std::string, std::string> CMapString;
 	typedef void(*CLTPSRHTTPFUNC)(YTSvrLib::ITCPBASE* pSocket, CMapString& mapParam);
 
 	class CHttpParserBase :public CParserBase
 	{
 	protected:
-		std::map<int, CLTPSRHTTPFUNC> m_CltMsgProcs;
-		std::map<int, UINT> m_MsgNeedParams;
+		std::unordered_map<int, CLTPSRHTTPFUNC> m_CltMsgProcs;
+		std::unordered_map<int, UINT> m_MsgNeedParams;
 	protected:
 
 		CHttpParserBase()

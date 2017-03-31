@@ -46,14 +46,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <PlatformToolset>v120</PlatformToolset>
-    <UseOfMfc>Static</UseOfMfc>
+    <UseOfMfc>false</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release64|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <PlatformToolset>v120</PlatformToolset>
-    <UseOfMfc>Static</UseOfMfc>
+    <UseOfMfc>false</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
@@ -134,6 +134,8 @@
       <WarningLevel>Level4</WarningLevel>
       <TreatWarningAsError>false</TreatWarningAsError>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4275;4505;4512;4127;</DisableSpecificWarnings>
+      <ExceptionHandling>Async</ExceptionHandling>
     </ClCompile>
     <Lib />
     <PostBuildEvent>
@@ -186,9 +188,10 @@ svn ci $(SolutionDir)Lib\ -m ""</Command>
       <WarningLevel>Level4</WarningLevel>
       <TreatWarningAsError>false</TreatWarningAsError>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <DisableSpecificWarnings>4275;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4275;4505;4512;4127;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <OmitFramePointers>false</OmitFramePointers>
+      <ExceptionHandling>Async</ExceptionHandling>
     </ClCompile>
     <Lib />
     <PostBuildEvent>
@@ -236,10 +239,9 @@ svn ci $(SolutionDir)Lib\ -m ""</Command>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release64|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release64|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="tinyxml\tinystr.cpp" />
-    <ClCompile Include="tinyxml\tinyxml.cpp" />
-    <ClCompile Include="tinyxml\tinyxmlerror.cpp" />
-    <ClCompile Include="tinyxml\tinyxmlparser.cpp" />
+    <ClCompile Include="tinyxml\tinyxml2.cpp" />
+    <ClCompile Include="tinyxml\XMLDocument.cpp" />
+    <ClCompile Include="tinyxml\XMLNode.cpp" />
     <ClCompile Include="tinyxml\XMLParser.cpp" />
     <ClCompile Include="urlwriter\urlwriter.cpp" />
     <ClCompile Include="XCPTHLR\ExceptHandler.cpp" />
@@ -278,7 +280,12 @@ svn ci $(SolutionDir)Lib\ -m ""</Command>
     <ClInclude Include="BugReport\SuperAssert.h" />
     <ClInclude Include="BugReport\SymbolEngine.h" />
     <ClInclude Include="BugReport\VariableInfo.h" />
+    <ClInclude Include="dice\dice.h" />
+    <ClInclude Include="findpath\JPS.h" />
     <ClInclude Include="Global\GlobalURLRequest.h" />
+    <ClInclude Include="tinyxml\tinyxml2.h" />
+    <ClInclude Include="tinyxml\XMLDocument.h" />
+    <ClInclude Include="tinyxml\XMLNode.h" />
     <ClInclude Include="YTSvrLib.h" />
     <ClInclude Include="Filter\Filter.h" />
     <ClInclude Include="Global\GlobalServer.h" />
@@ -497,8 +504,6 @@ svn ci $(SolutionDir)Lib\ -m ""</Command>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="stl\wqueue.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="tinyxml\tinystr.h" />
-    <ClInclude Include="tinyxml\tinyxml.h" />
     <ClInclude Include="tinyxml\XMLParser.h" />
     <ClInclude Include="typedef.h" />
     <ClInclude Include="urlwriter\urlwriter.h" />

@@ -8,9 +8,10 @@
 #include <stdlib.h>
 #if defined(_WIN32) || defined(_WIN64)
 #include <crtdbg.h>
+#include <cstdarg>
 #include "targetver.h"
-#include <afxwin.h>
-#include <afxtempl.h>
+// #include <afxwin.h>
+// #include <afxtempl.h>
 #endif // LIB_WINDOWS
 
 #define WIN32_LEAN_AND_MEAN             // 从 Windows 头中排除极少使用的资料

@@ -1,6 +1,6 @@
 /*MIT License
 
-Copyright (c) 2016 Zhe Xu
+Copyright (c) 2016 Archer Xu
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,7 @@ SOFTWARE.*/
 
 #pragma once
 
-#define YTSVRLIB_VERSION_CODE	1.0
+#define YTSVRLIB_VERSION_CODE	1.01
 
 #define APPLICATION_EVENT_MAX_COUNT 16	//main thread event max count.主线程事件最大数量
 #define APPLICATION_EVENT_MIN_COUNT 1	//main thread event min count.主线程事件最小数量
@@ -35,6 +35,8 @@ SOFTWARE.*/
 
 namespace YTSvrLib
 {
+	void SetPrivateLastError(UINT nErrorCode);
+	UINT GetPrivateLastError();
 
 	typedef void(*EventProc)();//event handle function define
 
@@ -42,7 +44,9 @@ namespace YTSvrLib
 	{
 		EventProc	Proc;		//event handler
 		DWORD		dwLastHandleTime;//last handle time.最后一次处理时间
-		_EVENTINFO() :dwLastHandleTime(0){}
+		_EVENTINFO() :dwLastHandleTime(0){
+			Proc = NULL;
+		}
 	}EVENTINFO, *PEVENTINFO;
 
 	class CServerApplication
@@ -50,9 +54,6 @@ namespace YTSvrLib
 	public:
 		explicit CServerApplication();
 		~CServerApplication();
-
-		// call it at the begining of main() to init the server.在main()函数的最开始调用以初始化服务器
-		void GlobalInit(int nEventCount);
 
 		// call it to enter event loop.waiting for event to handle.make sure all config has been prepaired.主线程进入阻塞状态，用于等待及处理事件，由main()调用.调用之前确保配置都已经准备完毕.
 		void Run();
@@ -63,8 +64,11 @@ namespace YTSvrLib
 		// add a new event to event loop.and activate the event.
 		void SetEvent(DWORD dwEventIndex);
 	private:
+		// 初始化服务器
+		void GlobalInit();
+
 		// set the event count .init the event pool.
-		bool Init(int nEventCount);
+		bool Init();
 
 		// init event pool.
 		bool InitEvent();
@@ -75,13 +79,11 @@ namespace YTSvrLib
 		// set the event.
 		bool SetEventInfo(DWORD dwEventIndex, EventProc Proc);
 	private:
-		int						m_nEventCount;	//event count .事件个数
 		CHAR					m_szModuleName[MAX_PATH];//process name.进程名
 		EVENTINFO					m_ayEventHandle[APPLICATION_EVENT_MAX_COUNT];// event handle map. 事件表
 
 #ifdef LIB_WINDOWS
 		HMODULE					m_hException;
-		HMODULE					m_hZlib;
 #endif // LIB_WINDOWS
 
 		std::list<DWORD>		m_listEventQueue;// event queue.事件队列

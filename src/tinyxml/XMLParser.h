@@ -1,6 +1,6 @@
 /*MIT License
 
-Copyright (c) 2016 Zhe Xu
+Copyright (c) 2016 Archer Xu
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,7 @@ SOFTWARE.*/
 
 #include<string>
 
-#include "tinyxml.h"
+#include "tinyxml2.h"
 
 using std::string;
 
@@ -35,6 +35,7 @@ public:
 	CXMLParser(void)
 	{
 		m_xml.Clear();
+		m_pElement = NULL;
 	}
 
 	~CXMLParser(void)
@@ -44,13 +45,13 @@ public:
 
 private:
 
-	TiXmlDocument m_xml;
+	tinyxml2::XMLDocument m_xml;
 
-	TiXmlElement* m_pElement;
+	tinyxml2::XMLElement* m_pElement;
 
 private:
 
-	TiXmlElement* GetFirstElement(LPCSTR ElementMark,TiXmlElement* pElement);
+	tinyxml2::XMLElement* GetFirstElement(LPCSTR ElementMark, tinyxml2::XMLElement* pElement);
 
 public:
 
@@ -61,16 +62,16 @@ public:
 	bool ParseXmlFile(LPCSTR lpszXmlFilePath);
 
 	//根据标签取值
-	TiXmlElement* GetFirstElementValue(LPCSTR lpszElementMark,string& strValue);
+	tinyxml2::XMLElement* GetFirstElementValue(LPCSTR lpszElementMark, string& strValue);
 
 	//针对同一标签的记录取值
-	TiXmlElement* GetNextElementValue(TiXmlElement* pElement,LPCSTR lpszElementMark,string& strValue);
+	tinyxml2::XMLElement* GetNextElementValue(tinyxml2::XMLElement* pElement, LPCSTR lpszElementMark, string& strValue);
 
 	//取得属性值
-	bool GetElementAttributeValue(TiXmlElement* pElement,LPCSTR lpszAttributeName,string& strValue);
+	bool GetElementAttributeValue(tinyxml2::XMLElement* pElement,LPCSTR lpszAttributeName,string& strValue);
 
 	//获取根结点
-	TiXmlElement* GetRootElement();
+	tinyxml2::XMLElement* GetRootElement();
 
 	//返回当前的xml字符串
 	string GetXmlStr();
@@ -79,24 +80,29 @@ public:
 	void Clear();
 
 	//添加一个根节点
-	TiXmlElement* AddXmlRootElement(LPCSTR lpszElementMark);
+	tinyxml2::XMLElement* AddXmlRootElement(LPCSTR lpszElementMark);
 
 	//添加子节点
-	TiXmlElement* AddXmlChildElement(TiXmlElement* pElement,LPCSTR lpszElementMark,LPCSTR lpszValue = NULL);
-	TiXmlElement* AddXmlChildElementW(TiXmlElement* pElement,LPCSTR lpszElementMark,LPCWSTR lpwzValue);
-	TiXmlElement* AddXmlChildElementInt(TiXmlElement* pElement,LPCSTR lpszElementMark,int nValue);
+	tinyxml2::XMLElement* AddXmlChildElement(tinyxml2::XMLElement* pElement, LPCSTR lpszElementMark);
+
+	tinyxml2::XMLElement* AddXmlChildElement(tinyxml2::XMLElement* pElement,LPCSTR lpszElementMark,LPCSTR lpszValue);
+	tinyxml2::XMLElement* AddXmlChildElement(tinyxml2::XMLElement* pElement,LPCSTR lpszElementMark,LPCWSTR lpwzValue);
+	tinyxml2::XMLElement* AddXmlChildElement(tinyxml2::XMLElement* pElement,LPCSTR lpszElementMark,int nValue);
+	tinyxml2::XMLElement* AddXmlChildElement(tinyxml2::XMLElement* pElement, LPCSTR lpszElementMark, LONGLONG nValue);
+	tinyxml2::XMLElement* AddXmlChildElement(tinyxml2::XMLElement* pElement, LPCSTR lpszElementMark, long nValue);
+	tinyxml2::XMLElement* AddXmlChildElement(tinyxml2::XMLElement* pElement, LPCSTR lpszElementMark, double dValue);
 
 	//给节点添加值
-	TiXmlText* AddElementValue(TiXmlElement* pElement,LPCSTR lpszToAdd);
+	tinyxml2::XMLElement* AddElementValue(tinyxml2::XMLElement* pElement, LPCSTR lpszToAdd);
 
 	//添加属性及属性值
-	TiXmlElement* AddXmlAttribute(TiXmlElement* pElement,LPCSTR lpszAttributeKey,LPCSTR lpszAttributeValue);
+	tinyxml2::XMLElement* AddXmlAttribute(tinyxml2::XMLElement* pElement,LPCSTR lpszAttributeKey,LPCSTR lpszAttributeValue);
 
 	//添加声明
-	TiXmlDeclaration* AddXmlDeclaration(LPCSTR lpszVer,LPCSTR lpszEncode,LPCSTR lpszStandalone);
+	tinyxml2::XMLDeclaration* AddXmlDeclaration(LPCSTR lpszVer,LPCSTR lpszEncode,LPCSTR lpszStandalone);
 
 	//添加注释
-	TiXmlComment* AddXmlComment(TiXmlElement* pElement,LPCSTR lpszComment);
+	tinyxml2::XMLComment* AddXmlComment(tinyxml2::XMLElement* pElement,LPCSTR lpszComment);
 
 	//将xml内容保存到文件
 	bool SaveFile(LPCSTR lpszFileName);

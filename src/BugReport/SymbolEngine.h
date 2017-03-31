@@ -42,7 +42,7 @@ struct CImageHlp_Module : public IMAGEHLP_MODULE64
 {
     CImageHlp_Module ( )
     {
-        memset ( this , NULL , sizeof ( IMAGEHLP_MODULE64 ) ) ;
+        memset ( this , 0 , sizeof ( IMAGEHLP_MODULE64 ) ) ;
         SizeOfStruct = sizeof ( IMAGEHLP_MODULE64 ) ;
     }
 } ;
@@ -52,7 +52,7 @@ struct CImageHlp_Line : public IMAGEHLP_LINE64
 {
     CImageHlp_Line ( )
     {
-        memset ( this , NULL , sizeof ( IMAGEHLP_LINE64 ) ) ;
+        memset ( this , 0 , sizeof ( IMAGEHLP_LINE64 ) ) ;
         SizeOfStruct = sizeof ( IMAGEHLP_LINE64 ) ;
     }
 } ;

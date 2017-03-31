@@ -1,6 +1,6 @@
 /*MIT License
 
-Copyright (c) 2016 Zhe Xu
+Copyright (c) 2016 Archer Xu
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -31,6 +31,9 @@ namespace YTSvrLib
 	// wchar_t×Ö·û¹ýÂËÆ÷
 	class CKeywordFilterW : public CSingle<CKeywordFilterW>
 	{
+		typedef std::wstring FilterString;
+		typedef std::pair< std::vector< FilterString >::iterator, std::vector< FilterString >::iterator > ITPAIR;
+		typedef std::unordered_map< wchar_t, ITPAIR> FilterIndex;
 	public:
 		CKeywordFilterW()
 		{
@@ -61,15 +64,16 @@ namespace YTSvrLib
 		BOOL HasKeyWord(const wchar_t* pstrContent, long nTextLen, wchar_t* pstrOutKey = NULL, long nOutMaxLength = 0);
 
 	private:
-		std::vector< std::wstring > m_vctKeyword; //Sorted.´¢´æ¹Ø¼ü´Ê
+		std::vector< FilterString > m_vctKeyword; //Sorted.´¢´æ¹Ø¼ü´Ê
 
-		typedef std::pair< std::vector< std::wstring >::iterator, std::vector< std::wstring >::iterator > ITPAIR;
-
-		std::map< wchar_t, ITPAIR> m_mpKeyword;// Keyword Index.¹Ø¼ü´ÊË÷Òý
+		FilterIndex m_mpKeyword;// Keyword Index.¹Ø¼ü´ÊË÷Òý
 	};
 
 	class CKeywordFilterA : public CSingle < CKeywordFilterA >
 	{
+		typedef std::string FilterString;
+		typedef std::pair< std::vector< FilterString >::iterator, std::vector< FilterString >::iterator > ITPAIR;
+		typedef std::unordered_map< char, ITPAIR> FilterIndex;
 	public:
 		CKeywordFilterA()
 		{
@@ -100,10 +104,8 @@ namespace YTSvrLib
 		BOOL HasKeyWord(const char* pstrContent, long nTextLen, char* pstrOutKey, long nOutMaxLength);
 
 	private:
-		std::vector< std::string > m_vctKeyword; //Sorted.´¢´æ¹Ø¼ü´Ê
+		std::vector< FilterString > m_vctKeyword; //Sorted.´¢´æ¹Ø¼ü´Ê
 
-		typedef std::pair< std::vector< std::string >::iterator, std::vector< std::string >::iterator > ITPAIR;
-
-		std::map< char, ITPAIR> m_mpKeyword;// Keyword Index.¹Ø¼ü´ÊË÷Òý
+		FilterIndex m_mpKeyword;// Keyword Index.¹Ø¼ü´ÊË÷Òý
 	};
 }

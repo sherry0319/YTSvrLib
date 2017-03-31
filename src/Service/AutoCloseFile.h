@@ -1,6 +1,6 @@
 /*MIT License
 
-Copyright (c) 2016 Zhe Xu
+Copyright (c) 2016 Archer Xu
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -31,7 +31,7 @@ namespace YTSvrLib
 		char m_strFileName[MAX_PATH];
 		char m_strSectionName[MAX_PATH];
 		BOOL m_bCfgFileOK;
-		std::map<std::string, std::string> m_mapConfigKey;
+		std::unordered_map<std::string, std::string> m_mapConfigKey;
 	public:
 
 		CConfigLoader(const char* pFileName)

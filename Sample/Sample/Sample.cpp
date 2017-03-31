@@ -65,8 +65,6 @@ int main(int argc, char* argv[])
 #else
 	SetConsoleCtrlHandler(signal_handle_function);
 #endif // LIB_WINDOWS
-
-	gApp.GlobalInit(EAppEvent::eAppEventCount);
 	//×¢²áÊÂ¼þ
 	gApp.RegisterEvent( EAppEvent::eAppGWSvrSocketEvent, CGWSvrParser::OnMsgRecv );
 	gApp.RegisterEvent( EAppEvent::eAppGWSvrSocketDisconnectEvent, CGWSvrParser::OnDisconnectMsgRecv );

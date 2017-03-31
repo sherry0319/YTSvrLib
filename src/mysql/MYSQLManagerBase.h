@@ -1,6 +1,6 @@
 /*MIT License
 
-Copyright (c) 2016 Zhe Xu
+Copyright (c) 2016 Archer Xu
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -31,7 +31,9 @@ SOFTWARE.*/
 
 typedef mysqlpp::DateTime CSQLDateTime;
 
-#define MSRESP_OUTPUTPARAM_MAX	4
+#define MYSQL_RESP_OUTPUTPARAM_MAX	4
+
+#define MYSQL_RESP_USERPARAM_MAX	6
 
 namespace YTSvrLib
 {
@@ -53,20 +55,16 @@ namespace YTSvrLib
 	};
 	typedef CWQueue<MYSQLRESPONSEINFO*> QueueMYSQLResp;
 
+
 	class CMYSQLQueryInfo : public CRecycle
 	{
 	public:
 
 		long		    m_nType;//请求类型
 		char            m_strSPName[64];
-		DWORD			m_tTime;
+		ULONGLONG		m_tTime;
 
-		LONGLONG    wParam;
-		LONGLONG    lParam;
-		LONGLONG    kParam;
-		LONGLONG    xParam;
-		LONGLONG    yParam;
-		LONGLONG	zParam;
+		LONGLONG		m_ayParam[MYSQL_RESP_USERPARAM_MAX];
 
 		CMYSQLQueryInfo()
 		{
@@ -76,17 +74,12 @@ namespace YTSvrLib
 		{
 			m_nType = 0;
 #ifdef LIB_WINDOWS
-			m_tTime = GetTickCount();
+			m_tTime = GetTickCount64();
 #else
-			m_tTime = time(NULL);
+			m_tTime = (ULONGLONG) time(NULL);
 #endif // DEBUG
 			memset(m_strSPName, 0, sizeof(m_strSPName));
-			wParam = 0;
-			lParam = 0;
-			kParam = 0;
-			xParam = 0;
-			yParam = 0;
-			zParam = 0;
+			ZeroMemory(m_ayParam, sizeof(m_ayParam));
 		}
 	};
 
@@ -132,8 +125,8 @@ namespace YTSvrLib
 		std::vector<MYSQLCONNECT_INFO>		m_DBSeverList;//数据库连接参数列表
 		CMYSQLDBSystem						m_DBSys;
 		CPool<CMYSQLQueryInfo, 256>			m_QueryPool;
-		std::map<INT, MYSQLPARSERESPONSEFUNC> m_mapParserFuncs;//处理函数
-		std::map<INT, std::string>			m_mapSQLName;
+		std::unordered_map<INT, MYSQLPARSERESPONSEFUNC> m_mapParserFuncs;//处理函数
+		std::unordered_map<INT, std::string>			m_mapSQLName;
 		CPool<MYSQLRESPONSEINFO, 256>		m_ResponsePool;
 		QueueMYSQLResp						m_qResponse;
 	};

@@ -81,12 +81,12 @@ void CDBManager::DoQuery(const char* pSQL, const char* pSPName, ECallBackType eC
 
 	strncpy_s(pQueryInfo->m_strSPName, pSPName, 63);
 	pQueryInfo->m_nType = eCallBackType;
-	pQueryInfo->wParam = wParam;
-	pQueryInfo->lParam = lParam;
-	pQueryInfo->kParam = kParam;
-	pQueryInfo->xParam = xParam;
-	pQueryInfo->yParam = yParam;
-	pQueryInfo->zParam = zParam;
+	pQueryInfo->m_ayParam[0] = wParam;
+	pQueryInfo->m_ayParam[1] = lParam;
+	pQueryInfo->m_ayParam[2] = kParam;
+	pQueryInfo->m_ayParam[3] = xParam;
+	pQueryInfo->m_ayParam[4] = yParam;
+	pQueryInfo->m_ayParam[5] = zParam;
 
 	if (bASync)
 	{// Òì²½Ö´ÐÐ
@@ -100,12 +100,12 @@ void CDBManager::DoQuery(const char* pSQL, const char* pSPName, ECallBackType eC
 
 void CDBManager::OnQueryTest(YTSvrLib::CMYSQLQueryInfo* pQueryInfo, YTSvrLib::MYSQLRESPONSEINFO* pRespInfo)
 {
-	LONGLONG wParam = pQueryInfo->wParam;
-	LONGLONG lParam = pQueryInfo->lParam;
-	LONGLONG kParam = pQueryInfo->kParam;
-	LONGLONG xParam = pQueryInfo->xParam;
-	LONGLONG yParam = pQueryInfo->yParam;
-	LONGLONG zParam = pQueryInfo->zParam;
+	LONGLONG wParam = pQueryInfo->m_ayParam[0];
+	LONGLONG lParam = pQueryInfo->m_ayParam[1];
+	LONGLONG kParam = pQueryInfo->m_ayParam[2];
+	LONGLONG xParam = pQueryInfo->m_ayParam[3];
+	LONGLONG yParam = pQueryInfo->m_ayParam[4];
+	LONGLONG zParam = pQueryInfo->m_ayParam[5];
 
 	if (pRespInfo->nErrorCode != 0)
 	{

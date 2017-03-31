@@ -1,6 +1,6 @@
 /*MIT License
 
-Copyright (c) 2016 Zhe Xu
+Copyright (c) 2016 Archer Xu
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -170,6 +170,12 @@ typedef LONGLONG __time64_t;
 
 #define closesocket close
 
+#ifdef NULL
+#undef NULL
+#endif
+
+#define NULL nullptr
+
 DWORD GetTickCount();
 
 int _wtoi(const wchar_t* pwzSrc);
@@ -199,6 +205,25 @@ typedef struct _SYSTEMTIME {
 
 void GetLocalTime(LPSYSTEMTIME lpSystemTime);
 
+#else
+typedef unsigned int UINT;
+
+typedef int INT;
+
+typedef double DOUBLE;
+
+typedef __int64 LONGLONG;
+
+typedef const char* LPCSTR;
+
+typedef const wchar_t* LPCWSTR;
+
+#ifdef NULL
+#undef NULL
 #endif
+
+#define NULL nullptr
+
+#endif // #ifdef LIB_LINUX
 
 #endif

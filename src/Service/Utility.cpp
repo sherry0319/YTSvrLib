@@ -1,6 +1,6 @@
 /*MIT License
 
-Copyright (c) 2016 Zhe Xu
+Copyright (c) 2016 Archer Xu
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +26,8 @@ SOFTWARE.*/
 
 #ifdef LIB_WINDOWS
 #include "../xcpthlr/ExceptHandler.h"
+#else
+#include <sys/sysinfo.h>
 #endif // LIB_WINDOWS
 
 void StrDelimiter(const char *lpszSrc, const char *lpszDelimiter, std::vector<std::string> &vecResult)
@@ -221,46 +223,201 @@ unsigned int Random(unsigned int nEnd)
         return 0;
     return rand()%nEnd;
 }
-#define MY_RAND_MAX 0x7FFF
+
+#ifdef LIB_WINDOWS
+HCRYPTPROV g_Rnd = 0;
+
+bool InitGenRandomFunction()
+{
+	LPCSTR UserName = "YTSvrKey";
+	if (!CryptAcquireContextA(&g_Rnd, UserName, NULL, PROV_RSA_FULL, 0))
+	{
+		if (GetLastError() == NTE_BAD_KEYSET)
+		{
+			if (CryptAcquireContextA(
+				&g_Rnd,
+				UserName,
+				NULL,
+				PROV_RSA_FULL,
+				CRYPT_NEWKEYSET))
+			{
+				//printf("A new key container has been created.\n");
+				return true;
+			}
+			else
+			{
+				//printf("Could not create a new key container.\n");
+				return false;
+			}
+		}
+		else
+		{
+			// printf("A cryptographic service handle could not be acquired.\n");
+			return false;
+		}
+	}
+
+	// 		printf("A cryptographic context with the %s key container ",UserName);
+	// 		printf("has been acquired.\n\n");
+	return true;
+}
+
+bool ReleaseGenRandomFunction()
+{
+	if (CryptReleaseContext(g_Rnd, 0))
+	{
+		// printf("The handle has been released.\n\n");
+		return true;
+	}
+
+	return false;
+}
+
+#endif
+
 int Random2( int nMax, int nMin )
 {
     if( nMin == nMax )
         return nMax;
 
 	int nRandSeed = (rand() << 13) + rand();
+#ifdef LIB_WINDOWS
+	LARGE_INTEGER cur;
+	QueryPerformanceFrequency(&cur);
+	nRandSeed += cur.LowPart;
+#else
+	timespec tp;
+	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &tp);
+	nRandSeed += tp.tv_nsec;
+#endif
 
     srand( nRandSeed );
+
+#ifdef LIB_WINDOWS
+	int nRand = 0;
+	CryptGenRandom(g_Rnd, (DWORD)sizeof(int), (BYTE*) (&nRand));
+	nRand = abs(nRand);
+	double fRand = ((double) nRand / (double) INT_MAX);
+#else
 	int nRand = rand();
+	double fRand = ((double) nRand / (double) RAND_MAX);
+#endif
     if( nMax > nMin )
     {
 		int nRange = nMax - nMin;
-#ifdef LIB_WINDOWS
-		if (nRange <= 30000)
-			nRand = nRand*nRange / MY_RAND_MAX + nMin;
-		else
-			nRand = (int) ((float) nRand*nRange / MY_RAND_MAX + nMin);
-#else
-		nRand = ((nRand % nRange) + nMin);
-#endif // LIB_WINDOWS
+// #ifdef LIB_WINDOWS
+// 		if (nRange <= 30000)
+// 			nRand = nRand*nRange / MY_RAND_MAX + nMin;
+// 		else
+// 			nRand = (int) ((float) nRand*nRange / MY_RAND_MAX + nMin);
+// #else
+// 		nRand = ((nRand % nRange) + nMin);
+// #endif // LIB_WINDOWS
+
+		nRand = ((int)(fRand * (double)nRange) + nMin);
+
 		if (nRand >= (int) nMax)
 			nRand = nMax - 1;
     }
 	else
 	{
 		int nRange = nMin - nMax;
-#ifdef LIB_WINDOWS
-		if (nRange <= 30000)
-			nRand = nRand*nRange / MY_RAND_MAX + nMax;
-		else
-			nRand = (int) ((float) nRand*nRange / MY_RAND_MAX + nMax);
-#else
-		nRand = ((nRand % nRange) + nMax);
-#endif // LIB_WINDOWS
+// #ifdef LIB_WINDOWS
+// 		if (nRange <= 30000)
+// 			nRand = nRand*nRange / MY_RAND_MAX + nMax;
+// 		else
+// 			nRand = (int) ((float) nRand*nRange / MY_RAND_MAX + nMax);
+// #else
+// 		nRand = ((nRand % nRange) + nMax);
+// #endif // LIB_WINDOWS
+
+		nRand = ((int) (fRand * (double) nRange) + nMax);
+
 		if( nRand >= (int)nMin )
 			nRand = nMin-1;
 	}
 	return nRand;
 }
+
+LONGLONG Random2(LONGLONG nMax, LONGLONG nMin /*= 0*/)
+{
+	if (nMin == nMax)
+		return nMax;
+
+	int nRandSeed = (rand() << 13) + rand();
+#ifdef LIB_WINDOWS
+	LARGE_INTEGER cur;
+	QueryPerformanceFrequency(&cur);
+	nRandSeed += cur.LowPart;
+#else
+	timespec tp;
+	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &tp);
+	nRandSeed += tp.tv_nsec;
+#endif
+
+	srand(nRandSeed);
+
+#ifdef LIB_WINDOWS
+	LONGLONG nRand = 0;
+	CryptGenRandom(g_Rnd, (DWORD)sizeof(int), (BYTE*) (&nRand));
+	nRand = abs(nRand);
+	double fRand = ((double) nRand / (double) INT_MAX);
+#else
+	LONGLONG nRand = rand();
+	double fRand = ((double) nRand / (double) RAND_MAX);
+#endif
+
+	if (nMax > nMin)
+	{
+		LONGLONG nRange = nMax - nMin;
+// #ifdef LIB_WINDOWS
+// 		if (nRange <= 30000)
+// 			nRand = nRand*nRange / RAND_MAX + nMin;
+// 		else
+// 			nRand = (LONGLONG) ((DOUBLE) nRand*nRange / RAND_MAX + nMin);
+// #else
+// 		nRand = ((nRand % nRange) + nMin);
+// #endif // LIB_WINDOWS
+		nRand = ((int) (fRand * (double) nRange) + nMin);
+
+		if (nRand >= nMax)
+			nRand = nMax - 1;
+	}
+	else
+	{
+		LONGLONG nRange = nMin - nMax;
+// #ifdef LIB_WINDOWS
+// 		if (nRange <= 30000)
+// 			nRand = nRand*nRange / RAND_MAX + nMax;
+// 		else
+// 			nRand = (LONGLONG) ((DOUBLE) nRand*nRange / RAND_MAX + nMax);
+// #else
+// 		nRand = ((nRand % nRange) + nMax);
+// #endif // LIB_WINDOWS
+		nRand = ((int) (fRand * (double) nRange) + nMax);
+
+		if (nRand >= nMin)
+			nRand = nMin - 1;
+	}
+	return nRand;
+}
+
+DOUBLE Random2(DOUBLE dMax, DOUBLE dMin /*= 0.000000*/, int nPrecision /*= 3*/)
+{
+	if (nPrecision == 0)
+	{
+		return (DOUBLE)Random2((LONGLONG) dMax, (LONGLONG) dMin);
+	}
+
+	DOUBLE dRate = pow((DOUBLE)10.000,nPrecision);
+	LONGLONG nMax = (LONGLONG)(dMax * dRate);
+	LONGLONG nMin = (LONGLONG)(dMin * dRate);
+
+	LONGLONG nRand = Random2(nMax, nMin);
+
+	return (DOUBLE)((DOUBLE) nRand / dRate);
+}
+
 char* Trim(char* lpszStr)
 {
     TrimL(lpszStr);
@@ -755,24 +912,24 @@ std::vector<int> ProduceRandSerial(int nBegin, int nSize)
 BOOL WCharToMByte( LPCWSTR lpcwszStr, LPSTR lpszStr, DWORD dwSize)
 {
 	DWORD dwMinSize;
-	dwMinSize = WideCharToMultiByte(CP_OEMCP, NULL, lpcwszStr, -1, NULL, 0, NULL, FALSE);
+	dwMinSize = WideCharToMultiByte(CP_OEMCP, 0, lpcwszStr, -1, NULL, 0, NULL, FALSE);
 	if (dwSize < dwMinSize)
 	{
 		return FALSE;
 	}
-	WideCharToMultiByte(CP_OEMCP, NULL, lpcwszStr, -1, lpszStr, dwSize, NULL, FALSE);
+	WideCharToMultiByte(CP_OEMCP, 0, lpcwszStr, -1, lpszStr, dwSize, NULL, FALSE);
 	return TRUE;
 }
 
 BOOL MByteToWChar(LPCSTR lpszStr, LPWSTR lpcwszStr, DWORD dwSize)
 {
 	DWORD dwMinSize;
-	dwMinSize = MultiByteToWideChar(CP_OEMCP, NULL, lpszStr, -1, NULL, 0);
+	dwMinSize = MultiByteToWideChar(CP_OEMCP, 0, lpszStr, -1, NULL, 0);
 	if (dwSize < dwMinSize)
 	{
 		return FALSE;
 	}
-	MultiByteToWideChar(CP_OEMCP, NULL, lpszStr, -1, lpcwszStr, dwSize);
+	MultiByteToWideChar(CP_OEMCP, 0, lpszStr, -1, lpcwszStr, dwSize);
 	return TRUE;
 }
 #endif // LIB_WINDOWS
@@ -960,8 +1117,20 @@ int lwchartoutf8(LPCWSTR p, LPSTR pdst, int cbMultiByte)
 	return ret;
 }
 
+int GetCPUCoreCount()
+{
+#ifdef LIB_WINDOWS
+	SYSTEM_INFO si;
 
-DWORD WINAPI    GetPrimeNumInRange(DWORD dwLow, DWORD dwHigh)
+	GetSystemInfo(&si);
+
+	return (int)si.dwNumberOfProcessors;
+#else
+	return get_nprocs();
+#endif
+}
+
+DWORD WINAPI GetPrimeNumInRange(DWORD dwLow, DWORD dwHigh)
 {
 	for (DWORD i=dwLow; i<dwHigh; i++)
 	{

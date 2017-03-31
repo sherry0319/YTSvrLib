@@ -1,6 +1,6 @@
 /*MIT License
 
-Copyright (c) 2016 Zhe Xu
+Copyright (c) 2016 Archer Xu
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -51,6 +51,7 @@ using namespace std;
 #include <winsock2.h>
 #include <Mswsock.h>
 #include <process.h>
+#include "typedef.h"
 #include "iconv/iconv.h"
 #include "event.h"
 EXTERN_C
@@ -59,6 +60,7 @@ EXTERN_C
 #include "redis/hiredis/win32/async.h"
 #include "redis/hiredis/win32/adapters/libevent.h"
 }
+#define DIRECTORY_SEPARATOR "\\"
 #else
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -87,7 +89,18 @@ extern "C"
 #include "redis/hiredis/linux/async.h"
 #include "redis/hiredis/linux/adapters/libevent.h"
 }
+#define DIRECTORY_SEPARATOR "/"
 #endif // LIB_WINDOWS
+
+#define X2		<< 1
+#define X4		<< 2
+#define X8		<< 3
+#define X16		<< 4
+#define X32		<< 5
+#define X64		<< 6
+#define X128	<< 7
+#define X256	<< 8
+#define X512	<< 9
 
 //STL
 #include <map>
@@ -96,6 +109,8 @@ extern "C"
 #include <vector>
 #include <list>
 #include <queue>
+#include <unordered_map>
+#include <unordered_set>
 
 #ifdef LIB_WINDOWS
 #include "BugReport/BugslayerUtil.h"
@@ -113,6 +128,8 @@ extern "C"
 #include "./Global/Perfermance.h"
 #include "./Single/Single.h"
 #include "./Service/SyncObj.h"
+#include "./dice/dice.h"
+#include "./findpath/JPS.h"
 #include "./Global/GlobalURLRequest.h"
 #include "./Service/Pool.h"
 #include "./Service/Utility.h"
@@ -128,6 +145,7 @@ extern "C"
 #include "./md5/md5.h"
 #include "./Filter/Filter.h"
 #include "./tinyxml/XMLParser.h"
+#include "./tinyxml/XMLDocument.h"
 #include "./redis/RedisConnector.h"
 #include "./Socket/YTSocketBase.h"
 #include "./Socket/YTSocketThread.h"

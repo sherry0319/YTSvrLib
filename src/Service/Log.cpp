@@ -1,6 +1,6 @@
 /*MIT License
 
-Copyright (c) 2016 Zhe Xu
+Copyright (c) 2016 Archer Xu
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -142,38 +142,38 @@ void LogErrorASync(const char* szFile, const int nLine, EM_LOG_LEVEL emLevel, co
 	YTSvrLib::CLogManager::PostBufferReady(YTSvrLib::CProcessLogMgr::GetInstance(), pLogBuffer, YTSvrLib::IOErrorData);
 }
 
-void LogError(const char* szFile, const int nLine, const char *fmt, ...)
-{
-	char cTime[128] = { 0 };
-	GetDateTime(cTime, 127, 'S');
-	cTime[127] = '\0';
-
-	char lpszBuf[10240] = { 0 };
-	va_list	ap;
-	va_start(ap, fmt);
-	vsprintf_s(lpszBuf, _countof(lpszBuf), fmt, ap);
-	va_end(ap);
-
-	char* pszFileShort = strrchr((char*) szFile, '\\');
-	if (pszFileShort)
-		pszFileShort++;
-	if (pszFileShort == NULL)
-		pszFileShort = (char*) szFile;
-
-	YTSvrLib::CLogBufferA LogBuffer;
-	char* lpszWriteBuf = LogBuffer.GetBuffer();
-	LogBuffer.ReSize(
-		sprintf_s(lpszWriteBuf, LogBuffer.GetCapcity(), "[%s,tid=0x%04x][%s:%d] %s\r\n",
-		cTime, 
-#ifdef LIB_WINDOWS
-		GetCurrentThreadId()
-#else
-		pthread_self()
-#endif // LIB_WINDOWS
-		, pszFileShort, nLine, lpszBuf)
-		);
-	YTSvrLib::CLogManager::WriteSynLog(YTSvrLib::CProcessLogMgr::GetInstance(), &LogBuffer);
-}
+// void LogError(const char* szFile, const int nLine, const char *fmt, ...)
+// {
+// 	char cTime[128] = { 0 };
+// 	GetDateTime(cTime, 127, 'S');
+// 	cTime[127] = '\0';
+// 
+// 	char lpszBuf[10240] = { 0 };
+// 	va_list	ap;
+// 	va_start(ap, fmt);
+// 	vsprintf_s(lpszBuf, _countof(lpszBuf), fmt, ap);
+// 	va_end(ap);
+// 
+// 	char* pszFileShort = strrchr((char*) szFile, '\\');
+// 	if (pszFileShort)
+// 		pszFileShort++;
+// 	if (pszFileShort == NULL)
+// 		pszFileShort = (char*) szFile;
+// 
+// 	YTSvrLib::CLogBufferA LogBuffer;
+// 	char* lpszWriteBuf = LogBuffer.GetBuffer();
+// 	LogBuffer.ReSize(
+// 		sprintf_s(lpszWriteBuf, LogBuffer.GetCapcity(), "[%s,tid=0x%04x][%s:%d] %s\r\n",
+// 		cTime, 
+// #ifdef LIB_WINDOWS
+// 		GetCurrentThreadId()
+// #else
+// 		pthread_self()
+// #endif // LIB_WINDOWS
+// 		, pszFileShort, nLine, lpszBuf)
+// 		);
+// 	YTSvrLib::CLogManager::WriteSynLog(YTSvrLib::CProcessLogMgr::GetInstance(), &LogBuffer);
+// }
 
 void LogCommon(const char *fmt, ...)
 {
@@ -472,7 +472,7 @@ namespace YTSvrLib
 	void CLogManager::ShutDown()
 	{
 		LOG("LogManager ShutDown..");
-		PostQueuedCompletionStatus(m_hIOCP, 0, NULL, NULL);
+		PostQueuedCompletionStatus(m_hIOCP, 0, 0, NULL);
 
 		WaitForMultipleObjects(1, &m_hThread, TRUE, 10000);
 		if (m_hThread != NULL && m_hThread != INVALID_HANDLE_VALUE)
@@ -782,7 +782,7 @@ namespace YTSvrLib
 	void CLogManagerW::ShutDown()
 	{
 		LOG("LogManager ShutDown..");
-		PostQueuedCompletionStatus(m_hIOCP, 0, NULL, NULL);
+		PostQueuedCompletionStatus(m_hIOCP, 0, 0, NULL);
 
 		WaitForMultipleObjects(1, &m_hThread, TRUE, 10000);
 		CloseHandle(m_hThread);
@@ -1050,7 +1050,10 @@ namespace YTSvrLib
 	{
 		m_lockSynFile.Lock();
 
-		fclose(m_hSynFileHandle);
+		if (m_hSynFileHandle)
+		{
+			fclose(m_hSynFileHandle);
+		}
 
 		m_hSynFileHandle = OpenSynLogFile();
 
@@ -1206,8 +1209,8 @@ namespace YTSvrLib
 
 			if (pLogBuffer && m_hAsynFileHandle)
 			{
-				char utf8_buffer[1024 * 16] = { 0 };
-				unicodetoutf8(pLogBuffer->GetBuffer(), utf8_buffer, 1024 * 16);
+				char utf8_buffer[1024 X16] = { 0 };
+				unicodetoutf8(pLogBuffer->GetBuffer(), utf8_buffer, 1024 X16);
 				size_t nRealWrite = fwrite(utf8_buffer, strlen(utf8_buffer), 1, m_hAsynFileHandle);
 				fflush(m_hAsynFileHandle);
 			}

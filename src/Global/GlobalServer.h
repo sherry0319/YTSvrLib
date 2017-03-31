@@ -1,6 +1,6 @@
 /*MIT License
 
-Copyright (c) 2016 Zhe Xu
+Copyright (c) 2016 Archer Xu
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -298,3 +298,8 @@ void RemoveSpace(LPCSTR pszSrc, LPSTR pszDst, int nLen);
 
 // 获取本机IP
 void GetLocalIP(vector<string>& vctIPList);
+
+// 检查是否是debug版本
+bool CheckDebugVersion();
+// 检查是否是零时区
+bool CheckTimezoneZero();

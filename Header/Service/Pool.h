@@ -1,6 +1,6 @@
 /*MIT License
 
-Copyright (c) 2016 Zhe Xu
+Copyright (c) 2016 Archer Xu
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -32,7 +32,9 @@ namespace YTSvrLib
 	{
 	public:
 		CRecycle()
-		{}
+		{
+			m_bInUse = false;
+		}
 
 		virtual void Init()
 		{};
@@ -48,7 +50,7 @@ namespace YTSvrLib
 			m_bInUse = bInUse;
 		}
 
-		void        SetIdx(const std::pair< INT_PTR, INT_PTR >& nIndex)
+		void SetIdx(const std::pair< INT_PTR, INT_PTR >& nIndex)
 		{
 			m_Idx = nIndex;
 		}
@@ -70,7 +72,7 @@ namespace YTSvrLib
 	class CPool
 	{
 	public:
-		CPool(LPCSTR pszObjName)
+		explicit CPool(LPCSTR pszObjName)
 		{
 			Init(pszObjName);
 		}

@@ -1,6 +1,6 @@
 /*MIT License
 
-Copyright (c) 2016 Zhe Xu
+Copyright (c) 2016 Archer Xu
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -231,7 +231,14 @@ int Random(int nFirst,int nEnd);
 //------------------------------------------------------
 unsigned int Random(unsigned int nEnd);
 
+#ifdef LIB_WINDOWS
+bool InitGenRandomFunction();
+bool ReleaseGenRandomFunction();
+#endif
+
 int Random2( int nMax, int nMin = 0 ); //介于 nMin~nMax-1的随机数
+LONGLONG Random2(LONGLONG nMax, LONGLONG nMin = 0);//介于 nMin~nMax-1的随机数
+DOUBLE Random2(DOUBLE dMax, DOUBLE dMin = 0.000000, int nPrecision = 0);//介于 dMin~dMax的随机数.精度取nPrecision
 
 //================================时间函数================================
 
@@ -318,6 +325,8 @@ void DelLogManager();
 #ifdef LIB_WINDOWS
 __time32_t SystemTimeToTime_t( LPSYSTEMTIME pst );
 #endif
+
+int GetCPUCoreCount();// 获取cpu核心数
 
 int lwchartoutf8(LPCWSTR p, LPSTR pdst, int cbMultiByte);
 DWORD WINAPI    GetPrimeNumInRange(DWORD dwLow, DWORD dwHigh);

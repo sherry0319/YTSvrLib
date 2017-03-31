@@ -1,6 +1,6 @@
 /*MIT License
 
-Copyright (c) 2016 Zhe Xu
+Copyright (c) 2016 Archer Xu
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -57,6 +57,7 @@ namespace YTSvrLib
 			m_nDbCount = 1;
 			m_nHashNum = 1;
 			m_tLastSQLRequest = 0;
+			m_nRetryCount = 0;
 		}
 		virtual ~CMYSQLDBSystem(void)
 		{}

@@ -1793,7 +1793,7 @@ BOOL CExceptionLogger::GetAddressDetails(void* pAddress, LPTSTR pszModule, DWORD
     {
       dwOffset = dwRVAAddress - dwSectionStart;
       CopyMemory(pszSectionName, pSection->Name, IMAGE_SIZEOF_SHORT_NAME);
-      pszSectionName[IMAGE_SIZEOF_SHORT_NAME] = NULL; //Don't forget to NULL terminate the Section name
+      pszSectionName[IMAGE_SIZEOF_SHORT_NAME] = 0; //Don't forget to NULL terminate the Section name
       return TRUE;
     }
   }

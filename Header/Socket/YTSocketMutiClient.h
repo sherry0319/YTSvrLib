@@ -1,6 +1,6 @@
 /*MIT License
 
-Copyright (c) 2016 Zhe Xu
+Copyright (c) 2016 Archer Xu
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -31,7 +31,10 @@ namespace YTSvrLib
 	public:
 		ITCPMUTICLIENT()
 		{
-
+			m_bIsConnecting = FALSE;
+			m_bIsConnected = FALSE;
+			m_bIsDisconnecting = FALSE;
+			m_pController = NULL;
 		}
 
 		virtual ~ITCPMUTICLIENT()

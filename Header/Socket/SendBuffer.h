@@ -1,6 +1,6 @@
 /*MIT License
 
-Copyright (c) 2016 Zhe Xu
+Copyright (c) 2016 Archer Xu
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -214,7 +214,7 @@ namespace YTSvrLib
 	{
 	public:
 		//CBuffer(const CBuffer& rSrc){  }
-		void operator=(const CBuffer& rSrc);
+		//void operator=(const CBuffer& rSrc);
 		CBuffer() : m_nLength(0)
 		{
 			m_nBufSize = size;
@@ -230,6 +230,14 @@ namespace YTSvrLib
 				m_pbuf = NULL;
 			}
 			m_nBufSize = 0;
+		}
+		CBuffer<size>(CBuffer<size>& other) : m_nLength(other.GetLength())
+		{
+			m_nBufSize = other.GetCapacity();
+			m_pbuf = new char[m_nBufSize];
+			memcpy(m_pbuf, other.GetBuffer(), other.GetLength());
+			m_nBufSizeMax = other.GetBufSizeMax();
+			m_nLength = other.GetLength();
 		}
 
 		///获取缓冲区的总容量
@@ -250,9 +258,9 @@ namespace YTSvrLib
 			if (nNewSize < m_nLength)
 				return FALSE;
 			char* pNewBuf = new char[nNewSize];
-			ZeroMemory(pNewBuf, nNewSize);
 			if (pNewBuf == NULL)
 				return FALSE;
+			ZeroMemory(pNewBuf, nNewSize);
 			if (m_pbuf)
 			{
 				if (m_nLength > 0)

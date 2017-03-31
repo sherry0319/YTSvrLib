@@ -102,6 +102,15 @@
     <Filter Include="URLRequest">
       <UniqueIdentifier>{bc919df3-2219-432e-a9d6-3a83b394b9f9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="dice">
+      <UniqueIdentifier>{64625140-3b2d-43a7-9ea7-9ad4d8a5616c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="findpath">
+      <UniqueIdentifier>{a907a53e-94a0-43d7-a8a3-3a44a621f797}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tinyXML\newParser">
+      <UniqueIdentifier>{6dfea10a-6bfd-486f-97c2-87da68974527}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -127,18 +136,6 @@
     </ClCompile>
     <ClCompile Include="XCPTHLR\ExceptHandler.cpp">
       <Filter>XCPTHLR</Filter>
-    </ClCompile>
-    <ClCompile Include="tinyxml\tinystr.cpp">
-      <Filter>tinyXML</Filter>
-    </ClCompile>
-    <ClCompile Include="tinyxml\tinyxml.cpp">
-      <Filter>tinyXML</Filter>
-    </ClCompile>
-    <ClCompile Include="tinyxml\tinyxmlerror.cpp">
-      <Filter>tinyXML</Filter>
-    </ClCompile>
-    <ClCompile Include="tinyxml\tinyxmlparser.cpp">
-      <Filter>tinyXML</Filter>
     </ClCompile>
     <ClCompile Include="tinyxml\XMLParser.cpp">
       <Filter>tinyXML</Filter>
@@ -214,6 +211,15 @@
     </ClCompile>
     <ClCompile Include="Global\GlobalURLRequest.cpp">
       <Filter>URLRequest</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxml\XMLNode.cpp">
+      <Filter>tinyXML\newParser</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxml\XMLDocument.cpp">
+      <Filter>tinyXML\newParser</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxml\tinyxml2.cpp">
+      <Filter>tinyXML</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -351,12 +357,6 @@
     </ClInclude>
     <ClInclude Include="stl\wqueue.h">
       <Filter>stl</Filter>
-    </ClInclude>
-    <ClInclude Include="tinyxml\tinystr.h">
-      <Filter>tinyXML</Filter>
-    </ClInclude>
-    <ClInclude Include="tinyxml\tinyxml.h">
-      <Filter>tinyXML</Filter>
     </ClInclude>
     <ClInclude Include="tinyxml\XMLParser.h">
       <Filter>tinyXML</Filter>
@@ -996,6 +996,21 @@
     </ClInclude>
     <ClInclude Include="Global\GlobalURLRequest.h">
       <Filter>URLRequest</Filter>
+    </ClInclude>
+    <ClInclude Include="dice\dice.h">
+      <Filter>dice</Filter>
+    </ClInclude>
+    <ClInclude Include="findpath\JPS.h">
+      <Filter>findpath</Filter>
+    </ClInclude>
+    <ClInclude Include="tinyxml\XMLNode.h">
+      <Filter>tinyXML\newParser</Filter>
+    </ClInclude>
+    <ClInclude Include="tinyxml\XMLDocument.h">
+      <Filter>tinyXML\newParser</Filter>
+    </ClInclude>
+    <ClInclude Include="tinyxml\tinyxml2.h">
+      <Filter>tinyXML</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

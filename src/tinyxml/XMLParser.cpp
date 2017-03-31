@@ -1,6 +1,6 @@
 /*MIT License
 
-Copyright (c) 2016 Zhe Xu
+Copyright (c) 2016 Archer Xu
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -35,9 +35,9 @@ bool CXMLParser::ParseXmlStr( LPCSTR lpszXmlStr )
 		return false;
 }
 
-TiXmlElement* CXMLParser::GetFirstElement( LPCSTR lpszElementMark,TiXmlElement* pElement )
+tinyxml2::XMLElement* CXMLParser::GetFirstElement(LPCSTR lpszElementMark, tinyxml2::XMLElement* pElement)
 {
-    TiXmlElement* pElementTmp=NULL;
+	tinyxml2::XMLElement* pElementTmp = NULL;
 
     pElementTmp=pElement;
 
@@ -49,7 +49,7 @@ TiXmlElement* CXMLParser::GetFirstElement( LPCSTR lpszElementMark,TiXmlElement* 
         }
         else
         {
-            TiXmlElement* pElementNext=pElementTmp->FirstChildElement();
+			tinyxml2::XMLElement* pElementNext = pElementTmp->FirstChildElement();
 
             while(pElementNext)
             {
@@ -59,7 +59,7 @@ TiXmlElement* CXMLParser::GetFirstElement( LPCSTR lpszElementMark,TiXmlElement* 
                 }
                 else
                 {
-                    TiXmlElement* reElement=NULL;
+					tinyxml2::XMLElement* reElement = NULL;
 
                     reElement=GetFirstElement(lpszElementMark,pElementNext);
 
@@ -83,12 +83,12 @@ TiXmlElement* CXMLParser::GetFirstElement( LPCSTR lpszElementMark,TiXmlElement* 
 
 //根据标签取值
 
-TiXmlElement* CXMLParser::GetFirstElementValue( LPCSTR lpszElementMark,string& strValue )
+tinyxml2::XMLElement* CXMLParser::GetFirstElementValue(LPCSTR lpszElementMark, string& strValue)
 {
 	strValue.clear();
     try
     {
-        TiXmlElement* pElement=m_xml.RootElement();
+		tinyxml2::XMLElement* pElement = m_xml.RootElement();
 
         pElement=GetFirstElement(lpszElementMark,pElement);
 
@@ -110,7 +110,7 @@ TiXmlElement* CXMLParser::GetFirstElementValue( LPCSTR lpszElementMark,string& s
     return NULL;
 }
 
-TiXmlElement* CXMLParser::GetNextElementValue(TiXmlElement* pElement, LPCSTR lpszElementMark,string& strValue )
+tinyxml2::XMLElement* CXMLParser::GetNextElementValue(tinyxml2::XMLElement* pElement, LPCSTR lpszElementMark, string& strValue)
 {
     strValue.clear();
 
@@ -145,7 +145,7 @@ string CXMLParser::GetXmlStr()
     string result;
     try
     {
-        TiXmlPrinter printer;
+        tinyxml2::XMLPrinter printer;
 
         m_xml.Accept(&printer);
 
@@ -166,36 +166,40 @@ void CXMLParser::Clear()
 
 //添加子节点
 
-TiXmlElement* CXMLParser::AddXmlRootElement( LPCSTR lpszElementMark )
+tinyxml2::XMLElement* CXMLParser::AddXmlRootElement( LPCSTR lpszElementMark )
 {
-    TiXmlElement* pRootElement = new TiXmlElement(lpszElementMark);
+	tinyxml2::XMLElement* pRootElement = m_xml.NewElement(lpszElementMark);
 
-    m_xml.LinkEndChild(pRootElement);
+	m_xml.LinkEndChild(pRootElement);
 
     return pRootElement;
 }
 
-TiXmlElement* CXMLParser::AddXmlChildElementW(TiXmlElement* pElement,LPCSTR lpszElementMark,LPCWSTR lpwzValue)
+tinyxml2::XMLElement* CXMLParser::AddXmlChildElement(tinyxml2::XMLElement* pElement, LPCSTR lpszElementMark)
 {
-	CHAR szValue[2048] = {0};
-	WChar2Ansi(lpwzValue,szValue,2047);
+	if (pElement)
+	{
+		tinyxml2::XMLElement* pElementAdd = m_xml.NewElement(lpszElementMark);
 
-	return AddXmlChildElement(pElement,lpszElementMark,szValue);
+		pElement->LinkEndChild(pElementAdd);
+
+		return pElementAdd;
+	}
+
+	return NULL;
 }
 
-TiXmlElement* CXMLParser::AddXmlChildElement( TiXmlElement* pElement,LPCSTR lpszElementMark,LPCSTR lpszValue/* = NULL*/ )
+tinyxml2::XMLElement* CXMLParser::AddXmlChildElement( tinyxml2::XMLElement* pElement,LPCSTR lpszElementMark,LPCSTR lpszValue )
 {
     if(pElement)
     {
-        TiXmlElement* pElementAdd=new TiXmlElement(lpszElementMark);
+		tinyxml2::XMLElement* pElementAdd = m_xml.NewElement(lpszElementMark);
 
         pElement->LinkEndChild(pElementAdd);
 
 		if (lpszValue)
 		{
-			TiXmlText *pContent=new TiXmlText(lpszValue);
-
-			pElementAdd->LinkEndChild(pContent);
+			pElementAdd->SetText(lpszValue);
 		}
 
         return pElementAdd;
@@ -204,22 +208,72 @@ TiXmlElement* CXMLParser::AddXmlChildElement( TiXmlElement* pElement,LPCSTR lpsz
     return NULL;
 }
 
-TiXmlElement* CXMLParser::AddXmlChildElementInt(TiXmlElement* pElement,LPCSTR lpszElementMark,int nValue/*=0*/)
+
+tinyxml2::XMLElement* CXMLParser::AddXmlChildElement(tinyxml2::XMLElement* pElement, LPCSTR lpszElementMark, LPCWSTR lpwzValue)
 {
-	if(pElement)
+	CHAR szValue[2048] = { 0 };
+	WChar2Ansi(lpwzValue, szValue, 2047);
+
+	return AddXmlChildElement(pElement, lpszElementMark, szValue);
+}
+
+tinyxml2::XMLElement* CXMLParser::AddXmlChildElement(tinyxml2::XMLElement* pElement, LPCSTR lpszElementMark, LONGLONG nValue)
+{
+	if (pElement)
 	{
-		TiXmlElement* pElementAdd=new TiXmlElement(lpszElementMark);
+		tinyxml2::XMLElement* pElementAdd = m_xml.NewElement(lpszElementMark);
 
 		pElement->LinkEndChild(pElementAdd);
 
-		char szValue[32] = {0};
-		int nSize = _snprintf_s(szValue, 31, "%d", nValue);
-		if (nSize > 0)
-		{
-			TiXmlText *pContent=new TiXmlText(szValue);
+		pElementAdd->SetText((int64_t)nValue);
 
-			pElementAdd->LinkEndChild(pContent);
-		}
+		return pElementAdd;
+	}
+
+	return NULL;
+}
+
+tinyxml2::XMLElement* CXMLParser::AddXmlChildElement(tinyxml2::XMLElement* pElement, LPCSTR lpszElementMark, long nValue)
+{
+	if (pElement)
+	{
+		tinyxml2::XMLElement* pElementAdd = m_xml.NewElement(lpszElementMark);
+
+		pElement->LinkEndChild(pElementAdd);
+
+		pElementAdd->SetText(nValue);
+
+		return pElementAdd;
+	}
+
+	return NULL;
+}
+
+tinyxml2::XMLElement* CXMLParser::AddXmlChildElement(tinyxml2::XMLElement* pElement, LPCSTR lpszElementMark, double dValue)
+{
+	if (pElement)
+	{
+		tinyxml2::XMLElement* pElementAdd = m_xml.NewElement(lpszElementMark);
+
+		pElement->LinkEndChild(pElementAdd);
+
+		pElementAdd->SetText(dValue);
+
+		return pElementAdd;
+	}
+
+	return NULL;
+}
+
+tinyxml2::XMLElement* CXMLParser::AddXmlChildElement(tinyxml2::XMLElement* pElement,LPCSTR lpszElementMark,int nValue)
+{
+	if(pElement)
+	{
+		tinyxml2::XMLElement* pElementAdd = m_xml.NewElement(lpszElementMark);
+
+		pElement->LinkEndChild(pElementAdd);
+
+		pElementAdd->SetText(nValue);
 		
 		return pElementAdd;
 	}
@@ -227,67 +281,70 @@ TiXmlElement* CXMLParser::AddXmlChildElementInt(TiXmlElement* pElement,LPCSTR lp
 	return NULL;
 }
 
-TiXmlText* CXMLParser::AddElementValue( TiXmlElement* pElement,LPCSTR lpszToAdd )
+tinyxml2::XMLElement* CXMLParser::AddElementValue(tinyxml2::XMLElement* pElement, LPCSTR lpszToAdd)
 {
     if(pElement)
     {
-        TiXmlText *pContent=new TiXmlText(lpszToAdd);
-
-        pElement->LinkEndChild(pContent);
-
-		return pContent;
+		pElement->SetText(lpszToAdd);
     }
 
-	return NULL;
+	return pElement;
 }
 
 //添加属性及属性值
-TiXmlElement* CXMLParser::AddXmlAttribute( TiXmlElement* pElement,LPCSTR lpszAttributeKey,LPCSTR lpszAttributeValue )
+tinyxml2::XMLElement* CXMLParser::AddXmlAttribute( tinyxml2::XMLElement* pElement,LPCSTR lpszAttributeKey,LPCSTR lpszAttributeValue )
 {
     if(pElement)
     {
         pElement->SetAttribute(lpszAttributeKey,lpszAttributeValue);
-		
-		return pElement;
     }
+
+	return pElement;
+}
+
+//添加声明
+tinyxml2::XMLDeclaration* CXMLParser::AddXmlDeclaration( LPCSTR lpszVer,LPCSTR lpszEncode,LPCSTR lpszStandalone )
+{
+	char buffer[256] = { 0 };
+	if (lpszStandalone == NULL)
+	{
+		_snprintf_s(buffer, 255, "xml version=\"%s\" encoding=\"%s\"", lpszVer, lpszEncode);
+	}
+	else
+	{
+		_snprintf_s(buffer, 255, "xml version=\"%s\" encoding=\"%s\" standalone=\"%s\"", lpszVer, lpszEncode, lpszStandalone);
+	}
+
+	return m_xml.NewDeclaration(buffer);
+}
+
+//添加注释
+tinyxml2::XMLComment* CXMLParser::AddXmlComment( tinyxml2::XMLElement* pElement,LPCSTR lpszComment )
+{
+	if (pElement)
+	{
+		tinyxml2::XMLComment *pComment = m_xml.NewComment(lpszComment);
+
+		pElement->LinkEndChild(pComment);
+
+		return pComment;
+	}
+	else
+	{
+		return m_xml.NewComment(lpszComment);
+	}
 
 	return NULL;
 }
 
-//添加声明
-TiXmlDeclaration* CXMLParser::AddXmlDeclaration( LPCSTR lpszVer,LPCSTR lpszEncode,LPCSTR lpszStandalone )
-{
-    TiXmlDeclaration *pDeclaration=new TiXmlDeclaration(lpszVer,lpszEncode,lpszStandalone);
-
-    m_xml.LinkEndChild(pDeclaration);
-
-	return pDeclaration;
-}
-
-//添加注释
-TiXmlComment* CXMLParser::AddXmlComment( TiXmlElement* pElement,LPCSTR lpszComment )
-{
-	TiXmlComment *pComment=new TiXmlComment(lpszComment);
-    if(pElement)
-    {
-        pElement->LinkEndChild(pComment);
-    }
-	else
-	{
-		m_xml.LinkEndChild(pComment);
-	}
-
-	return pComment;
-}
-
-TiXmlElement* CXMLParser::GetRootElement()
+tinyxml2::XMLElement* CXMLParser::GetRootElement()
 {
     return m_xml.RootElement();
 }
 
 //取得属性值
 
-bool CXMLParser::GetElementAttributeValue( TiXmlElement* pElement,LPCSTR lpszAttributeName,string& strValue )
+bool CXMLParser::GetElementAttributeValue( tinyxml2::XMLElement* pElement,LPCSTR lpszAttributeName,string& strValue )
 {
 	strValue.clear();
     if(pElement)
