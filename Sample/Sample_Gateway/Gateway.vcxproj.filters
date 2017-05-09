@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="ClientParser\GameSocket.cpp">
+      <Filter>ClientParser</Filter>
+    </ClCompile>
+    <ClCompile Include="ClientParser\PkgParser.cpp">
+      <Filter>ClientParser</Filter>
+    </ClCompile>
+    <ClCompile Include="ServerParser\ServerParser.cpp">
+      <Filter>ServerParser</Filter>
+    </ClCompile>
+    <ClCompile Include="ServerParser\ServerSocket.cpp">
+      <Filter>ServerParser</Filter>
+    </ClCompile>
+    <ClCompile Include="timer\TimerMgr.cpp">
+      <Filter>Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="Config\Config.cpp">
+      <Filter>Config</Filter>
+    </ClCompile>
+    <ClCompile Include="Gateway.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ClientParser\ClientDef.h">
+      <Filter>ClientParser</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientParser\GameSocket.h">
+      <Filter>ClientParser</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientParser\PkgParser.h">
+      <Filter>ClientParser</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerParser\ServerParser.h">
+      <Filter>ServerParser</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerParser\ServerSocket.h">
+      <Filter>ServerParser</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerParser\GWMsgDef.h">
+      <Filter>ServerParser</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientParser\MsgRetDef.h">
+      <Filter>ClientParser</Filter>
+    </ClInclude>
+    <ClInclude Include="timer\TimerMgr.h">
+      <Filter>Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="Config\Config.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Gateway.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="Global.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>main</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="ClientParser">
+      <UniqueIdentifier>{45a5e95e-a8ea-4f7e-9c90-2f6466fb9b54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ServerParser">
+      <UniqueIdentifier>{37e13e27-a8b2-4835-969a-b6d439da971d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Timer">
+      <UniqueIdentifier>{76e7f512-869f-465a-947e-80be56029edb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Config">
+      <UniqueIdentifier>{b5fd21ae-5543-4da8-8aeb-8ad6a6b90377}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resource">
+      <UniqueIdentifier>{af2d3ded-fe20-4da3-982a-58602599440e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="main">
+      <UniqueIdentifier>{3ea7b846-71c0-4e0b-a002-1e45dd81d1ba}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt">
+      <Filter>resource</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Gateway.rc">
+      <Filter>resource</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="configure.ac">
+      <Filter>resource</Filter>
+    </None>
+    <None Include="Makefile.am">
+      <Filter>resource</Filter>
+    </None>
+  </ItemGroup>
+</Project>
