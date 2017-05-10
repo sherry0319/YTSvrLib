@@ -8,4 +8,5 @@ os:
 before_install:
 - sudo apt-get update -qq
 - sudo apt-get install -qq autoconf automake libmysqlclient-dev
+- sudo chmod 755 install-dependencies.sh
 install: ./install-dependencies.sh
