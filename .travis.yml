@@ -1,0 +1,9 @@
+language: cpp
+sudo: required
+dist: trusty
+compiler:
+- g++
+os:
+- linux
+before_install:
+- ./install_depency.sh
