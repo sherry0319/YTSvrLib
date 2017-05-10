@@ -6,4 +6,6 @@ compiler:
 os:
 - linux
 before_install:
-- ./install_depency.sh
+- sudo apt-get update -qq
+- sudo apt-get install -qq autoconf automake mysql-devel
+install: ./install-dependencies.sh

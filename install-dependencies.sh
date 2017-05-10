@@ -1,5 +1,4 @@
 #!/bin/bash
-sudo apt-get install autoconf automake python-devel mysql-devel -qq -y
 cd third_party
 tar -xzf curl-7.53.1.tar.gz
 cd curl-7.53.1
