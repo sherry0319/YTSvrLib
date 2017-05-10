@@ -7,5 +7,5 @@ os:
 - linux
 before_install:
 - sudo apt-get update -qq
-- sudo apt-get install -qq autoconf automake mysql-devel
+- sudo apt-get install -qq autoconf automake libmysqlclient-dev
 install: ./install-dependencies.sh
