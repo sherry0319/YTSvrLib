@@ -27,6 +27,7 @@ Service/YTThread.cpp \
 Service/Utility.cpp \
 Service/SyncObj.cpp \
 Service/TimerThread.cpp \
+Service/TimerHandler.cpp \
 Socket/SendBuffer.cpp \
 Socket/YTSocketBase.cpp \
 Socket/YTSocketThread.cpp \

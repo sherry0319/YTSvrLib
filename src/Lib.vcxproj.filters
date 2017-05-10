@@ -221,6 +221,9 @@
     <ClCompile Include="tinyxml\tinyxml2.cpp">
       <Filter>tinyXML</Filter>
     </ClCompile>
+    <ClCompile Include="Service\TimerHandler.cpp">
+      <Filter>Timer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1011,6 +1014,9 @@
     </ClInclude>
     <ClInclude Include="tinyxml\tinyxml2.h">
       <Filter>tinyXML</Filter>
+    </ClInclude>
+    <ClInclude Include="Service\TimerHandler.h">
+      <Filter>Timer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

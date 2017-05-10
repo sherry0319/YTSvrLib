@@ -111,6 +111,8 @@ extern "C"
 #include <queue>
 #include <unordered_map>
 #include <unordered_set>
+#include <sstream>
+#include <istream>
 
 #ifdef LIB_WINDOWS
 #include "BugReport/BugslayerUtil.h"
@@ -150,6 +152,7 @@ extern "C"
 #include "./Socket/YTSocketBase.h"
 #include "./Socket/YTSocketThread.h"
 #include "./Service/TimerThread.h"
+#include "./Service/TimerHandler.h"
 #include "./Socket/YTSocketConnector.h"
 #include "./Socket/YTSocketClient.h"
 #include "./Socket/YTSocketServer.h"

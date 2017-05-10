@@ -3,6 +3,7 @@
 
 #define CLIENT_LISTEN_PORT 0
 #define USER_LISTEN_PORT 10
+#define DB_LISTEN_PORT 20
 
 #ifdef LIB_WINDOWS
 #define LOCAL_CONFIG_FILE	"\\YTSvr_config.ini"

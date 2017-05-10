@@ -7,7 +7,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sample", "Sample\Sample.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sample_CallDB", "Sample_CallDB\Sample_CallDB.vcxproj", "{50582D1A-3354-48A2-B7C4-F59D79B252CE}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Gateway", "Sample_Gateway\Gateway.vcxproj", "{34A6B451-C3C1-4422-B8BE-ADD75BE31F0C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sample_Gateway", "Sample_Gateway\Gateway.vcxproj", "{34A6B451-C3C1-4422-B8BE-ADD75BE31F0C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sample_DBSvr", "Sample_DBSvr\MYSQLDBSaver.vcxproj", "{12CAF7A8-8219-4196-9ACB-2AD1BDC0EACB}"
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
@@ -73,6 +75,22 @@ Global
 		{34A6B451-C3C1-4422-B8BE-ADD75BE31F0C}.Release64|Win32.Build.0 = Release64|Win32
 		{34A6B451-C3C1-4422-B8BE-ADD75BE31F0C}.Release64|x64.ActiveCfg = Release64|x64
 		{34A6B451-C3C1-4422-B8BE-ADD75BE31F0C}.Release64|x64.Build.0 = Release64|x64
+		{12CAF7A8-8219-4196-9ACB-2AD1BDC0EACB}.Debug|Win32.ActiveCfg = Debug64|Win32
+		{12CAF7A8-8219-4196-9ACB-2AD1BDC0EACB}.Debug|Win32.Build.0 = Debug64|Win32
+		{12CAF7A8-8219-4196-9ACB-2AD1BDC0EACB}.Debug|x64.ActiveCfg = Debug64|x64
+		{12CAF7A8-8219-4196-9ACB-2AD1BDC0EACB}.Debug|x64.Build.0 = Debug64|x64
+		{12CAF7A8-8219-4196-9ACB-2AD1BDC0EACB}.Debug64|Win32.ActiveCfg = Debug64|Win32
+		{12CAF7A8-8219-4196-9ACB-2AD1BDC0EACB}.Debug64|Win32.Build.0 = Debug64|Win32
+		{12CAF7A8-8219-4196-9ACB-2AD1BDC0EACB}.Debug64|x64.ActiveCfg = Debug64|x64
+		{12CAF7A8-8219-4196-9ACB-2AD1BDC0EACB}.Debug64|x64.Build.0 = Debug64|x64
+		{12CAF7A8-8219-4196-9ACB-2AD1BDC0EACB}.Release|Win32.ActiveCfg = Release64|Win32
+		{12CAF7A8-8219-4196-9ACB-2AD1BDC0EACB}.Release|Win32.Build.0 = Release64|Win32
+		{12CAF7A8-8219-4196-9ACB-2AD1BDC0EACB}.Release|x64.ActiveCfg = Release64|x64
+		{12CAF7A8-8219-4196-9ACB-2AD1BDC0EACB}.Release|x64.Build.0 = Release64|x64
+		{12CAF7A8-8219-4196-9ACB-2AD1BDC0EACB}.Release64|Win32.ActiveCfg = Release64|Win32
+		{12CAF7A8-8219-4196-9ACB-2AD1BDC0EACB}.Release64|Win32.Build.0 = Release64|Win32
+		{12CAF7A8-8219-4196-9ACB-2AD1BDC0EACB}.Release64|x64.ActiveCfg = Release64|x64
+		{12CAF7A8-8219-4196-9ACB-2AD1BDC0EACB}.Release64|x64.Build.0 = Release64|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

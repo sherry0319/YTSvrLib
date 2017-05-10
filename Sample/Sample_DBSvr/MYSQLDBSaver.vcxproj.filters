@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Config">
+      <UniqueIdentifier>{14001960-7ae4-447e-b8fa-cb14def69b2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DB">
+      <UniqueIdentifier>{ef0456af-fb42-488b-b891-327d2406d001}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="global">
+      <UniqueIdentifier>{794581b9-e1eb-4015-ad4b-bff7e5b55bae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GMSvrParser">
+      <UniqueIdentifier>{d818bae1-8541-441f-b805-985f23a28421}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Timer">
+      <UniqueIdentifier>{c49e88ac-96e2-45ad-af00-dcc4b8a3805c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="DBCache">
+      <UniqueIdentifier>{638b7d3c-c9e4-4849-86e3-376fb3f71e87}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DBSaver.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Config\Config.cpp">
+      <Filter>Config</Filter>
+    </ClCompile>
+    <ClCompile Include="db\DBLogMgr.cpp">
+      <Filter>DB</Filter>
+    </ClCompile>
+    <ClCompile Include="db\DBManager.cpp">
+      <Filter>DB</Filter>
+    </ClCompile>
+    <ClCompile Include="GMSvrParser\GMSvrParser.cpp">
+      <Filter>GMSvrParser</Filter>
+    </ClCompile>
+    <ClCompile Include="GMSvrParser\GMSvrSocket.cpp">
+      <Filter>GMSvrParser</Filter>
+    </ClCompile>
+    <ClCompile Include="timer\TimerMgr.cpp">
+      <Filter>Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="dbcache\DBCache.cpp">
+      <Filter>DBCache</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DBSaver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Config\Config.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="db\DBLogMgr.h">
+      <Filter>DB</Filter>
+    </ClInclude>
+    <ClInclude Include="db\DBManager.h">
+      <Filter>DB</Filter>
+    </ClInclude>
+    <ClInclude Include="global\Global.h">
+      <Filter>global</Filter>
+    </ClInclude>
+    <ClInclude Include="GMSvrParser\GMSvrDef.h">
+      <Filter>GMSvrParser</Filter>
+    </ClInclude>
+    <ClInclude Include="GMSvrParser\GMSvrParser.h">
+      <Filter>GMSvrParser</Filter>
+    </ClInclude>
+    <ClInclude Include="GMSvrParser\GMSvrParseTable.h">
+      <Filter>GMSvrParser</Filter>
+    </ClInclude>
+    <ClInclude Include="GMSvrParser\GMSvrSocket.h">
+      <Filter>GMSvrParser</Filter>
+    </ClInclude>
+    <ClInclude Include="timer\TimerMgr.h">
+      <Filter>Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="dbcache\DBCache.h">
+      <Filter>DBCache</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DBSaver.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="configure.ac">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="Makefile.am">
+      <Filter>资源文件</Filter>
+    </None>
+  </ItemGroup>
+</Project>
