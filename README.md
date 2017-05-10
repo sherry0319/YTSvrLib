@@ -1,4 +1,4 @@
-# YTSvrLib
+# YTSvrLib [![TravisCI Status](https://travis-ci.org/sherry0319/YTSvrLib.svg?branch=master)](https://travis-ci.org/sherry0319/YTSvrLib)
 a simple game server library for linux/windows
 
 # Install Windows
@@ -34,7 +34,7 @@ See the project "Sample".
 # 在Linux下使用
 1.先安装以下依赖库 : libiconv libevent2 libcurl libhiredis libmysqlpp libmysqlclient libpthread libtcmalloc(mysqlpp 需要用项目中third_party里带的版本,因为本人对原本的库做了点小修改)
 
-2.cd src && ./configure && make install
+2.cd src && ./configure && make install (或者你可以直接用./makeall.sh来获得DEBUG版本或者./makeall_release.sh来获得release版本)
 
 3.你将会得到libytsvrlib.so
 
