@@ -267,6 +267,14 @@ void GetModuleFileName(char* pszOut,int nLen);
 const wchar_t* CovertUTC2String(__time32_t tTime, wchar_t* pwzOut, int nOutMaxLen);
 const char* CovertUTC2String(__time32_t tTime, char* pszOut, int nOutMaxLen);
 
+//把 年|月|日|时|分|秒 的时间转换为时间
+__time32_t MakeStrTimeToUTC(LPCWSTR lpwzTime);
+__time32_t MakeStrTimeToUTC(LPCSTR lpwzTime);
+
+//把 月|日|时|分|秒 的时间依据给定的年份转换为时间
+__time32_t MakeStrTimeToUTC_NoYear(LPCWSTR lpwzTime, UINT nYear);
+__time32_t MakeStrTimeToUTC_NoYear(LPCSTR lpwzTime, UINT nYear);
+
 // 生成一串随机的字符串
 LPCSTR MakeRandomKey(LPSTR pszOut, UINT nOutMaxLen,UINT nNeedLen);
 LPCWSTR MakeRandomKey(LPWSTR pszOut, UINT nOutMaxLen,UINT nNeedLen);
@@ -283,14 +291,6 @@ void WINAPI ParseListStr(LPCSTR pszList, std::vector< std::vector<int> >& vctOut
 // 将字符串全部转换为小写
 int StringToLowcase(LPCWSTR lpwzSrc, LPWSTR lpwzOut, int nLen);
 int StringToLowcase(LPCSTR lpszSrc, LPSTR lpszOut, int nLen);
-
-//把 年|月|日|时|分|秒 的时间转换为时间
-__time32_t MakeStrTimeToUTC(LPCWSTR lpwzTime);
-__time32_t MakeStrTimeToUTC(LPCSTR lpwzTime);
-
-//把 月|日|时|分|秒 的时间依据给定的年份转换为时间
-__time32_t MakeStrTimeToUTC_NoYear(LPCWSTR lpwzTime, UINT nYear);
-__time32_t MakeStrTimeToUTC_NoYear(LPCSTR lpwzTime, UINT nYear);
 
 //移除字符串前后空格
 void RemoveSpace(LPCWSTR pwzSrc, LPWSTR pwzDst, int nLen);

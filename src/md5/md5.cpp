@@ -151,7 +151,7 @@ void md5(const uint8_t *initial_msg, size_t initial_len, uint8_t *digest)
 	to_bytes(h3, digest + 12);
 }
 
-void MD5(LPCWSTR pwzInfo, wchar_t wzOutBuf[34])
+LPCWSTR MD5(LPCWSTR pwzInfo, wchar_t wzOutBuf[34])
 {
 	int nLen = 0;
 
@@ -168,9 +168,11 @@ void MD5(LPCWSTR pwzInfo, wchar_t wzOutBuf[34])
 		nLen += 2;
 	}
 	wzOutBuf[nLen] = L'\0';
+
+	return wzOutBuf;
 }
 
-void MD5(LPCSTR pszInfo, char szOutBuf[34])
+LPCSTR MD5(LPCSTR pszInfo, char szOutBuf[34])
 {
 	int nLen = 0;
 
@@ -187,9 +189,11 @@ void MD5(LPCSTR pszInfo, char szOutBuf[34])
 		nLen += 2;
 	}
 	szOutBuf[nLen] = '\0';
+
+	return szOutBuf;
 }
 
-void MD5(LPCWSTR pwzInfo, size_t nSize, wchar_t wzOutBuf[34])
+LPCWSTR MD5(LPCWSTR pwzInfo, size_t nSize, wchar_t wzOutBuf[34])
 {
 	int nLen = 0;
 
@@ -206,9 +210,11 @@ void MD5(LPCWSTR pwzInfo, size_t nSize, wchar_t wzOutBuf[34])
 		nLen += 2;
 	}
 	wzOutBuf[nLen] = L'\0';
+
+	return wzOutBuf;
 }
 
-void MD5(LPCSTR pszInfo, size_t nSize, char szOutBuf[34])
+LPCSTR MD5(LPCSTR pszInfo, size_t nSize, char szOutBuf[34])
 {
 	int nLen = 0;
 
@@ -225,4 +231,6 @@ void MD5(LPCSTR pszInfo, size_t nSize, char szOutBuf[34])
 		nLen += 2;
 	}
 	szOutBuf[nLen] = '\0';
+
+	return szOutBuf;
 }

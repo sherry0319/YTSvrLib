@@ -241,24 +241,19 @@ bool InitGenRandomFunction()
 				PROV_RSA_FULL,
 				CRYPT_NEWKEYSET))
 			{
-				//printf("A new key container has been created.\n");
 				return true;
 			}
 			else
 			{
-				//printf("Could not create a new key container.\n");
 				return false;
 			}
 		}
 		else
 		{
-			// printf("A cryptographic service handle could not be acquired.\n");
 			return false;
 		}
 	}
 
-	// 		printf("A cryptographic context with the %s key container ",UserName);
-	// 		printf("has been acquired.\n\n");
 	return true;
 }
 
@@ -266,7 +261,6 @@ bool ReleaseGenRandomFunction()
 {
 	if (CryptReleaseContext(g_Rnd, 0))
 	{
-		// printf("The handle has been released.\n\n");
 		return true;
 	}
 
@@ -279,6 +273,8 @@ int Random2( int nMax, int nMin )
 {
     if( nMin == nMax )
         return nMax;
+	if (nMax < nMin)
+		return Random2(nMin, nMax);
 
 	int nRandSeed = (rand() << 13) + rand();
 #ifdef LIB_WINDOWS
@@ -302,40 +298,14 @@ int Random2( int nMax, int nMin )
 	int nRand = rand();
 	double fRand = ((double) nRand / (double) RAND_MAX);
 #endif
-    if( nMax > nMin )
-    {
-		int nRange = nMax - nMin;
-// #ifdef LIB_WINDOWS
-// 		if (nRange <= 30000)
-// 			nRand = nRand*nRange / MY_RAND_MAX + nMin;
-// 		else
-// 			nRand = (int) ((float) nRand*nRange / MY_RAND_MAX + nMin);
-// #else
-// 		nRand = ((nRand % nRange) + nMin);
-// #endif // LIB_WINDOWS
+   
+	int nRange = nMax - nMin;
 
-		nRand = ((int)(fRand * (double)nRange) + nMin);
+	nRand = ((int) (fRand * (double) nRange) + nMin);
 
-		if (nRand >= (int) nMax)
-			nRand = nMax - 1;
-    }
-	else
-	{
-		int nRange = nMin - nMax;
-// #ifdef LIB_WINDOWS
-// 		if (nRange <= 30000)
-// 			nRand = nRand*nRange / MY_RAND_MAX + nMax;
-// 		else
-// 			nRand = (int) ((float) nRand*nRange / MY_RAND_MAX + nMax);
-// #else
-// 		nRand = ((nRand % nRange) + nMax);
-// #endif // LIB_WINDOWS
+	if (nRand >= (int) nMax)
+		nRand = nMax - 1;
 
-		nRand = ((int) (fRand * (double) nRange) + nMax);
-
-		if( nRand >= (int)nMin )
-			nRand = nMin-1;
-	}
 	return nRand;
 }
 
@@ -343,6 +313,8 @@ LONGLONG Random2(LONGLONG nMax, LONGLONG nMin /*= 0*/)
 {
 	if (nMin == nMax)
 		return nMax;
+	if (nMax < nMin)
+		return Random2(nMin, nMax);
 
 	int nRandSeed = (rand() << 13) + rand();
 #ifdef LIB_WINDOWS
@@ -359,51 +331,34 @@ LONGLONG Random2(LONGLONG nMax, LONGLONG nMin /*= 0*/)
 
 #ifdef LIB_WINDOWS
 	LONGLONG nRand = 0;
-	CryptGenRandom(g_Rnd, (DWORD)sizeof(int), (BYTE*) (&nRand));
+	CryptGenRandom(g_Rnd, (DWORD)sizeof(LONGLONG), (BYTE*) (&nRand));
 	nRand = abs(nRand);
-	double fRand = ((double) nRand / (double) INT_MAX);
+	double fRand = ((double) nRand / (double) LLONG_MAX);
 #else
 	LONGLONG nRand = rand();
 	double fRand = ((double) nRand / (double) RAND_MAX);
 #endif
 
-	if (nMax > nMin)
-	{
-		LONGLONG nRange = nMax - nMin;
-// #ifdef LIB_WINDOWS
-// 		if (nRange <= 30000)
-// 			nRand = nRand*nRange / RAND_MAX + nMin;
-// 		else
-// 			nRand = (LONGLONG) ((DOUBLE) nRand*nRange / RAND_MAX + nMin);
-// #else
-// 		nRand = ((nRand % nRange) + nMin);
-// #endif // LIB_WINDOWS
-		nRand = ((int) (fRand * (double) nRange) + nMin);
+	LONGLONG nRange = nMax - nMin;
 
-		if (nRand >= nMax)
-			nRand = nMax - 1;
-	}
-	else
-	{
-		LONGLONG nRange = nMin - nMax;
-// #ifdef LIB_WINDOWS
-// 		if (nRange <= 30000)
-// 			nRand = nRand*nRange / RAND_MAX + nMax;
-// 		else
-// 			nRand = (LONGLONG) ((DOUBLE) nRand*nRange / RAND_MAX + nMax);
-// #else
-// 		nRand = ((nRand % nRange) + nMax);
-// #endif // LIB_WINDOWS
-		nRand = ((int) (fRand * (double) nRange) + nMax);
+	nRand = ((LONGLONG) (fRand * (double) nRange) + nMin);
 
-		if (nRand >= nMin)
-			nRand = nMin - 1;
-	}
+	if (nRand >= nMax)
+		nRand = nMax - 1;
+
 	return nRand;
 }
 
 DOUBLE Random2(DOUBLE dMax, DOUBLE dMin /*= 0.000000*/, int nPrecision /*= 3*/)
 {
+	if ((dMax - dMin) < pow(10,-nPrecision))
+	{
+		return dMax;
+	}
+	if (dMin > dMax)
+	{
+		return Random2(dMin, dMax, nPrecision);
+	}
 	if (nPrecision == 0)
 	{
 		return (DOUBLE)Random2((LONGLONG) dMax, (LONGLONG) dMin);
@@ -607,7 +562,7 @@ char* GetDateTime(char *lpszTimeBuf, int nLen, char Flag)
     return lpszTimeBuf;
 }
 
-wchar_t* GetDateTimeW(wchar_t *lpwzTimeBuf, int nLen, char Flag )
+wchar_t* GetDateTime(wchar_t *lpwzTimeBuf, int nLen, char Flag )
 {
 	if(lpwzTimeBuf == NULL) return NULL;
 #ifdef LIB_WINDOWS
@@ -728,11 +683,11 @@ void StrReplace(char *szSource, int nLen,const char *pszOldstring,const char *ps
 #endif // LIB_WINDOWS
 }
 
-void StrReplaceW(wchar_t *wzSource, int nLen,const wchar_t *pwzOldstring,const wchar_t *pwzNewstring)
+void StrReplace(wchar_t *wzSource, int nLen,const wchar_t *pwzOldstring,const wchar_t *pwzNewstring)
 {
 	std::wstring strSource = wzSource;
 
-	StrReplaceW(strSource,pwzOldstring,pwzNewstring);
+	StrReplace(strSource,pwzOldstring,pwzNewstring);
 
 #ifdef LIB_WINDOWS
 	wcsncpy_s(wzSource, nLen, strSource.c_str(), strSource.size());
@@ -770,7 +725,7 @@ void StrReplace(std::string&strSource,const std::string&strOldstring,const std::
 	}
 }
 
-void StrReplaceW(std::wstring&strSource,const std::wstring&strOldstring,const std::wstring&strNewstring)
+void StrReplace(std::wstring&strSource,const std::wstring&strOldstring,const std::wstring&strNewstring)
 {
 	if (strOldstring == strNewstring)
 	{

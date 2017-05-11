@@ -23,17 +23,17 @@ SOFTWARE.*/
 
 namespace YTSvrLib
 {
-#define PERFERMANCE_MICRO_SECONDS 1000000//微秒级定时
-#define PERFERMANCE_MILLI_SECONDS 1000//毫秒级定时
+#define PERFORMANCE_MICRO_SECONDS 1000000//微秒级定时
+#define PERFORMANCE_MILLI_SECONDS 1000//毫秒级定时
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//性能检测器(默认为微秒)
 #ifdef LIB_WINDOWS
-	class PerfermanceWatch
+	class PerformanceWatch
 	{
 	public:
-		PerfermanceWatch(size_t nTimesize);
+		PerformanceWatch(size_t nTimesize);
 
-		~PerfermanceWatch(){}
+		~PerformanceWatch(){}
 	private:
 		size_t m_nTimesize;
 	private:
@@ -51,11 +51,11 @@ namespace YTSvrLib
 		LONGLONG CheckPoint(LPCSTR lpszInfo, ...);
 	};
 #else
-	class PerfermanceWatch
+	class PerformanceWatch
 	{
 	public:
-		PerfermanceWatch(int nTimesize);
-		~PerfermanceWatch(){}
+		PerformanceWatch(int nTimesize);
+		~PerformanceWatch(){}
 	private:
 		size_t m_nTimesize;
 	private:
@@ -76,7 +76,7 @@ namespace YTSvrLib
 #endif // LIB_WINDOWS
 
 	// 开始一个本地性能检测
-#define BEGIN_WATCH(type) PerfermanceWatch pw(type);pw.Start()
+#define BEGIN_WATCH(type) YTSvrLib::PerformanceWatch pw(type);pw.Start()
 	// 通过检查点
 #define CHECK_WATCH(s, ...) pw.CheckPoint(s, __VA_ARGS__)
 	// 结束本地性能测试

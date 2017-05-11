@@ -167,10 +167,10 @@ std::string HexDump(const BYTE* pData, int len, const char *delim=" ");
 //
 //-----------------------------------------------
 void StrReplace(char *szSource, int nLen,const char *pszOldstring,const char *pszNewstring);
-void StrReplaceW(wchar_t *wzSource, int nLen,const wchar_t *pwzOldstring,const wchar_t *pwzNewstring);
+void StrReplace(wchar_t *wzSource, int nLen,const wchar_t *pwzOldstring,const wchar_t *pwzNewstring);
 
 void StrReplace(std::string&strSource,const std::string&strOldstring,const std::string&strNewstring);
-void StrReplaceW(std::wstring&strSource,const std::wstring&strOldstring,const std::wstring&strNewstring);
+void StrReplace(std::wstring&strSource,const std::wstring&strOldstring,const std::wstring&strNewstring);
 
 #ifdef LIB_WINDOWS
 BOOL WCharToMByte( LPCWSTR lpcwszStr, LPSTR lpszStr, DWORD dwSize);
@@ -232,6 +232,7 @@ int Random(int nFirst,int nEnd);
 unsigned int Random(unsigned int nEnd);
 
 #ifdef LIB_WINDOWS
+// Windows 下必须使用InitGenRandomFunction初始化随机数生成器
 bool InitGenRandomFunction();
 bool ReleaseGenRandomFunction();
 #endif
@@ -261,7 +262,7 @@ DOUBLE Random2(DOUBLE dMax, DOUBLE dMin = 0.000000, int nPrecision = 0);//介于 d
 //
 //-----------------------------------------------------------
 char* GetDateTime(char *lpszTimeBuf, int nLen, char Flag='A');
-wchar_t* GetDateTimeW(wchar_t *lpwzTimeBuf, int nLen, char Flag='A');
+wchar_t* GetDateTime(wchar_t *lpwzTimeBuf, int nLen, char Flag='A');
 
 //判断一天是不是当月的第一天
 bool IsFirstDayOfMonth( const time_t& tTime );

@@ -25,7 +25,7 @@ SOFTWARE.*/
 namespace YTSvrLib
 {
 #ifdef LIB_WINDOWS
-	PerfermanceWatch::PerfermanceWatch(size_t nTimesize)
+	PerformanceWatch::PerformanceWatch(size_t nTimesize)
 	{
 		m_nTimesize = nTimesize;
 		m_begintick.QuadPart = 0;
@@ -34,7 +34,7 @@ namespace YTSvrLib
 		QueryPerformanceFrequency(&m_costtick);
 	}
 
-	LONGLONG PerfermanceWatch::Start()
+	LONGLONG PerformanceWatch::Start()
 	{
 		QueryPerformanceCounter(&m_begintick);
 		m_lasttick = m_begintick;
@@ -44,7 +44,7 @@ namespace YTSvrLib
 		return llStart;
 	}
 
-	LONGLONG PerfermanceWatch::Stop()
+	LONGLONG PerformanceWatch::Stop()
 	{
 		QueryPerformanceCounter(&m_endtick);
 
@@ -53,7 +53,7 @@ namespace YTSvrLib
 		return llStop;
 	}
 
-	LONGLONG PerfermanceWatch::GetCostTotal()
+	LONGLONG PerformanceWatch::GetCostTotal()
 	{
 		LONGLONG cost = m_endtick.QuadPart - m_begintick.QuadPart;
 
@@ -62,7 +62,7 @@ namespace YTSvrLib
 		return ms;
 	}
 
-	LONGLONG PerfermanceWatch::CheckPoint(LPCSTR lpszInfo, ...)
+	LONGLONG PerformanceWatch::CheckPoint(LPCSTR lpszInfo, ...)
 	{
 		LARGE_INTEGER check;
 
@@ -89,14 +89,14 @@ namespace YTSvrLib
 
 		va_end(va);
 
-		sprintf_s(szInfo, 2047, "%s[效率:上个检查点(%lld),开始点(%lld)]", szInfo, ms_check, ms_total);
+		sprintf_s(szInfo, 2047, "%s[LastPoint(%lld),BeginPoint(%lld)]", szInfo, ms_check, ms_total);
 
 		LOG(szInfo);
 
 		return ms_check;
 	}
 #else
-	PerfermanceWatch::PerfermanceWatch(int nTimesize)
+	PerformanceWatch::PerformanceWatch(int nTimesize)
 	{
 		m_nTimesize = nTimesize;
 		ZeroMemory(&m_begintick, sizeof(m_begintick));
@@ -104,7 +104,7 @@ namespace YTSvrLib
 		ZeroMemory(&m_lasttick, sizeof(m_lasttick));
 	}
 
-	void PerfermanceWatch::Start()
+	void PerformanceWatch::Start()
 	{
 		gettimeofday(&m_begintick, NULL);
 
@@ -112,12 +112,12 @@ namespace YTSvrLib
 		m_lasttick.tv_usec = m_begintick.tv_usec;
 	}
 
-	LONGLONG PerfermanceWatch::Stop()
+	LONGLONG PerformanceWatch::Stop()
 	{
 		gettimeofday(&m_endtick, NULL);
 	}
 
-	LONGLONG PerfermanceWatch::GetSpan(timeval& begin, timeval& end)
+	LONGLONG PerformanceWatch::GetSpan(timeval& begin, timeval& end)
 	{
 		int nSec = end.tv_sec - begin.tv_sec;
 		int nUsec = 0;
@@ -142,12 +142,12 @@ namespace YTSvrLib
 		}
 	}
 
-	LONGLONG PerfermanceWatch::GetCostTotal()
+	LONGLONG PerformanceWatch::GetCostTotal()
 	{
 		return GetSpan(m_begintick, m_endtick);
 	}
 
-	void PerfermanceWatch::CheckPoint(LPCSTR lpszInfo, ...)
+	void PerformanceWatch::CheckPoint(LPCSTR lpszInfo, ...)
 	{
 		timeval check;
 		gettimeofday(&check, NULL);
