@@ -123,7 +123,7 @@ xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
     <ClCompile Include="Base64\Base64.cpp" />
     <ClCompile Include="Filter\Filter.cpp" />
     <ClCompile Include="Global\GlobalServer.cpp" />
-    <ClCompile Include="Global\Perfermance.cpp" />
+    <ClCompile Include="Global\Performance.cpp" />
     <ClCompile Include="Global\GlobalURLRequest.cpp" />
     <ClCompile Include="md5\md5.cpp" />
     <ClCompile Include="mysql\MYSQLCommand.cpp" />
@@ -205,7 +205,7 @@ xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
     <ClInclude Include="YTSvrLib.h" />
     <ClInclude Include="Filter\Filter.h" />
     <ClInclude Include="Global\GlobalServer.h" />
-    <ClInclude Include="Global\Perfermance.h" />
+    <ClInclude Include="Global\Performance.h" />
     <ClInclude Include="iconv\iconv.h" />
     <ClInclude Include="iconv\libcharset.h" />
     <ClInclude Include="iconv\localcharset.h" />

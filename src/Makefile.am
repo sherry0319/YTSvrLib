@@ -12,7 +12,7 @@ libytsvrlib_so_SOURCES = \
 stdafx.cpp \
 Base64/Base64.cpp \
 Global/GlobalServer.cpp \
-Global/Perfermance.cpp \
+Global/Performance.cpp \
 Global/GlobalURLRequest.cpp \
 md5/md5.cpp \
 mysql/MYSQLCommand.cpp \
