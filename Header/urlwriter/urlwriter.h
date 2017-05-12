@@ -26,7 +26,9 @@ SOFTWARE.*/
 namespace YTSvrLib
 {
 	struct CURLRequest;
+	
 	typedef LONGLONG URLPARAM;
+
 	typedef void(*_REQUEST_CALLBACK)(CURLRequest* pReq);
 
 	struct CURLRequest : public CRecycle
@@ -71,6 +73,11 @@ namespace YTSvrLib
 		// Start a mutithread url writer.
 		BOOL StartURLWriter(UINT nCount);
 
+		// Send a request.nParam 1-4 will send back in callback function.
+		// _REQUEST_CALLBACK is defined as void _REQUEST_CALLBACK(YTSvrLib::CURLRequest*)
+		// Be careful the callback function will be called by mutithread in a single queue.
+		// And the param YTSvrLib::CURLRequest* passed by the callback will be released immediately after the callback function returned.
+		// You should copy the data by yourself if you want to use it after callback returned. 
 		void AddURLRequest(LPCSTR lpszReq, LPCSTR lpszPost, URLPARAM nParam1 = 0, URLPARAM nParam2 = 0, URLPARAM nParam3 = 0, URLPARAM nParam4 = 0, _REQUEST_CALLBACK pFunction = NULL);
 		void AddURLRequest(LPCSTR lpszReq, URLPARAM nParam1 = 0, URLPARAM nParam2 = 0, URLPARAM nParam3 = 0, URLPARAM nParam4 = 0, _REQUEST_CALLBACK pFunction = NULL);
 

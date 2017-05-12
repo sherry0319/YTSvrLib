@@ -27,6 +27,10 @@ namespace YTSvrLib
 	size_t CURLWriterClient::URLDataWriter(void* data, size_t size, size_t nmemb, void* content)
 	{
 		size_t nTotalSize = size*nmemb;
+		if (data == NULL)
+		{
+			return nTotalSize;
+		}
 		std::string* pstrRequest = (std::string*)content;
 		if (pstrRequest)
 		{

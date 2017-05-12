@@ -22,8 +22,28 @@ void OnURLRequestCallback(YTSvrLib::CURLRequest* pReq)
 	cout << "return field = " << pReq->m_strReturn << endl;
 }
 
+void OnURLRequestSync()
+{
+	std::string outdata;
+	int nResponseCode = YTSvrLib::CGlobalCURLRequest::GetInstance()->SendHTTPGETMessage(data[0].url, outdata);
+
+	cout << "sync get request code = " << nResponseCode << endl;
+
+	cout << "sync get request return field = " << outdata << endl;
+
+	outdata.clear();
+	outdata.shrink_to_fit();
+	nResponseCode = YTSvrLib::CGlobalCURLRequest::GetInstance()->SendHTTPPOSTMessage(data[1].url, data[1].post, outdata);
+
+	cout << "sync post request code = " << nResponseCode << endl;
+
+	cout << "sync post request return field = " << outdata << endl;
+}
+
 int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 {
+	OnURLRequestSync();
+
 	CURLWriter::GetInstance()->StartURLWriter(5);
 
 	int index = 0;
