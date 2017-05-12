@@ -24,16 +24,22 @@ SOFTWARE.*/
 
 namespace YTSvrLib
 {
+	size_t CURLWriterClient::URLDataWriter(void* data, size_t size, size_t nmemb, void* content)
+	{
+		size_t nTotalSize = size*nmemb;
+		std::string* pstrRequest = (std::string*)content;
+		if (pstrRequest)
+		{
+			pstrRequest->append((char *) data, ((char*) data) + nTotalSize);
+		}
+		return nTotalSize;
+	}
 
-	void CURLWriter::Execute(void)
+	void CURLWriterClient::Execute(void)
 	{
 		LOG("Start URL Writer Thread:%d", m_nID);
 		CURL* pReq = curl_easy_init();
 		curl_easy_setopt(pReq, CURLOPT_NOSIGNAL, 1);
-		if (m_bShowHttpInfo)
-		{
-			curl_easy_setopt(pReq, CURLOPT_VERBOSE, 1);
-		}
 
 		while (TRUE)
 		{
@@ -43,14 +49,28 @@ namespace YTSvrLib
 			{
 				curl_easy_setopt(pReq, CURLOPT_URL, pReqInfo->m_strRequestURL.c_str());
 
-				if (m_bIsPost)
+				if (!pReqInfo->m_strPost.empty())
 				{
 					curl_easy_setopt(pReq, CURLOPT_POST, true);
 					curl_easy_setopt(pReq, CURLOPT_POSTFIELDS, pReqInfo->m_strPost.c_str());
+				} 
+				curl_easy_setopt(pReq, CURLOPT_WRITEFUNCTION, CURLWriterClient::URLDataWriter);
+				curl_easy_setopt(pReq, CURLOPT_WRITEDATA, (void*) &pReqInfo->m_strReturn);
+
+				CURLcode emCode = curl_easy_perform(pReq);
+
+				if (emCode == CURLE_OK)
+				{
+					curl_easy_getinfo(pReq, CURLINFO_RESPONSE_CODE, &pReqInfo->m_nReturnCode);
 				}
 
-				curl_easy_perform(pReq);
-
+				if (pReqInfo->m_pFuncCallBack)
+				{
+					m_pFactory->GetCallBackLock();
+					pReqInfo->m_pFuncCallBack(pReqInfo);
+					m_pFactory->ReleaseCallBackLock();
+				}
+				
 				m_pFactory->ReleaseURLRequest(pReqInfo);
 			}
 		}
@@ -58,11 +78,11 @@ namespace YTSvrLib
 		curl_easy_cleanup(pReq);
 	}
 
-	BOOL CURLWriterFactory::StartURLWriter(UINT nCount, BOOL bShowHttpInfo, BOOL bIsPost /*= FALSE*/)
+	BOOL CURLWriterFactory::StartURLWriter(UINT nCount)
 	{
 		for (UINT i = 0; i < nCount; ++i)
 		{
-			CURLWriter* pWriter = new CURLWriter(this, i, bShowHttpInfo, bIsPost);
+			CURLWriterClient* pWriter = new CURLWriterClient(this, i);
 
 			if (pWriter)
 			{
@@ -77,7 +97,13 @@ namespace YTSvrLib
 		return TRUE;
 	}
 
-	void CURLWriterFactory::AddURLRequest(LPCSTR lpszReq, LPCSTR lpszPost /*= ""*/)
+	void CURLWriterFactory::AddURLRequest(LPCSTR lpszReq, URLPARAM nParam1 /*= 0*/, URLPARAM nParam2 /*= 0*/, URLPARAM nParam3 /*= 0*/, URLPARAM nParam4 /*= 0*/, _REQUEST_CALLBACK pFunction /*= NULL*/)
+	{
+		AddURLRequest(lpszReq, "", nParam1, nParam2, nParam3, nParam4, pFunction);
+	}
+
+	void CURLWriterFactory::AddURLRequest(LPCSTR lpszReq, LPCSTR lpszPost, 
+										  URLPARAM nParam1 /*= 0*/, URLPARAM nParam2 /*= 0*/, URLPARAM nParam3 /*= 0*/, URLPARAM nParam4 /*= 0*/, _REQUEST_CALLBACK pFunction /*= NULL*/)
 	{
 		if (m_bInited == FALSE)
 		{
@@ -93,7 +119,15 @@ namespace YTSvrLib
 			return;
 		}
 		pReq->m_strRequestURL = lpszReq;
-		pReq->m_strPost = lpszPost;
+		if (lpszPost)
+		{
+			pReq->m_strPost = lpszPost;
+		}
+		pReq->m_ayParam[0] = nParam1;
+		pReq->m_ayParam[1] = nParam2;
+		pReq->m_ayParam[2] = nParam3;
+		pReq->m_ayParam[3] = nParam4;
+		pReq->m_pFuncCallBack = pFunction;
 
 		m_listUrlRequest.push_back(pReq);
 
@@ -123,6 +157,16 @@ namespace YTSvrLib
 	void CURLWriterFactory::ReleaseURLRequest(CURLRequest* pReq)
 	{
 		m_poolURLRequest.ReclaimObj(pReq);
+	}
+
+	void CURLWriterFactory::GetCallBackLock()
+	{
+		m_criLockCallback.Lock();
+	}
+
+	void CURLWriterFactory::ReleaseCallBackLock()
+	{
+		m_criLockCallback.UnLock();
 	}
 
 	void CURLWriterFactory::WaitForAllRequestDone()

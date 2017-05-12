@@ -25,16 +25,40 @@ SOFTWARE.*/
 
 namespace YTSvrLib
 {
+	struct CURLRequest;
+	
+	typedef LONGLONG URLPARAM;
+
+	typedef void(*_REQUEST_CALLBACK)(CURLRequest* pReq);
 
 	struct CURLRequest : public CRecycle
 	{
+		virtual void Init()
+		{
+			m_strRequestURL.clear();
+			m_strRequestURL.shrink_to_fit();
+			m_strPost.clear();
+			m_strPost.shrink_to_fit();
+			m_strReturn.clear();
+			m_strReturn.shrink_to_fit();
+
+			m_nReturnCode = 0;
+			m_pFuncCallBack = NULL;
+			ZeroMemory(m_ayParam, sizeof(m_ayParam));
+		}
+
 		std::string m_strRequestURL;
 		std::string m_strPost;
+		int m_nReturnCode;
+		std::string m_strReturn;
+		URLPARAM m_ayParam[4];
+		_REQUEST_CALLBACK m_pFuncCallBack;
 	};
 
 	class CURLWriterFactory : public CThreadPool
 	{
 	public:
+		friend class CURLWriterClient;
 		CURLWriterFactory() :m_poolURLRequest("CURLRequest")
 		{
 			m_bInited = FALSE;
@@ -46,50 +70,62 @@ namespace YTSvrLib
 			m_bInited = FALSE;
 		}
 
-		BOOL StartURLWriter(UINT nCount, BOOL bShowHttpInfo, BOOL bIsPost = FALSE);
+		// Start a mutithread url writer.
+		BOOL StartURLWriter(UINT nCount);
 
-		void AddURLRequest(LPCSTR lpszReq, LPCSTR lpszPost = "");
-
-		CURLRequest* GetRequest();
-
-		void ReleaseURLRequest(CURLRequest* pReq);
+		// Send a request.nParam 1-4 will send back in callback function.
+		// _REQUEST_CALLBACK is defined as void _REQUEST_CALLBACK(YTSvrLib::CURLRequest*)
+		// Be careful the callback function will be called by mutithread in a single queue.
+		// And the param YTSvrLib::CURLRequest* passed by the callback will be released immediately after the callback function returned.
+		// You should copy the data by yourself if you want to use it after callback returned. 
+		void AddURLRequest(LPCSTR lpszReq, LPCSTR lpszPost, URLPARAM nParam1 = 0, URLPARAM nParam2 = 0, URLPARAM nParam3 = 0, URLPARAM nParam4 = 0, _REQUEST_CALLBACK pFunction = NULL);
+		void AddURLRequest(LPCSTR lpszReq, URLPARAM nParam1 = 0, URLPARAM nParam2 = 0, URLPARAM nParam3 = 0, URLPARAM nParam4 = 0, _REQUEST_CALLBACK pFunction = NULL);
 
 		void WaitForAllRequestDone();
 
 		UINT GetCurListSize()
 		{
 			return (UINT) m_listUrlRequest.size();
-		};
+		}
+	protected:
+		CURLRequest* GetRequest();
+
+		void ReleaseURLRequest(CURLRequest* pReq);
+
+		void GetCallBackLock();
+
+		void ReleaseCallBackLock();
 	protected:
 		std::list<CURLRequest*> m_listUrlRequest;
 		YTSvrLib::CSemaphore m_semLock;
 		YTSvrLib::CLock m_criLock;
 		BOOL m_bInited;
 		CPool<CURLRequest, 128> m_poolURLRequest;
+	protected:
+		YTSvrLib::CLock m_criLockCallback;
 	};
 
-	class CURLWriter : public CThread
+	class CURLWriterClient : public CThread
 	{
 	public:
 
-		CURLWriter(CURLWriterFactory* pFactory, UINT nID, BOOL bShowHttpInfo, BOOL bIsPost) :
-			m_nID(nID), m_bShowHttpInfo(bShowHttpInfo), m_bIsPost(bIsPost), m_pFactory(pFactory)
+		CURLWriterClient(CURLWriterFactory* pFactory, UINT nID) : m_nID(nID), m_pFactory(pFactory)
 		{
 
 		}
 
-		virtual ~CURLWriter()
+		virtual ~CURLWriterClient()
 		{
-
+			m_nID = 0;
+			m_pFactory = NULL;
 		}
 
 	public:
 		virtual void Execute(void);
 
+		static size_t URLDataWriter(void* data, size_t size, size_t nmemb, void* content);
 	protected:
 		UINT m_nID;
-		BOOL m_bShowHttpInfo;
-		BOOL m_bIsPost;
 		CURLWriterFactory* m_pFactory;
 	};
 
