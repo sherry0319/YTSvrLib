@@ -22,7 +22,7 @@ SOFTWARE.*/
 #include "stdafx.h"
 #include "MYSQLDBSys.h"
 #include "MYSQLManagerBase.h"
-#include "include/dbdriver.h"
+#include "mysqlpp/dbdriver.h"
 
 namespace YTSvrLib
 {

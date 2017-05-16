@@ -24,7 +24,7 @@ SOFTWARE.*/
 #ifndef _MYSQLDBSYS_H_
 #define _MYSQLDBSYS_H_
 
-#include "include/mysql++.h"
+#include "mysqlpp/mysql++.h"
 #include "MYSQLCommand.h"
 #include <vector>
 

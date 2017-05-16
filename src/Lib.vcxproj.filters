@@ -111,6 +111,9 @@
     <Filter Include="tinyXML\newParser">
       <UniqueIdentifier>{6dfea10a-6bfd-486f-97c2-87da68974527}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MySQL\mysqlpp">
+      <UniqueIdentifier>{8a14f0b1-0c5b-4579-977c-afb44aaa6a96}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -408,306 +411,6 @@
     </ClInclude>
     <ClInclude Include="mysql\MYSQLManagerBase.h">
       <Filter>MySQL</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\autoflag.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\beemutex.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\big_endian.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\byte_order_generic.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\byte_order_generic_x86.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\cmdline.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\common.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\comparable.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\connection.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\cpool.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\datetime.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\dbdriver.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\decimal.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\errmsg.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\exceptions.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\field.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\field_names.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\field_types.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\insertpolicy.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\keycache.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\little_endian.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\m_ctype.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\m_string.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\manip.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\my_alloc.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\my_byteorder.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\my_compiler.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\my_config.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\my_dbug.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\my_dir.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\my_getopt.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\my_global.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\my_list.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\my_net.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\my_pthread.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\my_sys.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\my_xml.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\myset.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\mysql++.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\mysql.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\mysql_com.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\mysql_com_server.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\mysql_embed.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\mysql_time.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\mysql_version.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\mysqld_ername.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\mysqld_error.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\mystring.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\noexceptions.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\null.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\options.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\qparms.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\query.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\querydef.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\refcounted.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\result.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\row.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\scopedconnection.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\sql_buffer.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\sql_common.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\sql_state.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\sql_types.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\sqlstream.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\sslopt-case.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\sslopt-longopts.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\sslopt-vars.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\ssqls.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\ssqls2.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\stadapter.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\stream2string.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\tcp_connection.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\tiny_int.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\transaction.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\type_info.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\typelib.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\uds_connection.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\utility.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\vallist.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\wnp_connection.h">
-      <Filter>MySQL\include</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\mysql\client_authentication.h">
-      <Filter>MySQL\include\mysql</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\mysql\client_plugin.h">
-      <Filter>MySQL\include\mysql</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\mysql\get_password.h">
-      <Filter>MySQL\include\mysql</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\mysql\plugin_auth_common.h">
-      <Filter>MySQL\include\mysql</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\mysql\plugin_trace.h">
-      <Filter>MySQL\include\mysql</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\mysql\service_mysql_alloc.h">
-      <Filter>MySQL\include\mysql</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\mysql\psi\mysql_file.h">
-      <Filter>MySQL\include\mysql\psi</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\mysql\psi\mysql_idle.h">
-      <Filter>MySQL\include\mysql\psi</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\mysql\psi\mysql_mdl.h">
-      <Filter>MySQL\include\mysql\psi</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\mysql\psi\mysql_memory.h">
-      <Filter>MySQL\include\mysql\psi</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\mysql\psi\mysql_ps.h">
-      <Filter>MySQL\include\mysql\psi</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\mysql\psi\mysql_socket.h">
-      <Filter>MySQL\include\mysql\psi</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\mysql\psi\mysql_sp.h">
-      <Filter>MySQL\include\mysql\psi</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\mysql\psi\mysql_stage.h">
-      <Filter>MySQL\include\mysql\psi</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\mysql\psi\mysql_statement.h">
-      <Filter>MySQL\include\mysql\psi</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\mysql\psi\mysql_table.h">
-      <Filter>MySQL\include\mysql\psi</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\mysql\psi\mysql_thread.h">
-      <Filter>MySQL\include\mysql\psi</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\mysql\psi\mysql_transaction.h">
-      <Filter>MySQL\include\mysql\psi</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\mysql\psi\psi.h">
-      <Filter>MySQL\include\mysql\psi</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\mysql\psi\psi_base.h">
-      <Filter>MySQL\include\mysql\psi</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\include\mysql\psi\psi_memory.h">
-      <Filter>MySQL\include\mysql\psi</Filter>
     </ClInclude>
     <ClInclude Include="urlwriter\urlwriter.h">
       <Filter>urlwriter</Filter>
@@ -1018,6 +721,438 @@
     <ClInclude Include="Global\Performance.h">
       <Filter>Perfermance</Filter>
     </ClInclude>
+    <ClInclude Include="mysql\include\big_endian.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\binary_log_types.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\byte_order_generic.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\byte_order_generic_x86.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\decimal.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\errmsg.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\keycache.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\little_endian.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\m_ctype.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\m_string.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\my_alloc.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\my_byteorder.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\my_command.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\my_compiler.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\my_config.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\my_dbug.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\my_dir.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\my_getopt.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\my_global.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\my_list.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\my_sys.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\my_thread.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\my_thread_local.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\my_xml.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql_com.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql_com_server.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql_embed.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql_time.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql_version.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysqld_ername.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysqld_error.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\plugin.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\plugin_audit.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\plugin_ftparser.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\plugin_group_replication.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\plugin_keyring.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\plugin_validate_password.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\sql_common.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\sql_state.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\sslopt-case.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\sslopt-longopts.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\sslopt-vars.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\thr_cond.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\thr_mutex.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\thr_rwlock.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\typelib.h">
+      <Filter>MySQL\include</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\client_authentication.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\client_plugin.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\com_data.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\get_password.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\group_replication_priv.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\innodb_priv.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\mysql_lex_string.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\plugin.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\plugin_audit.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\plugin_auth.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\plugin_auth_common.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\plugin_ftparser.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\plugin_group_replication.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\plugin_keyring.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\plugin_trace.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\plugin_validate_password.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\service_command.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\service_locking.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\service_my_plugin_log.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\service_my_snprintf.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\service_mysql_alloc.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\service_mysql_keyring.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\service_mysql_password_policy.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\service_mysql_string.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\service_parser.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\service_rpl_transaction_ctx.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\service_rpl_transaction_write_set.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\service_rules_table.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\service_security_context.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\service_srv_session.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\service_srv_session_info.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\service_ssl_wrapper.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\service_thd_alloc.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\service_thd_engine_lock.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\service_thd_wait.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\service_thread_scheduler.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\services.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\thread_pool_priv.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\thread_type.h">
+      <Filter>MySQL\include\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\psi\mysql_file.h">
+      <Filter>MySQL\include\mysql\psi</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\psi\mysql_idle.h">
+      <Filter>MySQL\include\mysql\psi</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\psi\mysql_mdl.h">
+      <Filter>MySQL\include\mysql\psi</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\psi\mysql_memory.h">
+      <Filter>MySQL\include\mysql\psi</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\psi\mysql_ps.h">
+      <Filter>MySQL\include\mysql\psi</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\psi\mysql_socket.h">
+      <Filter>MySQL\include\mysql\psi</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\psi\mysql_sp.h">
+      <Filter>MySQL\include\mysql\psi</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\psi\mysql_stage.h">
+      <Filter>MySQL\include\mysql\psi</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\psi\mysql_statement.h">
+      <Filter>MySQL\include\mysql\psi</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\psi\mysql_table.h">
+      <Filter>MySQL\include\mysql\psi</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\psi\mysql_thread.h">
+      <Filter>MySQL\include\mysql\psi</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\psi\mysql_transaction.h">
+      <Filter>MySQL\include\mysql\psi</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\psi\psi.h">
+      <Filter>MySQL\include\mysql\psi</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\psi\psi_base.h">
+      <Filter>MySQL\include\mysql\psi</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\include\mysql\psi\psi_memory.h">
+      <Filter>MySQL\include\mysql\psi</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\autoflag.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\beemutex.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\cmdline.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\common.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\comparable.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\connection.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\cpool.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\datetime.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\dbdriver.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\exceptions.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\field.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\field_names.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\field_types.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\insertpolicy.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\manip.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\myset.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\mysql++.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\mystring.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\noexceptions.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\null.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\options.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\qparms.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\query.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\querydef.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\refcounted.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\result.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\row.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\scopedconnection.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\sql_buffer.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\sql_types.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\sqlstream.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\ssqls.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\ssqls2.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\stadapter.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\stream2string.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\tcp_connection.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\tiny_int.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\transaction.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\type_info.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\uds_connection.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\utility.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\vallist.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\wnp_connection.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="BugReport\BugslayerUtil.lib">
@@ -1046,5 +1181,25 @@
     <CustomBuild Include="libcurl\libcurl64.lib">
       <Filter>curl</Filter>
     </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="mysql\include\mysql\client_plugin.h.pp">
+      <Filter>MySQL\include\mysql</Filter>
+    </None>
+    <None Include="mysql\include\mysql\plugin_audit.h.pp">
+      <Filter>MySQL\include\mysql</Filter>
+    </None>
+    <None Include="mysql\include\mysql\plugin_auth.h.pp">
+      <Filter>MySQL\include\mysql</Filter>
+    </None>
+    <None Include="mysql\include\mysql\plugin_ftparser.h.pp">
+      <Filter>MySQL\include\mysql</Filter>
+    </None>
+    <None Include="mysql\include\mysql\plugin_keyring.h.pp">
+      <Filter>MySQL\include\mysql</Filter>
+    </None>
+    <None Include="mysql\include\mysql\services.h.pp">
+      <Filter>MySQL\include\mysql</Filter>
+    </None>
   </ItemGroup>
 </Project>
