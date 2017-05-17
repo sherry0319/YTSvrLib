@@ -11,6 +11,7 @@ before_install:
 - sudo apt-file update
 - sudo apt-get install libmysqlclient18 libmysqlclient-dev
 - sudo apt-file search libmysqlclient.so
+- sudo ln -s /usr/lib/x86_64-linux-gnu/libmysqlclient.so /usr/lib/libmysqlclient.so
 - sudo chmod 755 install-dependencies.sh configure.sh makeall.sh makeall_release.sh src/configure src/linux_debug/install.sh src/linux_release/install.sh
 install: 
 - ./install-dependencies.sh
