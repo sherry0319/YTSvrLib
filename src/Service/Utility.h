@@ -172,6 +172,48 @@ void StrReplace(wchar_t *wzSource, int nLen,const wchar_t *pwzOldstring,const wc
 void StrReplace(std::string&strSource,const std::string&strOldstring,const std::string&strNewstring);
 void StrReplace(std::wstring&strSource,const std::wstring&strOldstring,const std::wstring&strNewstring);
 
+// 通配符字符串格式化.例如StrFormat("something {0} to {1} with {2}","123","kkk","???"); 将会得到something 123 to kkk with ???.注意通配符必须从{0}开始标.
+std::string StrFormat(const char* format, ...);
+std::string vStrFormat(const char* format, va_list va);
+
+// 将任何类型转换为const char*类型
+class string_coverter
+{
+public:
+	string_coverter()
+	{
+		m_vctSave.clear();
+	}
+
+	virtual ~string_coverter()
+	{
+		for (size_t i = 0; i < m_vctSave.size();++i)
+		{
+			delete[] m_vctSave[i];
+		}
+		m_vctSave.clear();
+	}
+
+	template<typename T>
+	const char* tostring(T value)
+	{
+		std::ostringstream s;
+		s << value;
+		char* buffer = new char[s.str().size() + 1];
+		ZeroMemory(buffer, s.str().size() + 1);
+#ifdef LIB_WINDOWS
+		strncpy_s(buffer, (s.str().size()+1), s.str().c_str(), s.str().size());
+#else
+		strncpy_s(buffer, s.str().c_str(), s.str().size());
+#endif
+		m_vctSave.push_back(buffer);
+		return buffer;
+	}
+
+private:
+	std::vector<char*> m_vctSave;
+};
+
 #ifdef LIB_WINDOWS
 BOOL WCharToMByte( LPCWSTR lpcwszStr, LPSTR lpszStr, DWORD dwSize);
 BOOL MByteToWChar(LPCSTR lpszStr, LPWSTR lpcwszStr, DWORD dwSize);

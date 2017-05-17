@@ -112,12 +112,6 @@ namespace YTSvrLib
 		m_pCurElement->SetText(value);
 	}
 
-	//给当前根节点设置一个属性
-	void CXMLNode::SetAttribute(const char* name, const char* value)
-	{
-		m_pCurElement->SetAttribute(name, value);
-	}
-
 	//给当前根节点设置一个注释
 	void CXMLNode::SetComment(const char* comment)
 	{
@@ -132,6 +126,16 @@ namespace YTSvrLib
 	const char* CXMLNode::GetName()
 	{
 		return m_pCurElement->Value();
+	}
+
+	const char* CXMLNode::GetAttribute(const char* name)
+	{
+		const tinyxml2::XMLAttribute* pAttribute = (const_cast<const tinyxml2::XMLElement*>(m_pCurElement))->FindAttribute(name);
+		if (pAttribute)
+		{
+			return pAttribute->Value();
+		}
+		return NULL;
 	}
 
 	CXMLNode& CXMLNode::Append(const char* key)

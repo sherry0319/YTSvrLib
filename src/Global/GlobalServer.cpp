@@ -179,63 +179,57 @@ __time32_t GetNextWeekDayTime(__time32_t tNow ,WORD wWeekDay, WORD wHour)
 	return tNextWeekZero;
 }
 
-const wchar_t* CovertUTC2String(__time32_t tTime, wchar_t* pwzOut, int nOutMaxLen)
+const wchar_t* CovertUTC2String(__time32_t tTime, wchar_t* pwzOut, int nOutMaxLen, const wchar_t* pwzQuote /*= L'\''*/)
 {
 	ZeroMemory(pwzOut, nOutMaxLen);
 
-	if (nOutMaxLen <= 20)
-	{
-		return pwzOut;
-	}
 	if (tTime == 0)
 	{
 #ifdef LIB_WINDOWS
-		wcsncpy_s(pwzOut, nOutMaxLen, L"0000-00-00 00:00:00", nOutMaxLen);
+		wcsncpy_s(pwzOut, nOutMaxLen - 1, L"NULL", nOutMaxLen - 1);
 #else
-		wcsncpy_s(pwzOut, L"0000-00-00 00:00:00", nOutMaxLen);
-#endif // LIB_WINDOWS
+		wcsncpy_s(pwzOut, L"NULL", nOutMaxLen - 1);
+#endif
+
 		return pwzOut;
 	}
 
 #ifdef LIB_WINDOWS
 	COleDateTime cDate(tTime);
-	_snwprintf(pwzOut, nOutMaxLen, L"%04d-%02d-%02d %02d:%02d:%02d", cDate.GetYear(), cDate.GetMonth(), cDate.GetDay(), cDate.GetHour(), cDate.GetMinute(), cDate.GetSecond());
+	_snwprintf(pwzOut, nOutMaxLen, L"%s%04d-%02d-%02d %02d:%02d:%02d%s", pwzQuote, cDate.GetYear(), cDate.GetMonth(), cDate.GetDay(), cDate.GetHour(), cDate.GetMinute(), cDate.GetSecond(), pwzQuote);
 #else
 	tm timenow;
 	localtime_r(&tTime, &timenow);
-	_snwprintf_s(pwzOut, nOutMaxLen, L"%04d-%02d-%02d %02d:%02d:%02d",
-				 (timenow.tm_year + 1900), (timenow.tm_mon + 1), timenow.tm_mday, timenow.tm_hour, timenow.tm_min, timenow.tm_sec);
+	_snwprintf_s(pwzOut, nOutMaxLen, L"%s%04d-%02d-%02d %02d:%02d:%02d%s",
+				 pwzQuote, (timenow.tm_year + 1900), (timenow.tm_mon + 1), timenow.tm_mday, timenow.tm_hour, timenow.tm_min, timenow.tm_sec, pwzQuote);
 #endif // LIB_WINDOWS
 
 	return pwzOut;
 }
 
-const char* CovertUTC2String(__time32_t tTime, char* pszOut, int nOutMaxLen)
+const char* CovertUTC2String(__time32_t tTime, char* pszOut, int nOutMaxLen, const char* pszQuote /*= '\''*/)
 {
 	ZeroMemory(pszOut, nOutMaxLen);
 
-	if (nOutMaxLen <= 20)
-	{
-		return pszOut;
-	}
 	if (tTime == 0)
 	{
 #ifdef LIB_WINDOWS
-		strncpy_s(pszOut, nOutMaxLen, "0000-00-00 00:00:00", nOutMaxLen);
+		strncpy_s(pszOut, nOutMaxLen - 1, "NULL", nOutMaxLen - 1);
 #else
-		strncpy_s(pszOut, "0000-00-00 00:00:00", nOutMaxLen);
-#endif // LIB_WINDOWS
+		strncpy_s(pszOut, "NULL", nOutMaxLen - 1);
+#endif
+
 		return pszOut;
 	}
 
 #ifdef LIB_WINDOWS
 	COleDateTime cDate(tTime);
-	snprintf(pszOut, nOutMaxLen, "%04d-%02d-%02d %02d:%02d:%02d", cDate.GetYear(), cDate.GetMonth(), cDate.GetDay(), cDate.GetHour(), cDate.GetMinute(), cDate.GetSecond());
+	snprintf(pszOut, nOutMaxLen, "%s%04d-%02d-%02d %02d:%02d:%02d%s", pszQuote, cDate.GetYear(), cDate.GetMonth(), cDate.GetDay(), cDate.GetHour(), cDate.GetMinute(), cDate.GetSecond(), pszQuote);
 #else
 	tm timenow;
 	localtime_r(&tTime, &timenow);
-	_snprintf_s(pszOut, nOutMaxLen, "%04d-%02d-%02d %02d:%02d:%02d",
-				(timenow.tm_year + 1900), (timenow.tm_mon + 1), timenow.tm_mday, timenow.tm_hour, timenow.tm_min, timenow.tm_sec);
+	_snprintf_s(pszOut, nOutMaxLen, "%s%04d-%02d-%02d %02d:%02d:%02d%s",
+				pszQuote, (timenow.tm_year + 1900), (timenow.tm_mon + 1), timenow.tm_mday, timenow.tm_hour, timenow.tm_min, timenow.tm_sec, pszQuote);
 #endif // LIB_WINDOWS
 
 	return pszOut;

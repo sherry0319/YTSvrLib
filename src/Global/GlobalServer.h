@@ -28,7 +28,7 @@ SOFTWARE.*/
 #define SEC_HOUR	(60*SEC_MINUTE) //一小时
 #define SEC_DAY		(24*SEC_HOUR) //一天
 #define SEC_MONTH	(31*SEC_DAY) // 一个月
-#define SEC_YEAR	(12*SEC_MONTH) //一年
+#define SEC_YEAR	(365*SEC_DAY) //一年
 
 #define SYS_WEEK_SUNDAY		0 //周日
 #define SYS_WEEK_MONDAY		1 //周一
@@ -262,10 +262,9 @@ void GetModuleFilePath(char* pszOut, int nLen);
 // 获取当前进程名称
 void GetModuleFileName(char* pszOut,int nLen);
 
-// 将一个UTC时间转换为字符串格式的时间(2011-09-02 22:11:02)
-// 特殊 : 0 = (0000-00-00 00:00:00)
-const wchar_t* CovertUTC2String(__time32_t tTime, wchar_t* pwzOut, int nOutMaxLen);
-const char* CovertUTC2String(__time32_t tTime, char* pszOut, int nOutMaxLen);
+// 将一个UTC时间转换为字符串格式的时间并且用pszQuote括起来.如果tTime=0则返回不带任何括号的NULL(2011-09-02 22:11:02)
+const wchar_t* CovertUTC2String(__time32_t tTime, wchar_t* pwzOut, int nOutMaxLen, const wchar_t* pwzQuote = L"'");
+const char* CovertUTC2String(__time32_t tTime, char* pszOut, int nOutMaxLen, const char* pszQuote = "'");
 
 //把 年|月|日|时|分|秒 的时间转换为时间
 __time32_t MakeStrTimeToUTC(LPCWSTR lpwzTime);

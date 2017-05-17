@@ -25,9 +25,6 @@ SOFTWARE.*/
 #ifndef _XML_NODE_H
 #define _XML_NODE_H
 
-#include <string>
-#include <sstream>
-#include <istream>
 #include "tinyxml2.h"
 
 namespace YTSvrLib
@@ -59,13 +56,19 @@ namespace YTSvrLib
 		//给当前根节点设置一个值
 		void SetValue(const char* value);
 		//给当前根节点设置一个属性
-		void SetAttribute(const char* name, const char* value);
+		template<typename T>
+		void SetAttribute(const char* name, T value)
+		{
+			m_pCurElement->SetAttribute(name, value);
+		}
 		//给当前根节点设置一个注释
 		void SetComment(const char* comment);
 		//获得当前节点的值
 		const char* GetValue();
 		//获得当前节点的key
 		const char* GetName();
+		//获得当前属性的值
+		const char* GetAttribute(const char* name);
 		//添加一个新节点
 		CXMLNode& Append(const char* key);
 

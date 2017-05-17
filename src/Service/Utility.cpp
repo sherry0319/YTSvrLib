@@ -747,6 +747,62 @@ void StrReplace(std::wstring&strSource,const std::wstring&strOldstring,const std
 	}
 }
 
+std::string vStrFormat(const char* format, va_list va)
+{
+	if (format == NULL || va == NULL)
+	{
+		return std::string("");
+	}
+
+	int i = 0;
+
+	std::string str = format;
+
+	do
+	{
+		char key[21] = { 0 };
+		_snprintf_s(key, 20, "{%d}", i);
+
+		if (str.find(key) == std::string::npos)
+		{
+			break;
+		}
+
+		std::string::size_type pos = 0;
+		std::string::size_type oldsize = strlen(key);
+		const char* newcstr = va_arg(va, const char*);
+		if (newcstr == NULL)
+		{
+			break;
+		}
+		std::string newstr = newcstr;
+		std::string::size_type newsize = newstr.size();
+
+		while ((pos = str.find(key, pos)) != std::wstring::npos)
+		{
+			str.replace(pos, oldsize, newstr);
+			pos += newsize;
+		}
+
+		++i;
+	} while (true);
+
+	return str;
+}
+
+std::string StrFormat(const char* format, ...)
+{
+	va_list va;
+
+	va_start(va, format);
+
+	std::string str = vStrFormat(format, va);
+
+	va_end(va);
+
+	return str;
+}
+
 //判断一天是不是当月的第一天
 bool IsFirstDayOfMonth( const time_t& tTime )
 {
