@@ -31,3 +31,8 @@ chmod 755 configure
 ./configure --prefix=$lib_install_base_dir"mysqlpp" && make -j5 && sudo make install
 sudo ln -s $lib_install_base_dir"mysqlpp/lib/libmysqlpp.so" "/usr/lib/libmysqlpp.so"
 cd ..
+tar -xzf gperftools-2.5.tar.gz
+cd gperftools-2.5
+./configure --prefix=$lib_install_base_dir"tcmalloc" --enable-frame-pointers --enable-minimal && make -j5 && sudo make install
+sudo ln -s $lib_install_base_dir"tcmalloc/lib/libtcmalloc_minimal.so" "/usr/lib/libtcmalloc_minimal.so"
+cd ..
