@@ -31,4 +31,3 @@ chmod 755 configure
 ./configure --prefix=$lib_install_base_dir"mysqlpp" && make -j5 && sudo make install
 sudo ln -s $lib_install_base_dir"mysqlpp/lib/libmysqlpp.so" "/usr/lib/libmysqlpp.so"
 cd ..
-sudo export CPLUS_INCLUDE_PATH="$CPLUS_INCLUDE_PATH:"$lib_install_base_dir"libevent2/include"

@@ -13,6 +13,8 @@ before_install:
 - sudo apt-file search libmysqlclient.so
 - sudo ln -s /usr/lib/x86_64-linux-gnu/libmysqlclient.so /usr/lib/libmysqlclient.so
 - sudo chmod 755 install-dependencies.sh configure.sh makeall.sh makeall_release.sh src/configure src/linux_debug/install.sh src/linux_release/install.sh
+env:
+- CPLUS_INCLUDE_PATH=/usr/local/libevent2/include:/usr/local/curl/include:/usr/local/zlib/include:/usr/local/iconv/include:/usr/local/mysqlpp/include
 install: 
 - ./install-dependencies.sh
 - ./configure.sh
