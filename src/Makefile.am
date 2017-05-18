@@ -47,4 +47,4 @@ redis/RedisConnectorCommand.cpp \
 Filter/Filter.cpp
 
 install-exec-hook:
-	./install.sh
+	sudo ./install.sh
