@@ -7,7 +7,7 @@ os:
 - linux
 before_install:
 - sudo apt-get update -qq
-- sudo apt-get install -qq autoconf automake apt-file libhiredis-dev gperftools-dev
+- sudo apt-get install -qq autoconf automake apt-file libhiredis-dev libtcmalloc_minimal
 - sudo apt-file update
 - sudo apt-get install libmysqlclient18 libmysqlclient-dev
 - sudo apt-file search libmysqlclient.so
