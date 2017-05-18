@@ -4,7 +4,7 @@ ytsvrlibdir=$(libdir)
 
 ytsvrlib_PROGRAMS=libytsvrlib.so
 
-libytsvrlib_so_CPPFLAGS=-fpermissive -shared -fPIC -I$(BASEDIR)/mysql/include/ -I$(BASEDIR)/libevent/ -std=c++11
+libytsvrlib_so_CPPFLAGS=-fpermissive -shared -fPIC -I$(BASEDIR)/mysql/include/ -std=c++11
 
 libytsvrlib_so_LDFLAGS=-fpic -shared -levent -levent_pthreads -lmysqlclient -lcurl -lpthread -lmysqlpp -lhiredis -ltcmalloc
 
