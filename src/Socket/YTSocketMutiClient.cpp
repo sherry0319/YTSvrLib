@@ -22,9 +22,6 @@ SOFTWARE.*/
 #include "stdafx.h"
 #include "YTSocketMutiClient.h"
 #include "YTSocketMutiClientController.h"
-#ifndef LIB_WINDOWS
-#include <fcntl.h>
-#endif // !LIB_WINDOWS
 
 namespace YTSvrLib
 {
@@ -38,13 +35,21 @@ namespace YTSvrLib
 
 	void ITCPMUTICLIENT::SafeClose()
 	{
+		if (m_bIsDisconnecting)
+		{
+			return;
+		}
+
+		m_lockBufferEvent.Lock();
+
+		m_bIsDisconnecting = TRUE;
 		m_bIsConnected = FALSE;
 		m_bIsClosed = TRUE;
 		m_bIsConnecting = FALSE;
-		m_bIsDisconnecting = FALSE;
 
 		if (m_pbufferevent)
 		{
+			bufferevent_disable(m_pbufferevent, EV_READ | EV_SIGNAL | EV_PERSIST);
 			bufferevent_free(m_pbufferevent);
 			m_pbufferevent = NULL;
 		}
@@ -54,17 +59,30 @@ namespace YTSvrLib
 			closesocket(m_fd);
 			m_fd = 0;
 		}
+
+		m_bIsDisconnecting = FALSE;
+
+		m_lockBufferEvent.UnLock();
 	}
 
 	void ITCPMUTICLIENT::OnDisconnecting()
 	{
-		m_bIsDisconnecting = TRUE;
+		m_lockBufferEvent.Lock();
 
 		if (m_pbufferevent)
 		{
+			bufferevent_disable(m_pbufferevent, EV_READ | EV_SIGNAL | EV_PERSIST);
 			bufferevent_free(m_pbufferevent);
 			m_pbufferevent = NULL;
 		}
+
+		if (m_fd)
+		{
+			closesocket(m_fd);
+			m_fd = 0;
+		}
+
+		m_lockBufferEvent.UnLock();
 
 		PostDisconnectMsg(eDisconnect);
 	}
@@ -82,71 +100,23 @@ namespace YTSvrLib
 			return FALSE;
 		}
 
-		if (pController->GetEvent() == NULL)
+		if (pController->CreateEvent() == FALSE)
 		{
 			return FALSE;
 		}
 
+		m_bIsConnecting = TRUE;
+
 		if (m_fd == 0 || m_fd == INVALID_SOCKET)
 		{
-			SOCKET nSock = socket(AF_INET, SOCK_STREAM, 0);
-			if (nSock == 0 || nSock == INVALID_SOCKET)
+			if (CreateAsyncClientSock() == FALSE)
 			{
 				m_bIsConnecting = FALSE;
 				return FALSE;
 			}
 
-			m_fd = nSock;
-			strncpy_s(m_szHost, pszIP, 31);
 			m_nPort = nPort;
-
-			sockaddr_in sAddrMy;
-#ifdef LIB_WINDOWS
-			sAddrMy.sin_family = AF_INET;
-			sAddrMy.sin_addr.S_un.S_addr = INADDR_ANY;
-			sAddrMy.sin_port = 0;
-
-			u_long flag = 1;
-			int nResult = ioctlsocket(nSock, FIONBIO, &flag);
-			if (nResult != NO_ERROR)
-			{
-				OnError(GetLastError());
-				closesocket(nSock);
-				m_fd = 0;
-				m_bIsConnecting = FALSE;
-				return FALSE;
-			}
-#else
-			sAddrMy.sin_family = AF_INET;
-			sAddrMy.sin_addr.s_addr = INADDR_ANY;
-			sAddrMy.sin_port = 0;
-
-			int flags = 0;
-			if ((flags = fcntl(nSock, F_GETFL)) == -1)
-			{
-				OnError(GetLastError());
-				closesocket(nSock);
-				m_bIsConnecting = FALSE;
-				m_fd = 0;
-				return FALSE;
-			}
-
-			flags |= O_NONBLOCK;
-
-			if (fcntl(nSock, F_SETFL, flags) == -1)
-			{
-				OnError(GetLastError());
-				closesocket(nSock);
-				m_fd = 0;
-				return FALSE;
-			}
-#endif // LIB_WINDOWS
-
-			if (::bind(nSock, (sockaddr*) &sAddrMy, sizeof(sockaddr_in)))
-			{
-				m_bIsConnecting = FALSE;
-				return FALSE;
-			}
+			strncpy_s(m_szHost, pszIP, 31);
 		}
 		
 		sockaddr_in sAddrDst;
@@ -168,11 +138,9 @@ namespace YTSvrLib
 			bufferevent_setwatermark(m_pbufferevent, EV_READ, 0, 0);
 
 			bufferevent_setcb(m_pbufferevent, OnRead, NULL, ITCPBASE::OnError, this);
-
-			bufferevent_enable(m_pbufferevent, EV_READ | EV_SIGNAL | EV_PERSIST);
 		}
 
-		if (bufferevent_socket_connect(m_pbufferevent, (sockaddr*) &sAddrDst, sizeof(sAddrDst)))
+		if (m_pbufferevent && bufferevent_socket_connect(m_pbufferevent, (sockaddr*) &sAddrDst, sizeof(sAddrDst)))
 		{
 			OnError(GetLastError());
 			if (m_pbufferevent)
@@ -189,7 +157,11 @@ namespace YTSvrLib
 			return FALSE;
 		}
 
+		bufferevent_enable(m_pbufferevent, EV_READ | EV_SIGNAL | EV_PERSIST);
+
 		m_pController = pController;
+
+		pController->CreateThread();
 
 		m_bIsClosed = FALSE;
 

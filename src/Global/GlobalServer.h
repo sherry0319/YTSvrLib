@@ -59,6 +59,12 @@ inline _Ty _max(_Ty nLeft, _Ty nRight)
 	return (nLeft > nRight) ? nLeft : nRight;
 }
 
+// 比较两个double类型是否相等
+inline bool is_double_same(double dLeft, double dRight, int nPrecision = 1)
+{
+	return ((dLeft - dRight) < pow(10, -nPrecision));
+}
+
 // 交换两值
 template<typename _Ty>
 inline void _swap(_Ty& nLeft, _Ty& nRight)

@@ -71,6 +71,7 @@ namespace YTSvrLib
 		BOOL m_bIsConnected;
 		BOOL m_bIsDisconnecting;
 		ITCPMUTICLIENTCONTROLLER* m_pController;
+		YTSvrLib::CLock m_lockBufferEvent;
 	};
 }
 

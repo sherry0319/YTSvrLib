@@ -406,11 +406,7 @@ char* TrimL(char *lpszStr)
         i++;
     }
 
-#ifdef LIB_WINDOWS
-	strcpy_s(lpszStr, nLen, (lpszStr + i));
-#else
-	strncpy(lpszStr, (lpszStr + i), nLen);
-#endif
+	__strncpy_s(lpszStr, (lpszStr + i), nLen);
 
     return lpszStr;
 }
@@ -435,11 +431,9 @@ wchar_t* TrimLW(wchar_t* lpswStr )
 	}
 	if( i == 0 )
 		return lpswStr;
-#ifdef LIB_WINDOWS
-	wcscpy_s(lpswStr, nLen, (lpswStr+i));
-#else
-	wcsncpy(lpswStr, (lpswStr + i), nLen);
-#endif // LIB_WINDOWS
+
+	__wcsncpy_s(lpswStr, (lpswStr + i), nLen);
+
 	return lpswStr;
 }
 char* TrimR(char *lpszStr)
@@ -689,16 +683,7 @@ void StrReplace(wchar_t *wzSource, int nLen,const wchar_t *pwzOldstring,const wc
 
 	StrReplace(strSource,pwzOldstring,pwzNewstring);
 
-#ifdef LIB_WINDOWS
-	wcsncpy_s(wzSource, nLen, strSource.c_str(), strSource.size());
-#else
-	if (strSource.size() > (size_t) nLen)
-	{
-		nLen = (int) (strSource.size() - 1);
-	}
-
-	wcsncpy_s(wzSource, strSource.c_str(), strSource.size());
-#endif
+	__wcsncpy_s(wzSource, strSource.c_str(), nLen-1);
 }
 
 

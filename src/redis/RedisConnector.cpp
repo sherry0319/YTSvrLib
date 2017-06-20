@@ -223,11 +223,7 @@ namespace YTSvrLib
 			return FALSE;
 		}
 
-#ifdef LIB_WINDOWS
-		strncpy_s(pszOut, nMaxLen, reply->str, reply->len);
-#else
-		strncpy_s(pszOut, reply->str, nMaxLen);
-#endif // LIB_WINDOWS
+		__strncpy_s(pszOut, reply->str, nMaxLen);
 
 		freeReplyObject(reply);
 

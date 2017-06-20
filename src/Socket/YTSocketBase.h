@@ -73,6 +73,8 @@ namespace YTSvrLib
 		virtual BOOL IsDisconnecting() = 0;
 		virtual void OnDisconnecting();
 		virtual void PostDisconnectMsg(EType eType) = 0;
+	protected:
+		BOOL CreateAsyncClientSock();
 	public:
 		const char* GetAddrIp()
 		{

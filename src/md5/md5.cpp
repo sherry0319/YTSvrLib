@@ -160,11 +160,7 @@ LPCWSTR MD5(LPCWSTR pwzInfo, wchar_t wzOutBuf[34])
 
 	for (UINT i = 0; i < 16; i++)
 	{
-#ifdef LIB_WINDOWS
-		_snwprintf_s(wzOutBuf + nLen, 34 - nLen, 34 - nLen, L"%02x", result[i]);
-#else
-		_snwprintf_s(wzOutBuf + nLen, 34 - nLen, L"%02x", result[i]);
-#endif // LIB_WINDOWS
+		__snwprintf_s(wzOutBuf + nLen, 34 - nLen, L"%02x", result[i]);
 		nLen += 2;
 	}
 	wzOutBuf[nLen] = L'\0';
@@ -202,11 +198,7 @@ LPCWSTR MD5(LPCWSTR pwzInfo, size_t nSize, wchar_t wzOutBuf[34])
 
 	for (UINT i = 0; i < 16; i++)
 	{
-#ifdef LIB_WINDOWS
-		_snwprintf_s(wzOutBuf + nLen, 34 - nLen, 34 - nLen, L"%02x", result[i]);
-#else
-		_snwprintf_s(wzOutBuf + nLen, 34 - nLen, L"%02x", result[i]);
-#endif // LIB_WINDOWS
+		__snwprintf_s(wzOutBuf + nLen, 34 - nLen, L"%02x", result[i]);
 		nLen += 2;
 	}
 	wzOutBuf[nLen] = L'\0';
@@ -223,11 +215,8 @@ LPCSTR MD5(LPCSTR pszInfo, size_t nSize, char szOutBuf[34])
 
 	for (UINT i = 0; i < 16; i++)
 	{
-#ifdef LIB_WINDOWS
-		_snprintf_s(szOutBuf + nLen, 34 - nLen, 34 - nLen, "%02x", result[i]);
-#else
-		_snprintf_s(szOutBuf + nLen, 34 - nLen, "%02x", result[i]);
-#endif // LIB_WINDOWS
+		__snprintf_s(szOutBuf + nLen, 34 - nLen, "%02x", result[i]);
+
 		nLen += 2;
 	}
 	szOutBuf[nLen] = '\0';

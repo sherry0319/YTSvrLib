@@ -63,6 +63,16 @@ namespace YTSvrLib
 		m_QueryInfo = szSQL;
 	}
 
+	void CMYSQLCommand::AddQueryText_NoFormat(string& strSQL)
+	{
+		m_QueryInfo = strSQL;
+	}
+
+	void CMYSQLCommand::AddQueryText_NoFormat(wstring& wstrSQL)
+	{
+		AddQueryText_NoFormat(wstrSQL.c_str());
+	}
+
 	void MYSQLLIB::CMYSQLRecordSet::AddResult(const mysqlpp::StoreQueryResult& res)
 	{
 		res.enable_exceptions();

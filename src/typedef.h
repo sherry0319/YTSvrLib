@@ -138,7 +138,15 @@ typedef LONGLONG __time64_t;
 
 #define StrStrIA strcasestr
 
-//#define localtime_s(_tm_p,_time_t_p)		localtime_r(_time_t_p,_tm_p)
+#define __snprintf_s(_STR,_LEN,_FMT,args...) snprintf(_STR,_LEN,_FMT,##args)
+#define __vsnprintf_s(_STR,_LEN,_FMT,_VAR) vsnprintf(_STR,_LEN,_FMT,_VAR)
+
+#define __snwprintf_s(_STR,_LEN,_FMT,args...) swprintf(_STR,_LEN,_FMT,##args)
+#define __vsnwprintf_s(_STR,_LEN,_FMT,_VAR) vswprintf(_STR,_LEN,_FMT,_VAR)
+
+#define __strncpy_s(_DST,_SRC,_LEN) strncpy(_DST,_SRC,_LEN)
+
+#define __wcsncpy_s(_DST,_SRC,_LEN) wcsncpy(_DST,_SRC,_LEN)
 
 #define gmtime_s(_tm,_ts)		gmtime_r(_ts,_tm)
 
@@ -206,6 +214,16 @@ typedef struct _SYSTEMTIME {
 void GetLocalTime(LPSYSTEMTIME lpSystemTime);
 
 #else
+#define __snprintf_s(_STR,_LEN,_FMT,...) _snprintf_s(_STR,_LEN,_LEN,_FMT,__VA_ARGS__)
+#define __vsnprintf_s(_STR,_LEN,_FMT,_VAR) vsnprintf_s(_STR,_LEN,_LEN,_FMT,_VAR)
+
+#define __snwprintf_s(_STR,_LEN,_FMT,...) _snwprintf_s(_STR,_LEN,_LEN,_FMT,__VA_ARGS__)
+#define __vsnwprintf_s(_STR,_LEN,_FMT,_VAR) vswprintf_s(_STR,_LEN,_LEN,_FMT,_VAR)
+
+#define __strncpy_s(_DST,_SRC,_LEN) strncpy_s(_DST,_LEN,_SRC,_LEN)
+
+#define __wcsncpy_s(_DST,_SRC,_LEN) wcsncpy_s(_DST,_LEN,_SRC,_LEN)
+
 typedef unsigned int UINT;
 
 typedef int INT;

@@ -185,11 +185,7 @@ const wchar_t* CovertUTC2String(__time32_t tTime, wchar_t* pwzOut, int nOutMaxLe
 
 	if (tTime == 0)
 	{
-#ifdef LIB_WINDOWS
-		wcsncpy_s(pwzOut, nOutMaxLen - 1, L"NULL", nOutMaxLen - 1);
-#else
-		wcsncpy_s(pwzOut, L"NULL", nOutMaxLen - 1);
-#endif
+		__wcsncpy_s(pwzOut, L"NULL", nOutMaxLen - 1);
 
 		return pwzOut;
 	}
@@ -213,11 +209,7 @@ const char* CovertUTC2String(__time32_t tTime, char* pszOut, int nOutMaxLen, con
 
 	if (tTime == 0)
 	{
-#ifdef LIB_WINDOWS
-		strncpy_s(pszOut, nOutMaxLen - 1, "NULL", nOutMaxLen - 1);
-#else
-		strncpy_s(pszOut, "NULL", nOutMaxLen - 1);
-#endif
+		__strncpy_s(pszOut, "NULL", nOutMaxLen - 1);
 
 		return pszOut;
 	}

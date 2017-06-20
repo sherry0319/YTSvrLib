@@ -39,7 +39,11 @@ namespace YTSvrLib
 		}
 
 	public:
-		BOOL CreateClientController();
+		BOOL CreateEvent();
+
+		BOOL CreateThread();
+	private:
+		YTSvrLib::CLock m_lockThread;
 	};
 }
 

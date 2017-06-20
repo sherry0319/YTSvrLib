@@ -77,6 +77,9 @@ namespace YTSvrLib
 		void AddQueryText_NoFormat(LPCSTR lpszSQL);
 		void AddQueryText_NoFormat(LPCWSTR lpwzSQL);
 
+		void AddQueryText_NoFormat(string& strSQL);
+		void AddQueryText_NoFormat(wstring& wstrSQL);
+
 		std::string GetSQLRequest()
 		{
 			return m_QueryInfo;

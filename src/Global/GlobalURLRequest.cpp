@@ -104,7 +104,7 @@ namespace YTSvrLib
 
 		if (emCode != CURLE_OK)
 		{
-			LOGERROR("error : curl request failed : %d\nrequest url : %s", emCode, url);
+			LOGERROR("error : curl request failed : %d request url : %s", emCode, url);
 		}
 
 		return nResponseCode;
@@ -146,7 +146,7 @@ namespace YTSvrLib
 
 		if (CURLE_OK != emCode)
 		{
-			LOGERROR("error : curl request failed : %d\nrequest url : %s\npostdata : %s", emCode, url, postdata);
+			LOGERROR("error : curl request failed : %d request url : %s postdata : %s", emCode, url, postdata);
 		}
 
 		return nResponseCode;

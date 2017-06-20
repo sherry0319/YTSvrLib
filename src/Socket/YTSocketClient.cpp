@@ -22,11 +22,6 @@ SOFTWARE.*/
 #include "stdafx.h"
 #include "YTSocketClient.h"
 
-#ifndef LIB_WINDOWS
-#include <fcntl.h>
-#include <linux/tcp.h>
-#endif // !LIB_WINDOWS
-
 namespace YTSvrLib
 {
 	void ITCPCLIENT::OnError(int nErrCode)
@@ -146,77 +141,14 @@ namespace YTSvrLib
 
 		if (m_fd == 0 || m_fd == INVALID_SOCKET)
 		{
-			SOCKET nSock = socket(AF_INET, SOCK_STREAM, 0);
-			if (nSock == 0 || nSock == INVALID_SOCKET)
+			if (CreateAsyncClientSock() == FALSE)
 			{
-				LOGERROR("Error : socket failed : %d",GetLastError());
 				m_bIsConnecting = FALSE;
 				return FALSE;
 			}
 
-			m_fd = nSock;
-			strncpy_s(m_szHost, pszIP, 31);
 			m_nPort = nPort;
-
-			sockaddr_in sAddrMy;
-#ifdef LIB_WINDOWS
-			sAddrMy.sin_family = AF_INET;
-			sAddrMy.sin_addr.S_un.S_addr = INADDR_ANY;
-			sAddrMy.sin_port = 0;
-
-			u_long flag = 1;
-			int nResult = ioctlsocket(nSock, FIONBIO, &flag);
-			if (nResult != NO_ERROR)
-			{
-				LOGERROR("Error : ioctlsocket failed : %d", GetLastError());
-				OnError(GetLastError());
-				closesocket(nSock);
-				m_fd = 0;
-				m_bIsConnecting = FALSE;
-				return FALSE;
-			}
-#else
-			sAddrMy.sin_family = AF_INET;
-			sAddrMy.sin_addr.s_addr = INADDR_ANY;
-			sAddrMy.sin_port = 0;
-
-			int flags = 0;
-			if ((flags = fcntl(nSock, F_GETFL)) == -1)
-			{
-				LOGERROR("Error : fcntl 1 failed : %d", GetLastError());
-				OnError(GetLastError());
-				closesocket(nSock);
-				m_bIsConnecting = FALSE;
-				m_fd = 0;
-				return FALSE;
-			}
-
-			flags |= O_NONBLOCK;
-
-			if (fcntl(nSock, F_SETFL, flags) == -1)
-			{
-				LOGERROR("Error : fcntl 2 failed : %d", GetLastError());
-				OnError(GetLastError());
-				closesocket(nSock);
-				m_fd = 0;
-				return FALSE;
-			}
-
-			int one = 1;
-			setsockopt(nSock, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(one));
-
-			setsockopt(nSock, IPPROTO_TCP, TCP_NODELAY, (void*) &one, sizeof(one));
-#endif // LIB_WINDOWS
-
-			if (::bind(nSock, (sockaddr*) &sAddrMy, sizeof(sockaddr_in)))
-			{
-				LOGERROR("Error : bind failed : %d", GetLastError());
-				OnError(GetLastError());
-				closesocket(nSock);
-				m_fd = 0;
-				m_bIsConnecting = FALSE;
-				return FALSE;
-			}
+			strncpy_s(m_szHost, pszIP, 31);
 		}
 		
 		sockaddr_in sAddrDst;

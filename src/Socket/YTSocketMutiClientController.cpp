@@ -24,14 +24,40 @@ SOFTWARE.*/
 
 namespace YTSvrLib
 {
-	BOOL ITCPMUTICLIENTCONTROLLER::CreateClientController()
+	BOOL ITCPMUTICLIENTCONTROLLER::CreateEvent()
 	{
-		if (CreateEvent() == FALSE)
+		m_lockThread.Lock();
+
+		if (GetEvent())
 		{
+			m_lockThread.UnLock();
+			return TRUE;
+		}
+
+		if (ITCPEVENTTHREAD::CreateEvent() == FALSE)
+		{
+			m_lockThread.UnLock();
 			return FALSE;
 		}
 
-		CreateThread();
+		m_lockThread.UnLock();
+
+		return TRUE;
+	}
+
+	BOOL ITCPMUTICLIENTCONTROLLER::CreateThread()
+	{
+		m_lockThread.Lock();
+
+		if (IsRuning())
+		{
+			m_lockThread.UnLock();
+			return TRUE;
+		}
+
+		ITCPEVENTTHREAD::CreateThread();
+
+		m_lockThread.UnLock();
 
 		return TRUE;
 	}

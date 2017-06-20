@@ -43,11 +43,8 @@ void LogBin(const char* pszData, int nDataLen)
 	UINT nCount = 0;
 	for (int i = 0; i < nDataLen; i++)
 	{
-#ifdef LIB_WINDOWS
-		nLen += _snprintf_s(szTmp + nLen, 127 - nLen, 127 - nLen, "%02X ", (BYTE) pszData[i]);
-#else
-		nLen += _snprintf_s(szTmp + nLen, 127 - nLen, "%02X ", (BYTE) pszData[i]);
-#endif // LIB_WINDOWS
+		nLen += __snprintf_s(szTmp + nLen, 127 - nLen, "%02X ", (BYTE) pszData[i]);
+
 		nCount++;
 		if (nCount >= 16)
 		{
@@ -109,7 +106,7 @@ void LogErrorASync(const char* szFile, const int nLine, EM_LOG_LEVEL emLevel, co
 	YTSvrLib::CLogBufferA* pLogBuffer = YTSvrLib::CProcessLogMgr::GetInstance()->ApplyObj();
 	char* lpszWriteBuf = pLogBuffer->GetBuffer();
 	pLogBuffer->ReSize(
-		sprintf_s(lpszWriteBuf, pLogBuffer->GetCapcity(), "[%s][%s,tid=0x%04x][%s:%d] %s\r\n",
+		sprintf_s(lpszWriteBuf, pLogBuffer->GetCapcity(), "[%s][%s,tid=0x%04x][%s:%d] %s%s",
 		pszLevel,
 		cTime, 
 #ifdef LIB_WINDOWS
@@ -117,7 +114,13 @@ void LogErrorASync(const char* szFile, const int nLine, EM_LOG_LEVEL emLevel, co
 #else
 		pthread_self()
 #endif // LIB_WINDOWS
-		, pszFileShort, nLine, lpszBuf)
+		, pszFileShort, nLine, lpszBuf,
+#ifdef LIB_WINDOWS
+		"\r\n"
+#else
+		"\n"
+#endif
+)
 		);
 	_ASSERT(strlen(lpszWriteBuf));
 	switch (emLevel)
@@ -127,14 +130,16 @@ void LogErrorASync(const char* szFile, const int nLine, EM_LOG_LEVEL emLevel, co
 		case LOG_LEVEL_WARN:
 		case LOG_LEVEL_ERROR:
 		{
-			printf(pLogBuffer->GetBuffer());
-			fprintf(stderr, pLogBuffer->GetBuffer());
+#ifdef LIB_WINDOWS
+			cout << pLogBuffer->GetBuffer();
+#endif
+			cerr << pLogBuffer->GetBuffer();
 		}
 			break;
 		default:
 		{
 #ifdef LIB_WINDOWS
-			printf(pLogBuffer->GetBuffer());
+			cout << pLogBuffer->GetBuffer();
 #endif
 		}
 			break;
@@ -251,7 +256,7 @@ namespace YTSvrLib
 	void CLogManager::WriteSynLog(CLogManager* pLogMgr, CLogBufferA* pBuffer)
 	{
 		pLogMgr->LockSyncFile();
-		printf(pBuffer->GetBuffer());
+		cout << pBuffer->GetBuffer();
 		DWORD dwIOSize = 0;
 		HANDLE hFileHandle = pLogMgr->GetSyncFileHandle();
 		if (hFileHandle != INVALID_HANDLE_VALUE)
@@ -333,7 +338,7 @@ namespace YTSvrLib
 					pThis->ReOpenAsynLogFile();
 					continue;
 				}
-				printf("LogThread OnExit...");
+				cout << "LogThread OnExit..." << endl;
 				break;
 			}
 			pLogBuffer = (CLogBufferA*) pOL;
@@ -628,7 +633,7 @@ namespace YTSvrLib
 					pThis->ReOpenAsynLogFile();
 					continue;
 				}
-				printf("LogThread OnExit...");
+				cout << "LogThread OnExit..." << endl;
 				break;
 			}
 			pLogBuffer = (CLogBufferW*) pOL;
@@ -870,7 +875,7 @@ namespace YTSvrLib
 	{
 		pLogMgr->LockSyncFile();
 
-		printf(pBuffer->GetBuffer());
+		cout << pBuffer->GetBuffer() << endl;
 
 		DWORD dwIOSize = 0;
 
@@ -973,13 +978,13 @@ namespace YTSvrLib
 			sprintf_s(szFinalFileName, MAX_PATH, ("%s%.2d-%.2d-%.2d-%.2d-%.2d-%.2d-[%d]%s.%s"), szFullPath,
 			(timenow.tm_year + 1900), (timenow.tm_mon + 1), timenow.tm_mday, timenow.tm_hour, timenow.tm_min, timenow.tm_sec, dwProcessID, pstrFileName, m_szFileExt);
 
-		printf("Cur Asyn LOG Path = [%s]\n", szFinalFileName);
+		// printf("Cur Asyn LOG Path = [%s]\n", szFinalFileName);
 
 		FILE* pFile = fopen(szFinalFileName, "w");
 
 		if (pFile == NULL)
 		{
-			printf("LOG Create Failed : %d\n", errno);
+			cerr << "LOG File [" << szFinalFileName << "]Create Failed : " << errno << endl;
 		}
 
 		return pFile;
@@ -1284,13 +1289,13 @@ namespace YTSvrLib
 			sprintf_s(szFinalFileName, MAX_PATH, ("%s%.2d-%.2d-%.2d-%.2d-%.2d-%.2d-[%d]%s.%s"), szFullPath,
 			(timenow.tm_year + 1900), (timenow.tm_mon + 1), timenow.tm_mday, timenow.tm_hour, timenow.tm_min, timenow.tm_sec, dwProcessID, pstrFileName, m_szFileExt);
 
-		printf("Cur Asyn LOG Path = [%s]\n", szFinalFileName);
+		// printf("Cur Asyn LOG Path = [%s]\n", szFinalFileName);
 
 		FILE* pFile = fopen(szFinalFileName, "w");
 
 		if (pFile == NULL)
 		{
-			printf("Create Log Failed : %d\n", errno);
+			cerr << "LOG File [" << szFinalFileName << "]Create Failed : " << errno << endl;
 		}
 
 		// 	if ( GetFileSize(pFile) == 0 )
@@ -1362,7 +1367,7 @@ namespace YTSvrLib
 
 		if (pFile == NULL)
 		{
-			printf("Create Log Failed : %d\n", errno);
+			cerr << "LOG File [" << szFinalFileName << "]Create Failed : " << errno << endl;
 		}
 
 		// 	if (GetFileSize(pFile) == 0)

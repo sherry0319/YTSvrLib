@@ -85,7 +85,15 @@ namespace YTSvrLib
 		fread(filebuffer, filesize, 1, pFile);
 
 		std::vector<std::string> vctList;
-		StrDelimiter(filebuffer, "\n", vctList);
+
+		if (filesize > 3 && filebuffer[0] == '\xEF' && filebuffer[1] == '\xBB' && filebuffer[2] == '\xBF')
+		{// »•µÙBOMÕ∑
+			StrDelimiter(filebuffer+3, "\n", vctList);
+		}
+		else
+		{
+			StrDelimiter(filebuffer, "\n", vctList);
+		}
 
 		delete[] filebuffer;
 		filebuffer = NULL;

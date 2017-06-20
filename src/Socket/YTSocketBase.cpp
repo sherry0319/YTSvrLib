@@ -21,6 +21,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
 #include "stdafx.h"
 #include "YTSocketBase.h"
+#ifndef LIB_WINDOWS
+#include <fcntl.h>
+#include <linux/tcp.h>
+#endif // !LIB_WINDOWS
 
 namespace YTSvrLib
 {
@@ -220,10 +224,13 @@ namespace YTSvrLib
 #endif // LIB_WINDOWS
 				{
 					SafeClose();
-					return;
+					break;
 				}
-#ifndef LIB_WINDOWS
+#ifdef LIB_WINDOWS
+				if (dwCode == WSAEWOULDBLOCK)
+#else
 				if (dwCode == EAGAIN)
+#endif
 				{// 如果这里返回EAGAIN.这是一个特殊情况.说明在非阻塞socket中send太快了已经占满了系统写缓冲区.要等待系统处理完系统写缓冲区之后再进行处理.
 					// 所以强制调用一次select.监视写缓冲区.如果写缓冲区可写了.则继续写.如果超时或者错误了.则直接返回.
 					fd_set fds;
@@ -232,17 +239,92 @@ namespace YTSvrLib
 					FD_ZERO(&fds);
 					FD_SET(GetSocket(), &fds);
 
-					int ret = select(GetSocket()+1,NULL,&fds,NULL,&timeout);
+					int ret = select((int)GetSocket()+1,NULL,&fds,NULL,&timeout);
 					if (ret <= 0)
 					{
 						SafeClose();
-						return;
+						break;
 					}
 				}
-#endif
 			}
 		}
 
 		m_bIsSending = FALSE;
+	}
+
+	BOOL ITCPBASE::CreateAsyncClientSock()
+	{
+		if (m_fd != 0 && m_fd != INVALID_SOCKET)
+		{
+			return TRUE;
+		}
+
+		SOCKET nSock = socket(AF_INET, SOCK_STREAM, 0);
+		if (nSock == 0 || nSock == INVALID_SOCKET)
+		{
+			LOGERROR("Error : socket failed : %d", GetLastError());
+			return FALSE;
+		}
+
+		m_fd = nSock;
+
+		sockaddr_in sAddrMy;
+#ifdef LIB_WINDOWS
+		sAddrMy.sin_family = AF_INET;
+		sAddrMy.sin_addr.S_un.S_addr = INADDR_ANY;
+		sAddrMy.sin_port = 0;
+
+		u_long flag = 1;
+		int nResult = ioctlsocket(nSock, FIONBIO, &flag);
+		if (nResult != NO_ERROR)
+		{
+			LOGERROR("Error : ioctlsocket failed : %d", GetLastError());
+			OnError(GetLastError());
+			closesocket(nSock);
+			m_fd = 0;
+			return FALSE;
+		}
+#else
+		sAddrMy.sin_family = AF_INET;
+		sAddrMy.sin_addr.s_addr = INADDR_ANY;
+		sAddrMy.sin_port = 0;
+
+		int flags = 0;
+		if ((flags = fcntl(nSock, F_GETFL)) == -1)
+		{
+			LOGERROR("Error : fcntl 1 failed : %d", GetLastError());
+			OnError(GetLastError());
+			closesocket(nSock);
+			m_fd = 0;
+			return FALSE;
+		}
+
+		flags |= O_NONBLOCK;
+
+		if (fcntl(nSock, F_SETFL, flags) == -1)
+		{
+			LOGERROR("Error : fcntl 2 failed : %d", GetLastError());
+			OnError(GetLastError());
+			closesocket(nSock);
+			m_fd = 0;
+			return FALSE;
+		}
+
+		int one = 1;
+		setsockopt(nSock, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(one));
+
+		setsockopt(nSock, IPPROTO_TCP, TCP_NODELAY, (void*) &one, sizeof(one));
+#endif // LIB_WINDOWS
+
+		if (::bind(nSock, (sockaddr*) &sAddrMy, sizeof(sockaddr_in)))
+		{
+			LOGERROR("Error : bind failed : %d", GetLastError());
+			OnError(GetLastError());
+			closesocket(nSock);
+			m_fd = 0;
+			return FALSE;
+		}
+
+		return TRUE;
 	}
 }

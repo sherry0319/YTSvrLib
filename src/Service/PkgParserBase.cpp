@@ -207,11 +207,7 @@ namespace YTSvrLib
 
 		va_list va;
 		va_start(va, szMsgFormat);
-#ifdef LIB_WINDOWS
-		vsnprintf_s(msg, 255, 255, szMsgFormat, va);
-#else
-		vsnprintf_s(msg, 255, szMsgFormat, va);
-#endif // LIB_WINDOWS
+		__vsnprintf_s(msg, 255, szMsgFormat, va);
 		va_end(va);
 
 		char szRetMsg[512] = { 0 };

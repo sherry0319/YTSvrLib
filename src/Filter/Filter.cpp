@@ -529,11 +529,7 @@ namespace YTSvrLib
 					{
 						if (pstrOutKey && nOutMaxLength > 0)
 						{
-#ifdef LIB_WINDOWS
-							strncpy_s(pstrOutKey, nOutMaxLength, (*it).c_str(), nOutMaxLength);
-#else
-							strncpy_s(pstrOutKey, (*it).c_str(), nOutMaxLength);
-#endif // LIB_WINDOWS
+							__strncpy_s(pstrOutKey, (*it).c_str(), nOutMaxLength);
 						}
 						return TRUE;
 					}
