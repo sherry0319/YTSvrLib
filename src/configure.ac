@@ -62,6 +62,19 @@ AC_CHECK_LIB(hiredis,redisConnect,[],[
 ])
 
 # Checks for library functions.
+AC_PROG_LN_S
+AC_FUNC_ALLOCA
+AC_FUNC_MALLOC
+AC_FUNC_REALLOC
+AC_FUNC_MKTIME
+AC_FUNC_STRCOLL
+AC_FUNC_STRERROR_R
+AC_FUNC_STRTOD
+AC_FUNC_ERROR_AT_LINE
+AC_STRUCT_TIMEZONE
+AC_TYPE_MODE_T
 AC_CHECK_FUNCS([gethostbyname gethostname getpagesize gettimeofday inet_ntoa localtime_r memchr memmove memset mkdir modf rint select setlocale socket sqrt stpcpy strcasecmp strchr strerror strncasecmp strpbrk strrchr strspn strstr strtol strtoull])
+AC_CHECK_FUNCS([clock_gettime])
+AC_CHECK_FUNCS([pow])
 
 AC_OUTPUT(Makefile)

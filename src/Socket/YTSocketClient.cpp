@@ -33,10 +33,11 @@ namespace YTSvrLib
 
 	void ITCPCLIENT::SafeClose()
 	{
-		if (m_bIsDisconnecting)
+		if (m_bIsClosed)
 		{
 			return;
 		}
+
 		m_bIsConnected = FALSE;
 		m_bIsClosed = TRUE;
 		m_bIsConnecting = FALSE;
@@ -59,7 +60,7 @@ namespace YTSvrLib
 
 		m_lockBufferEvent.UnLock();
 
-		// StopThread();
+		OnClosed();
 	}
 
 	void ITCPCLIENT::ReleaseClient()
@@ -69,57 +70,16 @@ namespace YTSvrLib
 
 	void ITCPCLIENT::OnThreadEnd()
 	{
-		m_bIsConnected = FALSE;
-		m_bIsClosed = TRUE;
-		m_bIsConnecting = FALSE;
-		m_bIsDisconnecting = FALSE;
-
-		m_lockBufferEvent.Lock();
-
-		if (m_pbufferevent)
-		{
-			bufferevent_disable(m_pbufferevent, EV_READ | EV_SIGNAL | EV_PERSIST);
-			bufferevent_free(m_pbufferevent);
-			m_pbufferevent = NULL;
-		}
-
-		if (m_fd)
-		{
-			closesocket(m_fd);
-			m_fd = 0;
-		}
-
-		m_lockBufferEvent.UnLock();
+		SafeClose();
 
 		ITCPEVENTTHREAD::CleanThread();
-		OnClosed();
 	}
 
 	void ITCPCLIENT::OnDisconnecting()
 	{
-		m_lockBufferEvent.Lock();
-
-		if (m_pbufferevent)
-		{
-			bufferevent_disable(m_pbufferevent, EV_READ | EV_SIGNAL | EV_PERSIST);
-			bufferevent_free(m_pbufferevent);
-			m_pbufferevent = NULL;
-		}
-
-		if (m_fd)
-		{
-			closesocket(m_fd);
-			m_fd = 0;
-		}
-
-		m_lockBufferEvent.UnLock();
+		m_bIsDisconnecting = TRUE;
 
 		PostDisconnectMsg(eDisconnect);
-	}
-
-	void ITCPCLIENT::OnConnected()
-	{
-
 	}
 
 	BOOL ITCPCLIENT::CreateClient(const char* pszIP, int nPort)

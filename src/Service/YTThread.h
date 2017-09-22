@@ -26,7 +26,7 @@ namespace YTSvrLib
 
 	const size_t THREAD_INFO_LEN = 128;
 
-	class CThread //: public CRecycle
+	class YTSVRLIB_EXPORT CThread //: public CRecycle
 	{
 	public:
 		CThread(void);
@@ -95,7 +95,7 @@ namespace YTSvrLib
 	*	管理多个线程对象。
 	*/
 
-	class CThreadPool
+	class YTSVRLIB_EXPORT CThreadPool
 	{
 	public:
 		CThreadPool(void)

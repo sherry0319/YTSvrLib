@@ -42,7 +42,6 @@ void InvalidParameterHandler(const wchar_t* , const wchar_t* , const wchar_t* , 
 	throw std::invalid_argument("");
 }
 
-YTSvrLib::CServerApplication gApp;
 UINT  g_nGlobalErrorCode;// È«¾Ö´íÎó
 
 namespace YTSvrLib
@@ -72,8 +71,6 @@ namespace YTSvrLib
 			getchar();
 			exit(0);
 		}
-
-		InitGenRandomFunction();
 #endif // LIB_WINDOWS
 
 		GlobalInit();
@@ -89,8 +86,6 @@ namespace YTSvrLib
 			FreeLibrary(m_hException);
 			m_hException = NULL;
 		}
-
-		ReleaseGenRandomFunction();
 #endif // LIB_WINDOWS
 
 		DelLogManager();

@@ -27,7 +27,7 @@ SOFTWARE.*/
 
 namespace YTSvrLib
 {
-	class ITCPCLIENT : public ITCPBASE, public ITCPEVENTTHREAD
+	class YTSVRLIB_EXPORT ITCPCLIENT : public ITCPBASE, public ITCPEVENTTHREAD
 	{
 	public:
 		ITCPCLIENT()
@@ -40,8 +40,6 @@ namespace YTSvrLib
 			
 		}
 	public:
-		virtual void OnConnected();
-
 		virtual void OnError(int nErrCode);
 
 		virtual void SafeClose();

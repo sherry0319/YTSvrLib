@@ -146,31 +146,32 @@ namespace YTSvrLib
 		m_dwExecuteCount++;
 		std::string strSQL = pSqlStr->m_pCmd->GetSQLRequest();
 
-#ifdef COREDEBUG
-		LOG("CMYSQLClient::ExecuteSQL(MYSQLSTRING_REQUEST *pSqlStr) BEGIN");
-#endif
-		DWORD dwTick = GetTickCount();
-		mysqlpp::Query CurQuery = m_DBSys.query(strSQL);
-		DWORD dwTick2 = GetTickCount();
-#ifdef COREDEBUG
-		LOG("CMYSQLClient::ExecuteSQL(MYSQLSTRING_REQUEST *pSqlStr) query End");
-#endif
-		DWORD dwCountInQueue = GetReqCountInQueue();
-		if (pQueryInfo && (dwTick2 >= dwTick + 200 || dwCountInQueue > 500))
-		{
-			LOGTRACE("DBClient=%d ExecuteSQL=%s pResSet=0x%08x Dur=%d Queue=%d", GetID(), pQueryInfo->m_strSPName, pResSet, dwTick2 - dwTick, dwCountInQueue);
-		}
-
-		BOOL bExcute = pSqlStr->m_pCmd->IsExcute();
-
-		CurQuery.enable_exceptions();
-
+		ULONG nAffectRows = 0;
 		try
 		{
 			if (m_bThreadSafe)
 			{
 				m_RequestLock.Lock();
 			}
+
+#ifdef COREDEBUG
+			LOG("CMYSQLClient::ExecuteSQL(MYSQLSTRING_REQUEST *pSqlStr) BEGIN");
+#endif
+			DWORD dwTick = GetTickCount();
+			mysqlpp::Query CurQuery = m_DBSys.query(strSQL);
+			DWORD dwTick2 = GetTickCount();
+#ifdef COREDEBUG
+			LOG("CMYSQLClient::ExecuteSQL(MYSQLSTRING_REQUEST *pSqlStr) query End");
+#endif
+			DWORD dwCountInQueue = GetReqCountInQueue();
+			if (pQueryInfo && (dwTick2 >= dwTick + 200 || dwCountInQueue > 500))
+			{
+				LOGTRACE("DBClient=%d ExecuteSQL=%s pResSet=0x%08x Dur=%d Queue=%d", GetID(), pQueryInfo->m_strSPName, pResSet, dwTick2 - dwTick, dwCountInQueue);
+			}
+
+			BOOL bExcute = pSqlStr->m_pCmd->IsExcute();
+
+			CurQuery.enable_exceptions();
 
 			if (bExcute)
 			{
@@ -201,23 +202,13 @@ namespace YTSvrLib
 #endif
 				}
 			}
+
+			nAffectRows = (ULONG) CurQuery.affected_rows();
+
 			if (m_bThreadSafe)
 			{
 				m_RequestLock.UnLock();
 			}
-
-			ULONG nAffectRows = (ULONG) CurQuery.affected_rows();
-
-			if (pSqlStr->m_pProcFun)
-			{
-				pSqlStr->m_pProcFun(0, nAffectRows, pQueryInfo, pResSet, pSqlStr->m_bIsAsync);
-			}
-			else
-			{
-				LOG("Invalid Proc Function : NULL : QueryInfo : 0x%x", pQueryInfo);
-			}
-
-			return TRUE;
 		}
 		catch (mysqlpp::BadQuery& err)
 		{
@@ -258,6 +249,17 @@ namespace YTSvrLib
 
 			return FALSE;
 		}
+
+		if (pSqlStr->m_pProcFun)
+		{
+			pSqlStr->m_pProcFun(0, nAffectRows, pQueryInfo, pResSet, pSqlStr->m_bIsAsync);
+		}
+		else
+		{
+			LOG("Invalid Proc Function : NULL : QueryInfo : 0x%x", pQueryInfo);
+		}
+
+		return TRUE;
 	}
 
 	void CMYSQLClient::Execute(void)

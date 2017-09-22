@@ -29,7 +29,7 @@ SOFTWARE.*/
 
 namespace YTSvrLib
 {
-	class CXMLNode
+	class YTSVRLIB_EXPORT CXMLNode
 	{
 	public:
 		typedef std::unordered_map<std::string, std::unordered_set<CXMLNode*> > _XMLPPChildList;

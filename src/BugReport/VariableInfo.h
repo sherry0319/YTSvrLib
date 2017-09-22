@@ -53,7 +53,7 @@ public      :
                                   MAX_VARNAME - 1    ) ;
             szVarName[ MAX_VARNAME - 1 ] = _T ( '\0' ) ;
 #else
-            _tcscpy ( szVarName , pSymInfo->Name ) ;
+			_tcscpy_s(szVarName, MAX_VARNAME, pSymInfo->Name);
 #endif            
         }
     }
@@ -123,7 +123,7 @@ public      :
                                   MAX_VARNAME - 1    ) ;
             szVarName[ MAX_VARNAME - 1 ] = _T ( '\0' ) ;
 #else
-            _tcscpy ( szVarName , pSymInfo->Name ) ; 
+			_tcscpy_s(szVarName, MAX_VARNAME, pSymInfo->Name);
 #endif            
         }
 

@@ -31,7 +31,7 @@ namespace YTSvrLib
 
 	typedef void(*_REQUEST_CALLBACK)(CURLRequest* pReq);
 
-	struct CURLRequest : public CRecycle
+	struct YTSVRLIB_EXPORT CURLRequest : public CRecycle
 	{
 		virtual void Init()
 		{
@@ -55,7 +55,7 @@ namespace YTSvrLib
 		_REQUEST_CALLBACK m_pFuncCallBack;
 	};
 
-	class CURLWriterFactory : public CThreadPool
+	class YTSVRLIB_EXPORT CURLWriterFactory : public CThreadPool
 	{
 	public:
 		friend class CURLWriterClient;
@@ -105,7 +105,7 @@ namespace YTSvrLib
 		YTSvrLib::CLock m_criLockCallback;
 	};
 
-	class CURLWriterClient : public CThread
+	class YTSVRLIB_EXPORT CURLWriterClient : public CThread
 	{
 	public:
 

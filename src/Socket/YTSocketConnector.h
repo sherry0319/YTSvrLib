@@ -27,7 +27,7 @@ SOFTWARE.*/
 namespace YTSvrLib
 {
 	class ITCPSERVER;
-	class ITCPCONNECTOR : public ITCPBASE
+	class YTSVRLIB_EXPORT ITCPCONNECTOR : public ITCPBASE
 	{
 	public:
 		ITCPCONNECTOR()
@@ -56,6 +56,8 @@ namespace YTSvrLib
 		virtual void ReclaimObj() = 0;
 
 		virtual BOOL CreateConnector(ITCPSERVER* pTCPServer, SOCKET fd, const char* pszHost, int nPort);
+
+		virtual void OnDisconnecting();
 
 		virtual BOOL IsDisconnecting()
 		{

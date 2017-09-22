@@ -29,7 +29,7 @@ namespace YTSvrLib
 
 	typedef int(*REDIS_HASH_FUNCTION)(int);
 
-	class CRedisConnector
+	class YTSVRLIB_EXPORT CRedisConnector
 	{
 	public:
 		CRedisConnector()
@@ -92,7 +92,7 @@ namespace YTSvrLib
 		BOOL m_bAsyncRedisConnecting;
 	};
 
-	class CRedisConnectorPool : public CSingle < CRedisConnectorPool >
+	class YTSVRLIB_EXPORT CRedisConnectorPool : public CSingle < CRedisConnectorPool >
 	{
 	public:
 		CRedisConnectorPool()

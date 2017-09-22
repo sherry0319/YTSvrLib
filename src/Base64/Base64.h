@@ -29,7 +29,7 @@ SOFTWARE.*/
 namespace YTSvrLib
 {
 
-	class CBase64 : public CSingle<CBase64>
+	class YTSVRLIB_EXPORT CBase64 : public CSingle<CBase64>
 	{
 	public:
 		CBase64();

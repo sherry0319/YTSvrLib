@@ -1,8 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug64DLL|x64">
+      <Configuration>Debug64DLL</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug64|x64">
       <Configuration>Debug64</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release64DLL|x64">
+      <Configuration>Release64DLL</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release64|x64">
@@ -19,10 +27,18 @@
     <SccLocalPath>Svn</SccLocalPath>
     <SccProvider>SubversionScc</SccProvider>
     <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug64DLL|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v120</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
@@ -35,13 +51,26 @@
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release64DLL|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug64DLL|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release64|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release64DLL|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
@@ -51,12 +80,22 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release64|x64'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
-    <TargetName>$(ProjectName)_x64</TargetName>
+    <TargetName>$(ProjectName)S</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release64DLL|x64'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
-    <TargetName>$(ProjectName)_x64D</TargetName>
+    <TargetName>$(ProjectName)SD</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug64DLL|x64'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)D</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release64|x64'">
     <Midl>
@@ -69,7 +108,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <AdditionalIncludeDirectories>./mysql/include/;./libevent/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_WIN64;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WIN64;NDEBUG;YTSVRLIB_NO_DLL;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -78,13 +117,57 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <DisableSpecificWarnings>4275;4505;4512;4127;</DisableSpecificWarnings>
       <ExceptionHandling>Async</ExceptionHandling>
+      <ProgramDataBaseFileName>$(TargetDir)$(TargetName).pdb</ProgramDataBaseFileName>
     </ClCompile>
     <Lib />
     <PostBuildEvent>
       <Command>xcopy /d /i /f /y $(TargetPath) $(SolutionDir)Lib\
 xcopy /d /i /e /r /f /y $(ProjectDir)*.h $(SolutionDir)Header\
-xcopy /d /i /e /r /f /y $(ProjectDir)*.dll $(SolutionDir)Header\</Command>
+xcopy /d /i /e /r /f /y $(ProjectDir)*.dll $(SolutionDir)Header\
+svn ci $(SolutionDir)Header\ -m ""
+svn ci $(SolutionDir)Lib\ -m ""</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>svn up $(SolutionDir)</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release64DLL|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>/D "_BIND_TO_CURRENT_VCLIBS_VERSION" %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <AdditionalIncludeDirectories>./mysql/include/;./libevent/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WIN64;NDEBUG;YTSVRLIB_MAKE_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4275;4505;4512;4127;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Async</ExceptionHandling>
+      <ProgramDataBaseFileName>$(TargetDir)$(TargetName).pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <Lib />
+    <PostBuildEvent>
+      <Command>xcopy /d /i /f /y $(OutputPath)$(TargetName).lib $(SolutionDir)Lib\
+xcopy /d /i /f /y $(OutputPath)$(TargetName).dll $(SolutionDir)Lib\
+xcopy /d /i /e /r /f /y $(ProjectDir)*.h $(SolutionDir)Header\
+xcopy /d /i /e /r /f /y $(ProjectDir)*.dll $(SolutionDir)Header\
+svn ci $(SolutionDir)Header\ -m ""
+svn ci $(SolutionDir)Lib\ -m ""</Command>
+    </PostBuildEvent>
+    <Link>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
+    </Link>
+    <PreBuildEvent>
+      <Command>svn up $(SolutionDir)</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'">
     <Midl>
@@ -97,7 +180,7 @@ xcopy /d /i /e /r /f /y $(ProjectDir)*.dll $(SolutionDir)Header\</Command>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <AdditionalIncludeDirectories>./mysql/include/;./libevent/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_WIN64;DEBUG64;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WIN64;DEBUG64;YTSVRLIB_NO_DLL;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -109,15 +192,62 @@ xcopy /d /i /e /r /f /y $(ProjectDir)*.dll $(SolutionDir)Header\</Command>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <OmitFramePointers>false</OmitFramePointers>
       <ExceptionHandling>Async</ExceptionHandling>
-      <ProgramDataBaseFileName>$(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName).pdb</ProgramDataBaseFileName>
+      <ProgramDataBaseFileName>$(TargetDir)$(TargetName).pdb</ProgramDataBaseFileName>
     </ClCompile>
     <Lib />
     <PostBuildEvent>
       <Command>xcopy /F /Y $(TargetPath) $(SolutionDir)Lib\
 xcopy $(ProjectDir)*.h $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
 xcopy $(ProjectDir)*.dll $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
-xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
+xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k
+svn ci $(SolutionDir)Header\ -m ""
+svn ci $(SolutionDir)Lib\ -m ""</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>svn up $(SolutionDir)</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug64DLL|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>/D "_BIND_TO_CURRENT_VCLIBS_VERSION" %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <AdditionalIncludeDirectories>./mysql/include/;./libevent/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WIN64;DEBUG64;_LIB;YTSVRLIB_MAKE_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <AssemblerOutput>All</AssemblerOutput>
+      <WarningLevel>Level4</WarningLevel>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4275;4505;4512;4127;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <OmitFramePointers>false</OmitFramePointers>
+      <ExceptionHandling>Async</ExceptionHandling>
+      <ProgramDataBaseFileName>$(TargetDir)$(TargetName).pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <Lib />
+    <PostBuildEvent>
+      <Command>xcopy /d /i /f /y $(OutputPath)$(TargetName).lib $(SolutionDir)Lib\
+xcopy /d /i /f /y $(OutputPath)$(TargetName).dll $(SolutionDir)Lib\
+xcopy $(ProjectDir)*.h $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
+xcopy $(ProjectDir)*.dll $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
+xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k
+svn ci $(SolutionDir)Header\ -m ""
+svn ci $(SolutionDir)Lib\ -m ""</Command>
+    </PostBuildEvent>
+    <Link>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
+    </Link>
+    <PreBuildEvent>
+      <Command>svn up $(SolutionDir)</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Base64\Base64.cpp" />
@@ -130,6 +260,7 @@ xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
     <ClCompile Include="mysql\MYSQLDBClient.cpp" />
     <ClCompile Include="mysql\MYSQLDBSys.cpp" />
     <ClCompile Include="mysql\MYSQLManagerBase.cpp" />
+    <ClCompile Include="mysql\MYSQLRecordSet.cpp" />
     <ClCompile Include="redis\RedisConnector.cpp" />
     <ClCompile Include="redis\RedisConnectorCommand.cpp" />
     <ClCompile Include="redis\RedisConnectorPool.cpp" />
@@ -152,7 +283,9 @@ xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
     <ClCompile Include="Socket\YTSocketThread.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug64DLL|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release64|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release64DLL|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="tinyxml\tinyxml2.cpp" />
     <ClCompile Include="tinyxml\XMLDocument.cpp" />
@@ -342,6 +475,7 @@ xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
     <ClInclude Include="mysql\mysqlpp\utility.h" />
     <ClInclude Include="mysql\mysqlpp\vallist.h" />
     <ClInclude Include="mysql\mysqlpp\wnp_connection.h" />
+    <ClInclude Include="mysql\MYSQLRecordSet.h" />
     <ClInclude Include="Service\TimerHandler.h" />
     <ClInclude Include="tinyxml\tinyxml2.h" />
     <ClInclude Include="tinyxml\XMLDocument.h" />
@@ -474,35 +608,27 @@ xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
   <ItemGroup>
     <Library Include="BugReport\BugslayerUtil.lib">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug64DLL|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release64|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release64DLL|x64'">true</ExcludedFromBuild>
     </Library>
-    <CustomBuild Include="libcurl\libcurl32.lib">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release64|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="libcurl\libcurl64.lib">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release64|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
     <Library Include="libevent\libevent.lib">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release64|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release64DLL|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug64DLL|x64'">true</ExcludedFromBuild>
     </Library>
     <Library Include="libevent\libevent_core.lib">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release64|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release64DLL|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug64DLL|x64'">true</ExcludedFromBuild>
     </Library>
     <Library Include="libevent\libevent_extras.lib">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release64|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release64DLL|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'">true</ExcludedFromBuild>
-    </Library>
-    <Library Include="zlib\zlibmt_x64.lib">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release64|x64'">true</ExcludedFromBuild>
-    </Library>
-    <Library Include="zlib\zlibmt_x86.lib">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release64|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug64DLL|x64'">true</ExcludedFromBuild>
     </Library>
   </ItemGroup>
   <ItemGroup>

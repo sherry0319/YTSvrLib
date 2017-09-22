@@ -29,7 +29,7 @@ SOFTWARE.*/
 namespace YTSvrLib
 {
 	// wchar_t×Ö·û¹ýÂËÆ÷
-	class CKeywordFilterW : public CSingle<CKeywordFilterW>
+	class YTSVRLIB_EXPORT CKeywordFilterW : public CSingle<CKeywordFilterW>
 	{
 		typedef std::wstring FilterString;
 		typedef std::pair< std::vector< FilterString >::iterator, std::vector< FilterString >::iterator > ITPAIR;
@@ -69,7 +69,7 @@ namespace YTSvrLib
 		FilterIndex m_mpKeyword;// Keyword Index.¹Ø¼ü´ÊË÷Òý
 	};
 
-	class CKeywordFilterA : public CSingle < CKeywordFilterA >
+	class YTSVRLIB_EXPORT CKeywordFilterA : public CSingle < CKeywordFilterA >
 	{
 		typedef std::string FilterString;
 		typedef std::pair< std::vector< FilterString >::iterator, std::vector< FilterString >::iterator > ITPAIR;

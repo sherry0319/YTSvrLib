@@ -24,7 +24,7 @@ SOFTWARE.*/
 
 namespace YTSvrLib
 {
-	class CGlobalCURLRequest : public CSingle<CGlobalCURLRequest>
+	class YTSVRLIB_EXPORT CGlobalCURLRequest : public CSingle<CGlobalCURLRequest>
 	{
 	public:
 		CGlobalCURLRequest();

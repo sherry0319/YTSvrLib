@@ -33,7 +33,7 @@ SOFTWARE.*/
 namespace YTSvrLib
 {
 #ifdef LIB_WINDOWS
-	class CCriticalSection
+	class YTSVRLIB_EXPORT CCriticalSection
 	{
 	public:
 		explicit CCriticalSection(void)
@@ -62,13 +62,13 @@ namespace YTSvrLib
 
 	typedef CCriticalSection CLock;
 
-	class   CMutex
+	class YTSVRLIB_EXPORT CMutex
 	{
 	public:
 		CMutex() :m_hMutex(NULL)
 		{}
 
-		CMutex(bool bAccess, WCHAR* pName) :m_hMutex(NULL)
+		CMutex(bool bAccess, TCHAR* pName) :m_hMutex(NULL)
 		{
 			Create(bAccess, pName);
 		}
@@ -81,7 +81,7 @@ namespace YTSvrLib
 			}
 		}
 
-		BOOL    Create(bool bAccess, WCHAR *pName)
+		BOOL Create(bool bAccess, TCHAR *pName)
 		{
 			if ((m_hMutex = CreateMutex(NULL, bAccess, pName)) == NULL)
 			{
@@ -90,7 +90,7 @@ namespace YTSvrLib
 			return  TRUE;
 		}
 
-		BOOL    Open(bool bAccess, WCHAR *pName)
+		BOOL Open(bool bAccess, TCHAR *pName)
 		{
 			if ((m_hMutex = OpenMutex(bAccess, FALSE, pName)) == NULL)
 			{
@@ -99,7 +99,7 @@ namespace YTSvrLib
 			return  TRUE;
 		}
 
-		BOOL    Lock(DWORD dwTimeOut = INFINITE)
+		BOOL Lock(DWORD dwTimeOut = INFINITE)
 		{
 			DWORD  dwReturn = WaitForSingleObject(m_hMutex, dwTimeOut);
 			if (dwReturn == WAIT_OBJECT_0)
@@ -120,12 +120,12 @@ namespace YTSvrLib
 	protected:
 	};
 
-	class   CEvent
+	class YTSVRLIB_EXPORT CEvent
 	{
 	public:
 		CEvent() :m_hEvent(NULL)
 		{}
-		CEvent(BOOL bManualReset, BOOL bInitialState, WCHAR * pName) :m_hEvent(NULL)
+		CEvent(BOOL bManualReset, BOOL bInitialState, TCHAR * pName) :m_hEvent(NULL)
 		{
 			Create(bManualReset, bInitialState, pName);
 		}
@@ -137,7 +137,7 @@ namespace YTSvrLib
 			}
 		}
 
-		BOOL  Create(BOOL bManualReset, BOOL bInitialState, WCHAR * pName)
+		BOOL  Create(BOOL bManualReset, BOOL bInitialState, TCHAR * pName)
 		{
 			m_bManualReset = bManualReset;
 			if ((m_hEvent = CreateEvent(NULL, bManualReset, bInitialState, pName)) == NULL)
@@ -168,6 +168,8 @@ namespace YTSvrLib
 			{
 				SetEvent(m_hEvent);
 			}
+
+			return TRUE;
 		}
 	private:
 
@@ -177,7 +179,7 @@ namespace YTSvrLib
 	protected:
 	};
 
-	class   CSemaphore
+	class YTSVRLIB_EXPORT CSemaphore
 	{
 	public:
 
@@ -191,7 +193,7 @@ namespace YTSvrLib
 			}
 		}
 
-		BOOL   Create(WCHAR *pName, LONG lInitCount, LONG lMaxCount)
+		BOOL Create(TCHAR *pName, LONG lInitCount, LONG lMaxCount)
 		{
 			m_hSemaphore = CreateSemaphore(NULL, lInitCount, lMaxCount, pName);
 			if (m_hSemaphore == NULL)
@@ -281,7 +283,7 @@ namespace YTSvrLib
 
 		BOOL UnLock(LONG lCount);
 
-		BOOL Create(WCHAR *pName, LONG lInitCount, LONG lMaxCount);
+		BOOL Create(char *pName, LONG lInitCount, LONG lMaxCount);
 
 	private:
 		sem_t m_Sem;

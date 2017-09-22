@@ -28,7 +28,7 @@ SOFTWARE.*/
 
 using std::string;
 
-class CXMLParser
+class YTSVRLIB_EXPORT CXMLParser
 {
 public:
 

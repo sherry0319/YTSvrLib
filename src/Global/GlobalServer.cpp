@@ -23,7 +23,7 @@ SOFTWARE.*/
 #include "stdafx.h"
 #include "GlobalServer.h"
 #ifdef LIB_WINDOWS
-#include <atlcomtime.h>
+#include <shlwapi.h>
 #else
 #include <execinfo.h>
 #include <signal.h>
@@ -183,22 +183,21 @@ const wchar_t* CovertUTC2String(__time32_t tTime, wchar_t* pwzOut, int nOutMaxLe
 {
 	ZeroMemory(pwzOut, nOutMaxLen);
 
-	if (tTime == 0)
-	{
+	if (tTime <= 0)
+	{// 不能小于等于0
 		__wcsncpy_s(pwzOut, L"NULL", nOutMaxLen - 1);
 
 		return pwzOut;
 	}
 
-#ifdef LIB_WINDOWS
-	COleDateTime cDate(tTime);
-	_snwprintf(pwzOut, nOutMaxLen, L"%s%04d-%02d-%02d %02d:%02d:%02d%s", pwzQuote, cDate.GetYear(), cDate.GetMonth(), cDate.GetDay(), cDate.GetHour(), cDate.GetMinute(), cDate.GetSecond(), pwzQuote);
-#else
 	tm timenow;
+#ifdef LIB_WINDOWS
+	_localtime32_s(&timenow, &tTime);
+#else
 	localtime_r(&tTime, &timenow);
-	_snwprintf_s(pwzOut, nOutMaxLen, L"%s%04d-%02d-%02d %02d:%02d:%02d%s",
-				 pwzQuote, (timenow.tm_year + 1900), (timenow.tm_mon + 1), timenow.tm_mday, timenow.tm_hour, timenow.tm_min, timenow.tm_sec, pwzQuote);
 #endif // LIB_WINDOWS
+	__snwprintf_s(pwzOut, nOutMaxLen, L"%s%04d-%02d-%02d %02d:%02d:%02d%s",
+		pwzQuote, (timenow.tm_year + 1900), (timenow.tm_mon + 1), timenow.tm_mday, timenow.tm_hour, timenow.tm_min, timenow.tm_sec, pwzQuote);
 
 	return pwzOut;
 }
@@ -207,22 +206,21 @@ const char* CovertUTC2String(__time32_t tTime, char* pszOut, int nOutMaxLen, con
 {
 	ZeroMemory(pszOut, nOutMaxLen);
 
-	if (tTime == 0)
-	{
+	if (tTime <= 0)
+	{// 不能小于等于0
 		__strncpy_s(pszOut, "NULL", nOutMaxLen - 1);
 
 		return pszOut;
 	}
 
-#ifdef LIB_WINDOWS
-	COleDateTime cDate(tTime);
-	snprintf(pszOut, nOutMaxLen, "%s%04d-%02d-%02d %02d:%02d:%02d%s", pszQuote, cDate.GetYear(), cDate.GetMonth(), cDate.GetDay(), cDate.GetHour(), cDate.GetMinute(), cDate.GetSecond(), pszQuote);
-#else
 	tm timenow;
+#ifdef LIB_WINDOWS
+	_localtime32_s(&timenow,&tTime);
+#else
 	localtime_r(&tTime, &timenow);
-	_snprintf_s(pszOut, nOutMaxLen, "%s%04d-%02d-%02d %02d:%02d:%02d%s",
-				pszQuote, (timenow.tm_year + 1900), (timenow.tm_mon + 1), timenow.tm_mday, timenow.tm_hour, timenow.tm_min, timenow.tm_sec, pszQuote);
 #endif // LIB_WINDOWS
+	__snprintf_s(pszOut, nOutMaxLen, "%s%04d-%02d-%02d %02d:%02d:%02d%s",
+		pszQuote, (timenow.tm_year + 1900), (timenow.tm_mon + 1), timenow.tm_mday, timenow.tm_hour, timenow.tm_min, timenow.tm_sec, pszQuote);
 
 	return pszOut;
 }
@@ -748,47 +746,6 @@ void GetLocalTime(LPSYSTEMTIME lpSystemTime)
 }
 #endif // LIB_LINUX
 
-/*
-namespace URL_Request
-{
-void SendGSMMessage(LPCSTR lpszDstHost,LPCWSTR lpwzMessage)
-{
-LPCSTR lpszFormat = "%s?MessageContent=%s&%d";
-
-WCHAR wzMessage[512] = {0};
-CHAR szMessage[1024] = {0};
-CHAR szLocalIP[64] = {0};
-
-_snwprintf_s(wzMessage,511,L"%s",lpwzMessage);
-
-unicodetoutf8(wzMessage,szMessage,1023);
-
-std::string strMessageDecode = URLEncode(std::string(szMessage));
-
-CHAR szUrl[2048] = {0};
-
-_snprintf_s(szUrl,2047,lpszFormat,lpszDstHost,strMessageDecode.c_str(),Random2((UINT)time(NULL)));
-
-SendHTTPGETMessage(szUrl,FALSE);
-}
-
-void SendGSMMessage(LPCSTR lpszDstHost, LPCSTR lpszMessage)
-{
-LPCSTR lpszFormat = "%s?MessageContent=%s&%d";
-
-CHAR szLocalIP[64] = { 0 };
-
-std::string strMessageEncode = URLEncode(std::string(lpszMessage));
-
-CHAR szUrl[2048] = { 0 };
-
-_snprintf_s(szUrl, 2047, lpszFormat, lpszDstHost, strMessageEncode.c_str(), Random2((UINT) time(NULL)));
-
-SendHTTPGETMessage(szUrl,FALSE);
-}
-}
-*/
-
 #ifdef LIB_WINDOWS
 int gettimeofday(struct timeval *tv, struct timezone *tz) 
 {
@@ -1004,4 +961,43 @@ bool CheckTimezoneZero()
 	}
 #endif // LIB_WINDOWS
 	return true;
+}
+
+int GetLocalTimeZone()
+{
+#ifdef LIB_WINDOWS
+	TIME_ZONE_INFORMATION sLocalTimeZone;
+	ZeroMemory(&sLocalTimeZone, sizeof(sLocalTimeZone));
+	GetTimeZoneInformation(&sLocalTimeZone);
+	return (int)(sLocalTimeZone.Bias * -60);
+#else
+	tm st;
+	localtime_r(NULL, &st);
+
+	return (int)-st.tm_gmtoff;
+#endif
+}
+
+const char* _stristr(const char* _Src, const char* _Search)
+{
+	return StrStrIA(_Src,_Search);
+}
+
+__time32_t time32()
+{
+#ifdef LIB_WINDOWS
+	return _time32(NULL);
+#else
+	return time(NULL);
+#endif
+}
+
+longtime_t GetLongTime()
+{
+	timeval tv;
+	gettimeofday(&tv, NULL);
+
+	longtime_t tNow = ((longtime_t) tv.tv_sec + ((longtime_t) tv.tv_usec / 1000000.000));
+
+	return tNow;
 }

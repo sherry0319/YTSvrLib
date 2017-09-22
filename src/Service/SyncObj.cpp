@@ -162,7 +162,7 @@ namespace YTSvrLib
 		return TRUE;
 	}
 
-	BOOL CSemaphore::Create(WCHAR *pName, LONG lInitCount, LONG lMaxCount)
+	BOOL CSemaphore::Create(char *pName, LONG lInitCount, LONG lMaxCount)
 	{
 		int nRet = sem_init(&m_Sem, 0, 0);
 		if (nRet)

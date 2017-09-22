@@ -333,8 +333,6 @@ tinyxml2::XMLComment* CXMLParser::AddXmlComment( tinyxml2::XMLElement* pElement,
 	{
 		return m_xml.NewComment(lpszComment);
 	}
-
-	return NULL;
 }
 
 tinyxml2::XMLElement* CXMLParser::GetRootElement()

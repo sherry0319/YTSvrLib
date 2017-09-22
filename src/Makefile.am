@@ -19,6 +19,7 @@ mysql/MYSQLCommand.cpp \
 mysql/MYSQLDBClient.cpp \
 mysql/MYSQLDBSys.cpp \
 mysql/MYSQLManagerBase.cpp \
+mysql/MYSQLRecordSet.cpp \
 Service/Application.cpp \
 Service/AutoCloseFile.cpp \
 Service/Log.cpp \
@@ -47,4 +48,4 @@ redis/RedisConnectorCommand.cpp \
 Filter/Filter.cpp
 
 install-exec-hook:
-	sudo ./install.sh
+	./install.sh

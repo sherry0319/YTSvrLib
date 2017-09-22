@@ -203,174 +203,63 @@ bool IsDirExist(char *lpszDir)
 		return false;
 	}
 #endif // LIB_LINUX
-	return false;
 }
 
-int Random(int nFirst,int nEnd)
+std::mt19937& RandomHelper::getEngine()
 {
-    if(nFirst == nEnd)	return nFirst;
-    int nNum = abs(nEnd-nFirst) + 1;
-
-    if(nFirst < nEnd)
-        return rand()%nNum + nFirst;
-    else
-        return rand()%nNum + nEnd;
+	static std::random_device seed_gen;
+	static std::mt19937 engine(seed_gen());
+	return engine;
 }
-
-unsigned int Random(unsigned int nEnd)
-{
-    if (nEnd == 0)
-        return 0;
-    return rand()%nEnd;
-}
-
-#ifdef LIB_WINDOWS
-HCRYPTPROV g_Rnd = 0;
-
-bool InitGenRandomFunction()
-{
-	LPCSTR UserName = "YTSvrKey";
-	if (!CryptAcquireContextA(&g_Rnd, UserName, NULL, PROV_RSA_FULL, 0))
-	{
-		if (GetLastError() == NTE_BAD_KEYSET)
-		{
-			if (CryptAcquireContextA(
-				&g_Rnd,
-				UserName,
-				NULL,
-				PROV_RSA_FULL,
-				CRYPT_NEWKEYSET))
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
-
-bool ReleaseGenRandomFunction()
-{
-	if (CryptReleaseContext(g_Rnd, 0))
-	{
-		return true;
-	}
-
-	return false;
-}
-
-#endif
 
 int Random2( int nMax, int nMin )
-{
-    if( nMin == nMax )
-        return nMax;
-	if (nMax < nMin)
-		return Random2(nMin, nMax);
-
-	int nRandSeed = (rand() << 13) + rand();
-#ifdef LIB_WINDOWS
-	LARGE_INTEGER cur;
-	QueryPerformanceFrequency(&cur);
-	nRandSeed += cur.LowPart;
-#else
-	timespec tp;
-	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &tp);
-	nRandSeed += tp.tv_nsec;
-#endif
-
-    srand( nRandSeed );
-
-#ifdef LIB_WINDOWS
-	int nRand = 0;
-	CryptGenRandom(g_Rnd, (DWORD)sizeof(int), (BYTE*) (&nRand));
-	nRand = abs(nRand);
-	double fRand = ((double) nRand / (double) INT_MAX);
-#else
-	int nRand = rand();
-	double fRand = ((double) nRand / (double) RAND_MAX);
-#endif
-   
-	int nRange = nMax - nMin;
-
-	nRand = ((int) (fRand * (double) nRange) + nMin);
-
-	if (nRand >= (int) nMax)
-		nRand = nMax - 1;
-
-	return nRand;
-}
-
-LONGLONG Random2(LONGLONG nMax, LONGLONG nMin /*= 0*/)
 {
 	if (nMin == nMax)
 		return nMax;
 	if (nMax < nMin)
 		return Random2(nMin, nMax);
 
-	int nRandSeed = (rand() << 13) + rand();
-#ifdef LIB_WINDOWS
-	LARGE_INTEGER cur;
-	QueryPerformanceFrequency(&cur);
-	nRandSeed += cur.LowPart;
-#else
-	timespec tp;
-	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &tp);
-	nRandSeed += tp.tv_nsec;
-#endif
-
-	srand(nRandSeed);
-
-#ifdef LIB_WINDOWS
-	LONGLONG nRand = 0;
-	CryptGenRandom(g_Rnd, (DWORD)sizeof(LONGLONG), (BYTE*) (&nRand));
-	nRand = abs(nRand);
-	double fRand = ((double) nRand / (double) LLONG_MAX);
-#else
-	LONGLONG nRand = rand();
-	double fRand = ((double) nRand / (double) RAND_MAX);
-#endif
-
-	LONGLONG nRange = nMax - nMin;
-
-	nRand = ((LONGLONG) (fRand * (double) nRange) + nMin);
-
-	if (nRand >= nMax)
-		nRand = nMax - 1;
-
-	return nRand;
+	return RandomHelper::random_int(nMin, nMax-1);
 }
 
-DOUBLE Random2(DOUBLE dMax, DOUBLE dMin /*= 0.000000*/, int nPrecision /*= 3*/)
+UINT Random2(UINT nMax, UINT nMin /*= 0*/)
 {
-	if ((dMax - dMin) < pow(10,-nPrecision))
-	{
+	if (nMin == nMax)
+		return nMax;
+	if (nMax < nMin)
+		return Random2(nMin, nMax);
+
+	return RandomHelper::random_int(nMin, nMax - 1);
+}
+
+long Random2(long nMax, long nMin)
+{
+	if (nMin == nMax)
+		return nMax;
+	if (nMax < nMin)
+		return Random2(nMin, nMax);
+
+	return RandomHelper::random_int(nMin, nMax-1);
+}
+
+LONGLONG Random2(LONGLONG nMax, LONGLONG nMin)
+{
+	if (nMin == nMax)
+		return nMax;
+	if (nMax < nMin)
+		return Random2(nMin, nMax);
+
+	return RandomHelper::random_int(nMin, nMax-1);
+}
+
+DOUBLE Random2(DOUBLE dMax, DOUBLE dMin /*= 0.000000*/)
+{
+	if (abs(dMin-dMax) < 0.000001)
 		return dMax;
-	}
-	if (dMin > dMax)
-	{
-		return Random2(dMin, dMax, nPrecision);
-	}
-	if (nPrecision == 0)
-	{
-		return (DOUBLE)Random2((LONGLONG) dMax, (LONGLONG) dMin);
-	}
+	if (dMax < dMin)
+		return Random2(dMin, dMax);
 
-	DOUBLE dRate = pow((DOUBLE)10.000,nPrecision);
-	LONGLONG nMax = (LONGLONG)(dMax * dRate);
-	LONGLONG nMin = (LONGLONG)(dMin * dRate);
-
-	LONGLONG nRand = Random2(nMax, nMin);
-
-	return (DOUBLE)((DOUBLE) nRand / dRate);
+	return RandomHelper::random_real(dMin, dMax);
 }
 
 char* Trim(char* lpszStr)
@@ -1025,9 +914,9 @@ void DelLogManager()
 	CloseLog();
 }
 
-#ifdef LIB_WINDOWS
 __time32_t SystemTimeToTime_t( LPSYSTEMTIME pst )
 {
+#ifdef LIB_WINDOWS
 	FILETIME ft;
 	if (FALSE == SystemTimeToFileTime(pst, &ft))
 		return 0;
@@ -1037,10 +926,20 @@ __time32_t SystemTimeToTime_t( LPSYSTEMTIME pst )
 
 	LONGLONG ll = ((LONGLONG) utcft.dwHighDateTime << 32) + utcft.dwLowDateTime;
 	__time32_t tRet = (__time32_t) ((ll - 116444736000000000) / 10000000);
-	//	COleDateTime t2(tRet);
+#else
+	tm st;
+
+	st.tm_year = pst->wYear - 1900;
+	st.tm_mon = pst->wMonth - 1;
+	st.tm_mday = pst->wDay;
+	st.tm_hour = pst->wHour;
+	st.tm_min = pst->wMinute;
+	st.tm_sec = pst->wSecond;
+
+	__time32_t tRet = mktime(&st);
+#endif // LIB_WINDOWS
 	return tRet;
 }
-#endif // LIB_WINDOWS
 
 int lwchartoutf8(LPCWSTR p, LPSTR pdst, int cbMultiByte)
 {

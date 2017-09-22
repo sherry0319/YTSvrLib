@@ -210,7 +210,7 @@ public:
 	/// \sa escape_string_no_conn(char*, const char*, size_t)
 	size_t escape_string(char* to, const char* from, size_t length)
 	{
-		//error_message_.clear();
+		error_message_.clear();
 		return mysql_real_escape_string(&mysql_, to, from, 
 				static_cast<unsigned long>(length));
 	}

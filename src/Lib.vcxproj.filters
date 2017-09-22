@@ -112,7 +112,7 @@
       <UniqueIdentifier>{6dfea10a-6bfd-486f-97c2-87da68974527}</UniqueIdentifier>
     </Filter>
     <Filter Include="MySQL\mysqlpp">
-      <UniqueIdentifier>{8a14f0b1-0c5b-4579-977c-afb44aaa6a96}</UniqueIdentifier>
+      <UniqueIdentifier>{53aae19f-bbab-47e9-8e04-f3431a7aa6dc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -226,6 +226,9 @@
     </ClCompile>
     <ClCompile Include="Global\Performance.cpp">
       <Filter>Perfermance</Filter>
+    </ClCompile>
+    <ClCompile Include="mysql\MYSQLRecordSet.cpp">
+      <Filter>MySQL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -862,6 +865,135 @@
     <ClInclude Include="mysql\include\typelib.h">
       <Filter>MySQL\include</Filter>
     </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\autoflag.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\beemutex.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\cmdline.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\common.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\comparable.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\connection.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\cpool.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\datetime.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\dbdriver.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\exceptions.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\field.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\field_names.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\field_types.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\insertpolicy.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\manip.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\myset.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\mysql++.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\mystring.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\noexceptions.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\null.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\options.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\qparms.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\query.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\querydef.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\refcounted.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\result.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\row.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\scopedconnection.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\sql_buffer.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\sql_types.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\sqlstream.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\ssqls.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\ssqls2.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\stadapter.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\stream2string.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\tcp_connection.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\tiny_int.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\transaction.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\type_info.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\uds_connection.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\utility.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\vallist.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlpp\wnp_connection.h">
+      <Filter>MySQL\mysqlpp</Filter>
+    </ClInclude>
     <ClInclude Include="mysql\include\mysql\client_authentication.h">
       <Filter>MySQL\include\mysql</Filter>
     </ClInclude>
@@ -1024,134 +1156,8 @@
     <ClInclude Include="mysql\include\mysql\psi\psi_memory.h">
       <Filter>MySQL\include\mysql\psi</Filter>
     </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\autoflag.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\beemutex.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\cmdline.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\common.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\comparable.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\connection.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\cpool.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\datetime.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\dbdriver.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\exceptions.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\field.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\field_names.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\field_types.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\insertpolicy.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\manip.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\myset.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\mysql++.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\mystring.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\noexceptions.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\null.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\options.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\qparms.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\query.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\querydef.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\refcounted.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\result.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\row.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\scopedconnection.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\sql_buffer.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\sql_types.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\sqlstream.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\ssqls.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\ssqls2.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\stadapter.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\stream2string.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\tcp_connection.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\tiny_int.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\transaction.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\type_info.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\uds_connection.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\utility.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\vallist.h">
-      <Filter>MySQL\mysqlpp</Filter>
-    </ClInclude>
-    <ClInclude Include="mysql\mysqlpp\wnp_connection.h">
-      <Filter>MySQL\mysqlpp</Filter>
+    <ClInclude Include="mysql\MYSQLRecordSet.h">
+      <Filter>MySQL</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1167,20 +1173,6 @@
     <Library Include="libevent\libevent_extras.lib">
       <Filter>Socket\libevent</Filter>
     </Library>
-    <Library Include="zlib\zlibmt_x64.lib">
-      <Filter>zlib</Filter>
-    </Library>
-    <Library Include="zlib\zlibmt_x86.lib">
-      <Filter>zlib</Filter>
-    </Library>
-  </ItemGroup>
-  <ItemGroup>
-    <CustomBuild Include="libcurl\libcurl32.lib">
-      <Filter>curl</Filter>
-    </CustomBuild>
-    <CustomBuild Include="libcurl\libcurl64.lib">
-      <Filter>curl</Filter>
-    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <None Include="mysql\include\mysql\client_plugin.h.pp">

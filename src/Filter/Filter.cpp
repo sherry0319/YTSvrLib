@@ -208,23 +208,23 @@ namespace YTSvrLib
 			if (it != m_mpKeyword.end())
 			{
 				ITPAIR& aPair = it->second;
-				for (std::vector< std::wstring >::iterator it = aPair.first; it != aPair.second; ++it)
+				for (std::vector< std::wstring >::iterator itSub = aPair.first; itSub != aPair.second; ++itSub)
 				{
-					nPattLen = (long) (*it).length();
+					nPattLen = (long) (*itSub).length();
 
 					if (nPattLen > nLenLeft)
 					{
 						continue;
 					}
 
-					if (0 == wcsncmp(pIndex, (*it).c_str(), nPattLen))
+					if (0 == wcsncmp(pIndex, (*itSub).c_str(), nPattLen))
 					{
 						if (pstrOutKey && nOutMaxLength > 0)
 						{
 #ifdef LIB_WINDOWS
-							wcsncpy_s(pstrOutKey, nOutMaxLength, (*it).c_str(), nOutMaxLength);
+							wcsncpy_s(pstrOutKey, nOutMaxLength, (*itSub).c_str(), nOutMaxLength);
 #else
-							wcsncpy_s(pstrOutKey, (*it).c_str(), nOutMaxLength);
+							wcsncpy_s(pstrOutKey, (*itSub).c_str(), nOutMaxLength);
 #endif // LIB_WINDOWS
 						}
 						return TRUE;
@@ -284,13 +284,13 @@ namespace YTSvrLib
 			if (it != m_mpKeyword.end())
 			{
 				ITPAIR& aPair = it->second;
-				for (std::vector< std::wstring >::iterator it = aPair.first; it != aPair.second; ++it)
+				for (std::vector< std::wstring >::iterator itSub = aPair.first; itSub != aPair.second; ++itSub)
 				{
-					nPattLen = (long) (*it).length();
+					nPattLen = (long) (*itSub).length();
 					if (nPattLen > nLenLeft)
 						continue;
 
-					if (0 == wcsncmp((LPCWSTR) (wzStrNoSpace + l), (*it).c_str(), nPattLen))
+					if (0 == wcsncmp((LPCWSTR) (wzStrNoSpace + l), (*itSub).c_str(), nPattLen))
 					{
 						bFind = true;
 						nLenLeft -= nPattLen;
@@ -412,21 +412,21 @@ namespace YTSvrLib
 			if (it != m_mpKeyword.end())
 			{
 				ITPAIR& aPair = it->second;
-				for (std::vector< std::string >::iterator it = aPair.first; it != aPair.second; ++it)
+				for (std::vector< std::string >::iterator itSub = aPair.first; itSub != aPair.second; ++itSub)
 				{
-					nPattLen = (long) (*it).length();
+					nPattLen = (long) (*itSub).length();
 					if (nPattLen > nLenLeft)
 						continue;
 
-					if (0 == strncmp((LPCSTR) (szStrNoSpace + l), (*it).c_str(), nPattLen))
+					if (0 == strncmp((LPCSTR) (szStrNoSpace + l), (*itSub).c_str(), nPattLen))
 					{
 						bFind = true;
 						nLenLeft -= nPattLen;
 
 						int nMaxCharlen = 0;
-						for (size_t i = 0; i < (*it).size();++i)
+						for (size_t i = 0; i < (*itSub).size();++i)
 						{
-							int nCharlen = utf8_char_lenth((*it)[i]);
+							int nCharlen = utf8_char_lenth((*itSub)[i]);
 							if (nCharlen > nMaxCharlen)
 							{
 								nMaxCharlen = nCharlen;
@@ -516,20 +516,20 @@ namespace YTSvrLib
 			if (it != m_mpKeyword.end())
 			{
 				ITPAIR& aPair = it->second;
-				for (std::vector< std::string >::iterator it = aPair.first; it != aPair.second; ++it)
+				for (std::vector< std::string >::iterator itSub = aPair.first; itSub != aPair.second; ++itSub)
 				{
-					nPattLen = (long) (*it).length();
+					nPattLen = (long) (*itSub).length();
 
 					if (nPattLen > nLenLeft)
 					{
 						continue;
 					}
 
-					if (0 == strncmp(pIndex, (*it).c_str(), nPattLen))
+					if (0 == strncmp(pIndex, (*itSub).c_str(), nPattLen))
 					{
 						if (pstrOutKey && nOutMaxLength > 0)
 						{
-							__strncpy_s(pstrOutKey, (*it).c_str(), nOutMaxLength);
+							__strncpy_s(pstrOutKey, (*itSub).c_str(), nOutMaxLength);
 						}
 						return TRUE;
 					}

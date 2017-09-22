@@ -26,7 +26,7 @@ SOFTWARE.*/
 
 namespace YTSvrLib
 {
-	class CConfigLoader
+	class YTSVRLIB_EXPORT CConfigLoader
 	{
 		char m_strFileName[MAX_PATH];
 		char m_strSectionName[MAX_PATH];

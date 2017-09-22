@@ -216,13 +216,14 @@ namespace YTSvrLib
 			else
 			{
 				DWORD dwCode = GetLastError();
-				LOG("Send Data Error : %d.Error : %d", nSend, dwCode);
+				
 #ifdef LIB_WINDOWS
 				if (dwCode != WSAEWOULDBLOCK)
 #else
 				if (dwCode != ENOMEM && dwCode != EAGAIN)
 #endif // LIB_WINDOWS
 				{
+					LOG("Send Data Error : %d.Error : %d", nSend, dwCode);
 					SafeClose();
 					break;
 				}
@@ -284,6 +285,12 @@ namespace YTSvrLib
 			m_fd = 0;
 			return FALSE;
 		}
+
+		BOOL one = TRUE;
+		setsockopt(nSock, SOL_SOCKET, SO_REUSEADDR, (const char*) &one, sizeof(one));
+
+		one = TRUE;
+		setsockopt(nSock, SOL_SOCKET, SO_KEEPALIVE, (const char*) &one, sizeof(one));
 #else
 		sAddrMy.sin_family = AF_INET;
 		sAddrMy.sin_addr.s_addr = INADDR_ANY;
@@ -311,9 +318,11 @@ namespace YTSvrLib
 		}
 
 		int one = 1;
-		setsockopt(nSock, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(one));
+		setsockopt(nSock, SOL_SOCKET, SO_REUSEADDR, (void*) &one, sizeof(one));
 
 		setsockopt(nSock, IPPROTO_TCP, TCP_NODELAY, (void*) &one, sizeof(one));
+
+		setsockopt(nSock, SOL_SOCKET, SO_KEEPALIVE, (void*) &one, sizeof(one));
 #endif // LIB_WINDOWS
 
 		if (::bind(nSock, (sockaddr*) &sAddrMy, sizeof(sockaddr_in)))
@@ -326,5 +335,19 @@ namespace YTSvrLib
 		}
 
 		return TRUE;
+	}
+
+	size_t ITCPBASE::Recv(char* buf, int nMaxLen)
+	{
+		if (m_pbufferevent == NULL)
+		{
+			return 0;
+		}
+		if (buf == NULL)
+		{
+			return 0;
+		}
+
+		return bufferevent_read(m_pbufferevent, buf, nMaxLen);
 	}
 }

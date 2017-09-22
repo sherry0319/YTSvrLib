@@ -34,7 +34,7 @@ typedef LONGLONG TIMER_PARAM;
 
 namespace YTSvrLib
 {
-	struct STimerInfo : public CRecycle
+	struct YTSVRLIB_EXPORT STimerInfo : public CRecycle
 	{
 		int m_nType;
 		int m_nUserID;
@@ -97,7 +97,7 @@ namespace YTSvrLib
 	};
 	typedef STimerInfo* LPSTimerInfo;
 
-	struct Timer_Less
+	struct YTSVRLIB_EXPORT Timer_Less
 	{
 		bool operator() (const LPSTimerInfo& _Left, const LPSTimerInfo& _Right) const
 		{
@@ -107,7 +107,7 @@ namespace YTSvrLib
 		}
 	};
 
-	class ITIMERHANDLER
+	class YTSVRLIB_EXPORT ITIMERHANDLER
 	{
 	public:
 		ITIMERHANDLER();

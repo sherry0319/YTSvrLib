@@ -38,7 +38,7 @@ typedef mysqlpp::DateTime CSQLDateTime;
 namespace YTSvrLib
 {
 
-	struct MYSQLRESPONSEINFO : public CRecycle
+	struct YTSVRLIB_EXPORT MYSQLRESPONSEINFO : public CRecycle
 	{
 		UINT				nErrorCode;
 		ULONG				nAffectRows;
@@ -56,7 +56,7 @@ namespace YTSvrLib
 	typedef CWQueue<MYSQLRESPONSEINFO*> QueueMYSQLResp;
 
 
-	class CMYSQLQueryInfo : public CRecycle
+	class YTSVRLIB_EXPORT CMYSQLQueryInfo : public CRecycle
 	{
 	public:
 
@@ -85,7 +85,7 @@ namespace YTSvrLib
 
 	typedef void(*MYSQLPARSERESPONSEFUNC)(CMYSQLQueryInfo*, MYSQLRESPONSEINFO*);
 
-	class CMYSQLManagerBase
+	class YTSVRLIB_EXPORT CMYSQLManagerBase
 	{
 	public:
 

@@ -103,6 +103,8 @@ namespace YTSvrLib
 	BOOL CMYSQLDBSystem::Lock()
 	{
 		m_InitLock.Lock();
+
+		return TRUE;
 	}
 
 	UINT CMYSQLDBSystem::EscapeString(char* out, const char* src, size_t len)

@@ -26,6 +26,7 @@ SOFTWARE.*/
 
 #include "mysqlpp/mysql++.h"
 #include "MYSQLCommand.h"
+#include "MYSQLRecordSet.h"
 #include <vector>
 
 #define INVALID_DBQUERY_KEY -1
@@ -34,7 +35,7 @@ namespace YTSvrLib
 {
 	typedef DWORD(*MYSQLProcFunc)(UINT nErrorCode, ULONG nEffectRows, void* nKey, YTSvrLib::MYSQLLIB::CMYSQLRecordSet * pResSet, BOOL bAsync);
 
-	typedef struct tagMYSQLConnectInfo
+	typedef struct YTSVRLIB_EXPORT tagMYSQLConnectInfo
 	{
 		int  m_nSN;                   //DB·þÎñÆ÷±àºÅ£¨0~n£©
 		char m_szHostname[128];
@@ -47,7 +48,7 @@ namespace YTSvrLib
 	}MYSQLCONNECT_INFO, *PMYSQLCONNECT_INFO;
 
 	class CMYSQLClient;
-	class  CMYSQLDBSystem : public CThreadPool
+	class YTSVRLIB_EXPORT CMYSQLDBSystem : public CThreadPool
 	{
 		friend  class  CMYSQLClient;
 	public:
@@ -132,7 +133,7 @@ namespace YTSvrLib
 		__time32_t							m_tLastSQLRequest;
 	};
 
-	class   CMYSQLClient : public CThread
+	class YTSVRLIB_EXPORT CMYSQLClient : public CThread
 	{
 		friend   class  CMYSQLDBSystem;
 

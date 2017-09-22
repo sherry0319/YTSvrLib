@@ -86,14 +86,15 @@ namespace YTSvrLib
 
 	void ITCPCONNECTOR::SafeClose()
 	{
-		if (m_bIsDisconnecting)
+		if (m_bIsClosed)
 		{
 			return;
 		}
-		m_bIsDisconnecting = TRUE;
+
 		LOG("ITCPCONNECTOR::SafeClose[0x%x] = %s:%d @ Socket(%d)",this, GetAddrIp(), GetAddrPort(), GetSocket());
 
 		m_bIsClosed = TRUE;
+		m_bIsDisconnecting = FALSE;
 
 		if (m_pbufferevent)
 		{
@@ -101,6 +102,7 @@ namespace YTSvrLib
 			bufferevent_free(m_pbufferevent);
 			m_pbufferevent = NULL;
 		}
+
 		if (m_fd)
 		{
 			closesocket(m_fd);
@@ -109,9 +111,14 @@ namespace YTSvrLib
 
 		OnClosed();
 
+		ReclaimObj();
+	}
+
+	void ITCPCONNECTOR::OnDisconnecting()
+	{
 		m_bIsDisconnecting = TRUE;
 
-		ReclaimObj();
+		PostDisconnectMsg(eDisconnect);
 	}
 }
 

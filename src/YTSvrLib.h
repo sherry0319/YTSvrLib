@@ -23,10 +23,6 @@ SOFTWARE.*/
 #ifndef _DIPAN_SERVER_H
 #define _DIPAN_SERVER_H
 
-//#define TIXML_USE_STL
-#define CURL_STATICLIB // 使用静态编译curl
-#define MYSQLPP_NO_DLL // 使用静态编译mysqlpp
-
 //编译时显示代码中的TODO列表和ATTENTION列表
 //#pragma INFO("your information")
 //#pragma TODO("your todo sth.")
@@ -46,6 +42,70 @@ extern "C" {
 #else
 #define LIB_LINUX
 #endif
+
+#ifdef LIB_WINDOWS
+
+#ifdef YTSVRLIB_USE_STATIC_LIB
+#define YTSVRLIB_NO_DLL
+#pragma comment(lib, "ws2_32.lib")
+#pragma comment(lib, "Wldap32.lib")
+#pragma comment(lib, "shlwapi.lib")
+#pragma comment(lib, "Winmm.lib" )
+
+#pragma comment(lib, "mysql/lib/static/mysqlpp.lib")
+#pragma comment(lib, "mysql/lib/libmysql.lib")
+#pragma comment(lib, "libevent/lib/libevent_core.lib")
+#pragma comment(lib, "BugReport/BugslayerUtil.lib")
+#pragma comment(lib, "iconv/lib/iconv.lib")
+#pragma comment(lib, "jsoncpp/lib/static/jsoncpp.lib")
+#pragma comment(lib, "libcurl/lib/static/libcurl.lib")
+#pragma comment(lib, "zlib/lib/static/zlib.lib")
+#pragma comment(lib, "redis/lib/hiredis.lib")
+#ifdef DEBUG64
+#pragma comment(lib, "YTSvrLibSD.lib" )
+#else
+#pragma comment(lib, "YTSvrLibS.lib" )
+#endif
+
+#elif defined(YTSVRLIB_USE_DLL_LIB)
+#pragma comment(lib, "zlib/lib/dll/zlib.lib")
+#pragma comment(lib, "mysql/lib/dll/mysqlpp.lib")
+#pragma comment(lib, "libcurl/lib/dll/libcurl.lib")
+#ifdef DEBUG64
+#pragma comment(lib,"YTSvrLibD.lib")
+#else
+#pragma comment(lib,"YTSvrLib.lib")
+#endif
+#endif
+
+#ifdef YTSVRLIB_MAKE_DLL
+#define YTSVRLIB_EXPORT __declspec(dllexport)
+#pragma comment(lib, "ws2_32.lib")
+#pragma comment(lib, "Wldap32.lib")
+#pragma comment(lib, "shlwapi.lib")
+#pragma comment(lib, "Winmm.lib" )
+
+#pragma comment(lib, "mysql/lib/dll/mysqlpp.lib")
+#pragma comment(lib, "mysql/lib/libmysql.lib")
+#pragma comment(lib, "libevent/lib/libevent_core.lib")
+#pragma comment(lib, "BugReport/BugslayerUtil.lib")
+#pragma comment(lib, "iconv/lib/iconv.lib")
+#pragma comment(lib, "jsoncpp/lib/dll/jsoncpp.lib")
+#pragma comment(lib, "libcurl/lib/dll/libcurl.lib")
+#pragma comment(lib, "zlib/lib/dll/zlib.lib")
+#pragma comment(lib, "redis/lib/hiredis.lib")
+#elif !defined(YTSVRLIB_NO_DLL)
+#define YTSVRLIB_EXPORT __declspec(dllimport)
+#else // MAKING STATIC LIB
+#define YTSVRLIB_EXPORT
+#define MYSQLPP_NO_DLL
+#define CURL_STATICLIB
+#endif
+
+#else
+#define YTSVRLIB_EXPORT
+#endif
+
 using namespace std;
 #ifdef LIB_WINDOWS
 #include <winsock2.h>
@@ -69,6 +129,8 @@ EXTERN_C
 #include <arpa/inet.h>
 #include <sys/sem.h>
 #include <sys/ipc.h>
+#include <sys/time.h>
+#include <signal.h>
 #include <malloc.h>
 #include <cassert>
 #include <cstdio>

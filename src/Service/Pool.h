@@ -28,7 +28,7 @@ SOFTWARE.*/
 namespace YTSvrLib
 {
 	// 对象池基类
-	class CRecycle
+	class YTSVRLIB_EXPORT CRecycle
 	{
 	public:
 		CRecycle()
@@ -133,7 +133,7 @@ namespace YTSvrLib
 					m_listFreeObject.push_back(Construct());
 				}
 				m_nTotalCount += SIZE;
-				LOG("Pool=0x%x Construct Object %s.Cur Total Count : %d", this, GetObjName(), GetTotalCount());
+				LOGTRACE("Pool=0x%x Construct Object %s.Cur Total Count : %d", this, GetObjName(), GetTotalCount());
 			}
 			catch (...)
 			{
@@ -218,7 +218,7 @@ namespace YTSvrLib
 					m_nTotalCount--;
 				}
 
-				LOG("Pool=0x%x Free Object %s.Cur Total Count : %d", this, GetObjName(), GetTotalCount());
+				LOGTRACE("Pool=0x%x Free Object %s.Cur Total Count : %d", this, GetObjName(), GetTotalCount());
 			}
 
 			m_Lock.UnLock();
