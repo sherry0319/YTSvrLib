@@ -123,12 +123,11 @@
     <PostBuildEvent>
       <Command>xcopy /d /i /f /y $(TargetPath) $(SolutionDir)Lib\
 xcopy /d /i /e /r /f /y $(ProjectDir)*.h $(SolutionDir)Header\
-xcopy /d /i /e /r /f /y $(ProjectDir)*.dll $(SolutionDir)Header\
-svn ci $(SolutionDir)Header\ -m ""
-svn ci $(SolutionDir)Lib\ -m ""</Command>
+xcopy /d /i /e /r /f /y $(ProjectDir)*.dll $(SolutionDir)Header\</Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>svn up $(SolutionDir)</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release64DLL|x64'">
@@ -158,15 +157,14 @@ svn ci $(SolutionDir)Lib\ -m ""</Command>
       <Command>xcopy /d /i /f /y $(OutputPath)$(TargetName).lib $(SolutionDir)Lib\
 xcopy /d /i /f /y $(OutputPath)$(TargetName).dll $(SolutionDir)Lib\
 xcopy /d /i /e /r /f /y $(ProjectDir)*.h $(SolutionDir)Header\
-xcopy /d /i /e /r /f /y $(ProjectDir)*.dll $(SolutionDir)Header\
-svn ci $(SolutionDir)Header\ -m ""
-svn ci $(SolutionDir)Lib\ -m ""</Command>
+xcopy /d /i /e /r /f /y $(ProjectDir)*.dll $(SolutionDir)Header\</Command>
     </PostBuildEvent>
     <Link>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
     <PreBuildEvent>
-      <Command>svn up $(SolutionDir)</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'">
@@ -199,12 +197,11 @@ svn ci $(SolutionDir)Lib\ -m ""</Command>
       <Command>xcopy /F /Y $(TargetPath) $(SolutionDir)Lib\
 xcopy $(ProjectDir)*.h $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
 xcopy $(ProjectDir)*.dll $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
-xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k
-svn ci $(SolutionDir)Header\ -m ""
-svn ci $(SolutionDir)Lib\ -m ""</Command>
+xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>svn up $(SolutionDir)</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug64DLL|x64'">
@@ -238,15 +235,14 @@ svn ci $(SolutionDir)Lib\ -m ""</Command>
 xcopy /d /i /f /y $(OutputPath)$(TargetName).dll $(SolutionDir)Lib\
 xcopy $(ProjectDir)*.h $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
 xcopy $(ProjectDir)*.dll $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
-xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k
-svn ci $(SolutionDir)Header\ -m ""
-svn ci $(SolutionDir)Lib\ -m ""</Command>
+xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
     </PostBuildEvent>
     <Link>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
     <PreBuildEvent>
-      <Command>svn up $(SolutionDir)</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
