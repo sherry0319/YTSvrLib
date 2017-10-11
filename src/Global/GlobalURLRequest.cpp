@@ -64,15 +64,15 @@ namespace YTSvrLib
 		{
 			return nTotalSize;
 		}
-		std::string* pstrRequest = (std::string*)content;
-		if (pstrRequest)
+		std::string* pOutData = (std::string*) content;
+		if (pOutData)
 		{
-			pstrRequest->append((char *) data, ((char*) data) + nTotalSize);
+			pOutData->append((char *) data, ((char*) data) + nTotalSize - 1);
 		}
 		return nTotalSize;
 	}
 
-	int CGlobalCURLRequest::SendHTTPGETMessage(const char* url, std::string& outdata)
+	int CGlobalCURLRequest::SendHTTPGETMessage(const char* url, std::string* outdata)
 	{
 		if (m_bCURLInited == FALSE)
 		{
@@ -90,11 +90,14 @@ namespace YTSvrLib
 		curl_easy_reset(m_curlCore);
 		curl_easy_setopt(m_curlCore, CURLOPT_URL, url);
 		curl_easy_setopt(m_curlCore, CURLOPT_NOSIGNAL, 1);
-		curl_easy_setopt(m_curlCore, CURLOPT_WRITEDATA, (void*) &outdata);
-		curl_easy_setopt(m_curlCore, CURLOPT_WRITEFUNCTION, curl_writer);
+		if (outdata)
+		{
+			curl_easy_setopt(m_curlCore, CURLOPT_WRITEDATA, (void*) outdata);
+			curl_easy_setopt(m_curlCore, CURLOPT_WRITEFUNCTION, curl_writer);
+		}
 
 		CURLcode emCode = curl_easy_perform(m_curlCore);
-		int nResponseCode = 0;
+		long nResponseCode = 0;
 		if (CURLE_OK == emCode)
 		{
 			curl_easy_getinfo(m_curlCore, CURLINFO_RESPONSE_CODE, &nResponseCode);
@@ -107,10 +110,10 @@ namespace YTSvrLib
 			LOGERROR("error : curl request failed : %d request url : %s", emCode, url);
 		}
 
-		return nResponseCode;
+		return (int)nResponseCode;
 	}
 
-	int CGlobalCURLRequest::SendHTTPPOSTMessage(const char* url, const char* postdata, std::string& outdata)
+	int CGlobalCURLRequest::SendHTTPPOSTMessage(const char* url, const char* postdata, std::string* outdata /*= NULL*/)
 	{
 		if (m_bCURLInited == FALSE)
 		{
@@ -132,11 +135,14 @@ namespace YTSvrLib
 		curl_easy_setopt(m_curlCore, CURLOPT_POST, 1);
 		curl_easy_setopt(m_curlCore, CURLOPT_POSTFIELDS, postdata);
 		curl_easy_setopt(m_curlCore, CURLOPT_POSTFIELDSIZE, nPostLen);
-		curl_easy_setopt(m_curlCore, CURLOPT_WRITEDATA, (void*) &outdata);
-		curl_easy_setopt(m_curlCore, CURLOPT_WRITEFUNCTION, curl_writer);
+		if (outdata)
+		{
+			curl_easy_setopt(m_curlCore, CURLOPT_WRITEDATA, (void*) outdata);
+			curl_easy_setopt(m_curlCore, CURLOPT_WRITEFUNCTION, curl_writer);
+		}
 
 		CURLcode emCode = curl_easy_perform(m_curlCore);
-		int nResponseCode = 0;
+		long nResponseCode = 0;
 		if (CURLE_OK == emCode)
 		{
 			curl_easy_getinfo(m_curlCore, CURLINFO_RESPONSE_CODE, &nResponseCode);
