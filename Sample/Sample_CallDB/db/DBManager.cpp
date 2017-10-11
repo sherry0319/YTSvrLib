@@ -13,7 +13,7 @@ DWORD MYSQLQueryCallBack(UINT nErrorCode, ULONG nEffectRows, void* nKey, YTSvrLi
 	return 0;
 }
 
-extern YTSvrLib::CServerApplication gApp;
+
 
 CDBManager::CDBManager():CMYSQLManagerBase()
 {
@@ -24,7 +24,7 @@ CDBManager::CDBManager():CMYSQLManagerBase()
 
 void CDBManager::SetEvent()
 {
-	gApp.SetEvent(EAppEvent::eAppGameDB);
+	YTSvrLib::CServerApplication::GetInstance()->SetEvent(EAppEvent::eAppGameDB);
 }
 
 BOOL CDBManager::ApplyCmdAndQueryInfo(YTSvrLib::CMYSQLCommand** ppCmd, YTSvrLib::CMYSQLQueryInfo** ppQueryInfo)

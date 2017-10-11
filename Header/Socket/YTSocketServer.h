@@ -30,7 +30,7 @@ SOFTWARE.*/
 
 namespace YTSvrLib
 {
-	class ITCPSERVER : public ITCPEVENTTHREAD
+	class YTSVRLIB_EXPORT ITCPSERVER : public ITCPEVENTTHREAD
 	{
 	public:
 		ITCPSERVER()

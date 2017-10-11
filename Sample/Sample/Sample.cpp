@@ -17,7 +17,7 @@
 #include <sys/time.h>
 #endif // LIB_WINDOWS
 
-extern YTSvrLib::CServerApplication gApp;
+
 
 void DestroyAllObj()
 {
@@ -66,10 +66,10 @@ int main(int argc, char* argv[])
 	SetConsoleCtrlHandler(signal_handle_function);
 #endif // LIB_WINDOWS
 	//×¢²áÊÂ¼ş
-	gApp.RegisterEvent( EAppEvent::eAppGWSvrSocketEvent, CGWSvrParser::OnMsgRecv );
-	gApp.RegisterEvent( EAppEvent::eAppGWSvrSocketDisconnectEvent, CGWSvrParser::OnDisconnectMsgRecv );
-	gApp.RegisterEvent( EAppEvent::eAppGameDB, CDBManager::OnDataRecv );
-	gApp.RegisterEvent( EAppEvent::eAppTimerMgrOnTimer, CTimerMgr::OnTimer );
+	YTSvrLib::CServerApplication::GetInstance()->RegisterEvent( EAppEvent::eAppGWSvrSocketEvent, CGWSvrParser::OnMsgRecv );
+	YTSvrLib::CServerApplication::GetInstance()->RegisterEvent( EAppEvent::eAppGWSvrSocketDisconnectEvent, CGWSvrParser::OnDisconnectMsgRecv );
+	YTSvrLib::CServerApplication::GetInstance()->RegisterEvent( EAppEvent::eAppGameDB, CDBManager::OnDataRecv );
+	YTSvrLib::CServerApplication::GetInstance()->RegisterEvent( EAppEvent::eAppTimerMgrOnTimer, CTimerMgr::OnTimer );
 
 	CConfig::GetInstance();
 	CDBManager::GetInstance()->SetConnection(	CConfig::GetInstance()->m_sDBConnectInfo.m_strMySQLDB.c_str(),
@@ -89,7 +89,7 @@ int main(int argc, char* argv[])
 
 	CDBManager::GetInstance()->OnServerStart();
 
-	gApp.Run();
+	YTSvrLib::CServerApplication::GetInstance()->Run();
 
 	return 0;
 }

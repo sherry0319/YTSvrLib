@@ -27,7 +27,7 @@ SOFTWARE.*/
 
 namespace YTSvrLib
 {
-	class ITCPEVENTTHREAD
+	class YTSVRLIB_EXPORT ITCPEVENTTHREAD
 	{
 	public:
 		ITCPEVENTTHREAD()

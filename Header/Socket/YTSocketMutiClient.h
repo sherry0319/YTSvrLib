@@ -26,7 +26,7 @@ SOFTWARE.*/
 namespace YTSvrLib
 {
 	class ITCPMUTICLIENTCONTROLLER;
-	class ITCPMUTICLIENT : public ITCPBASE
+	class YTSVRLIB_EXPORT ITCPMUTICLIENT : public ITCPBASE
 	{
 	public:
 		ITCPMUTICLIENT()
@@ -71,6 +71,7 @@ namespace YTSvrLib
 		BOOL m_bIsConnected;
 		BOOL m_bIsDisconnecting;
 		ITCPMUTICLIENTCONTROLLER* m_pController;
+		YTSvrLib::CLock m_lockBufferEvent;
 	};
 }
 

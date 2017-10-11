@@ -9,7 +9,7 @@
 #include <signal.h>
 #include <sys/time.h>
 #endif // LIB_WINDOWS
-extern YTSvrLib::CServerApplication gApp;// 唯一的应用程序对象
+// 唯一的应用程序对象
 
 void DestroyAllObj()
 {
@@ -60,11 +60,11 @@ int main(int argc, char* argv[])
 #endif // LIB_WINDOWS
 
 	//注册事件
-	gApp.RegisterEvent( EAppEvent::eAppClientSocketEvent, CPkgParser::OnMsgRecv );
-	gApp.RegisterEvent( EAppEvent::eAppClientSocketDisconnectEvent, CPkgParser::OnDisconnectMsgRecv );
-	gApp.RegisterEvent( EAppEvent::eAppServerSocketEvent, CServerParser::OnMsgRecv );
-	gApp.RegisterEvent( EAppEvent::eAppServerSocketDisconnectEvent, CServerParser::OnDisconnectMsgRecv );
-	gApp.RegisterEvent(EAppEvent::eAppTimerMgrOnTimer, CTimerMgr::OnTimer );
+	YTSvrLib::CServerApplication::GetInstance()->RegisterEvent( EAppEvent::eAppClientSocketEvent, CPkgParser::OnMsgRecv );
+	YTSvrLib::CServerApplication::GetInstance()->RegisterEvent( EAppEvent::eAppClientSocketDisconnectEvent, CPkgParser::OnDisconnectMsgRecv );
+	YTSvrLib::CServerApplication::GetInstance()->RegisterEvent( EAppEvent::eAppServerSocketEvent, CServerParser::OnMsgRecv );
+	YTSvrLib::CServerApplication::GetInstance()->RegisterEvent( EAppEvent::eAppServerSocketDisconnectEvent, CServerParser::OnDisconnectMsgRecv );
+	YTSvrLib::CServerApplication::GetInstance()->RegisterEvent(EAppEvent::eAppTimerMgrOnTimer, CTimerMgr::OnTimer );
 
 	//读取配置
 	CConfig::GetInstance();
@@ -90,7 +90,7 @@ int main(int argc, char* argv[])
 	_snprintf_s( szTitle, 127, "GatewaySvr=P[%d] L[%d] Online Client=%d ...",CConfig::GetInstance()->m_nPublicSvrID,CConfig::GetInstance()->m_nLocalSvrID,CPkgParser::GetInstance()->GetCurClientCount() );
 	SetConsoleTitleA( szTitle );
 
-	gApp.Run();
+	YTSvrLib::CServerApplication::GetInstance()->Run();
 
 	LOG("System is closed.");
 	Sleep(3000);

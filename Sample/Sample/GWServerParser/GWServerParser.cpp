@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "GWServerParser.h"
 
-extern YTSvrLib::CServerApplication gApp;
+
 //////////////////////////////////////////////////////////////////////////
 
 CGWSvrParser::CGWSvrParser(void) : YTSvrLib::CPkgParserBase(), m_poolGateway("CGMSvrSocket")
@@ -82,10 +82,10 @@ void CGWSvrParser::SendSvrMsg(CGWSvrSocket* pGWSocket, LPCSTR pszMsg, int nMsgLe
 
 void CGWSvrParser::SetEvent()
 {
-	gApp.SetEvent( EAppEvent::eAppGWSvrSocketEvent );
+	YTSvrLib::CServerApplication::GetInstance()->SetEvent( EAppEvent::eAppGWSvrSocketEvent );
 }
 
 void CGWSvrParser::SetDisconnectEvent()
 {
-	gApp.SetEvent( EAppEvent::eAppGWSvrSocketDisconnectEvent );
+	YTSvrLib::CServerApplication::GetInstance()->SetEvent( EAppEvent::eAppGWSvrSocketDisconnectEvent );
 }

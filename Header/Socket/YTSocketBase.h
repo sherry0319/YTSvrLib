@@ -29,7 +29,7 @@ SOFTWARE.*/
 #define BLOCK_RECV_BUFFER_SIZE (1024*8)
 namespace YTSvrLib
 {
-	class ITCPBASE
+	class YTSVRLIB_EXPORT ITCPBASE
 	{
 	public:
 		ITCPBASE()
@@ -73,6 +73,9 @@ namespace YTSvrLib
 		virtual BOOL IsDisconnecting() = 0;
 		virtual void OnDisconnecting();
 		virtual void PostDisconnectMsg(EType eType) = 0;
+	protected:
+		BOOL CreateAsyncClientSock();
+		size_t Recv(char* buf,int nMaxLen);
 	public:
 		const char* GetAddrIp()
 		{

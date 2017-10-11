@@ -14,15 +14,15 @@ CServerParser::~CServerParser(void)
 {
 }
 
-extern YTSvrLib::CServerApplication gApp;
+
 void CServerParser::SetEvent()
 {
-	gApp.SetEvent( EAppEvent::eAppServerSocketEvent );
+	YTSvrLib::CServerApplication::GetInstance()->SetEvent( EAppEvent::eAppServerSocketEvent );
 }
 
 void CServerParser::SetDisconnectEvent()
 {
-	gApp.SetEvent( EAppEvent::eAppServerSocketDisconnectEvent );
+	YTSvrLib::CServerApplication::GetInstance()->SetEvent( EAppEvent::eAppServerSocketDisconnectEvent );
 }
 
 void CServerParser::OnSvrDisconnect( CServerSocket* pSocket )

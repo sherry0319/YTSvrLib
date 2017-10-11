@@ -28,7 +28,7 @@ SOFTWARE.*/
 #define SEC_HOUR	(60*SEC_MINUTE) //一小时
 #define SEC_DAY		(24*SEC_HOUR) //一天
 #define SEC_MONTH	(31*SEC_DAY) // 一个月
-#define SEC_YEAR	(12*SEC_MONTH) //一年
+#define SEC_YEAR	(365*SEC_DAY) //一年
 
 #define SYS_WEEK_SUNDAY		0 //周日
 #define SYS_WEEK_MONDAY		1 //周一
@@ -57,6 +57,12 @@ template<typename _Ty>
 inline _Ty _max(_Ty nLeft, _Ty nRight)
 {
 	return (nLeft > nRight) ? nLeft : nRight;
+}
+
+// 比较两个double类型是否相等
+YTSVRLIB_EXPORT inline bool is_double_same(double dLeft, double dRight, int nPrecision = 1)
+{
+	return ((dLeft - dRight) < pow(10, -nPrecision));
 }
 
 // 交换两值
@@ -89,11 +95,11 @@ enum EM_LOG_LEVEL
 	LOG_LEVEL_ERROR,
 };
 
-void LogBin( const char* pszData, int nDataLen );
-void LogErrorASync(const char* szFile, const int nLine, EM_LOG_LEVEL emLevel, const char *fmt, ...);
-void  LogError( const char* szFile, const int nLine, const char *fmt, ...);
-void  LogError( const char *fmt, ...);
-void  LogCommon( const char *fmt, ... );
+YTSVRLIB_EXPORT void LogBin(const char* pszData, int nDataLen);
+YTSVRLIB_EXPORT void LogErrorASync(const char* szFile, const int nLine, EM_LOG_LEVEL emLevel, const char *fmt, ...);
+YTSVRLIB_EXPORT void  LogError(const char* szFile, const int nLine, const char *fmt, ...);
+YTSVRLIB_EXPORT void  LogError(const char *fmt, ...);
+YTSVRLIB_EXPORT void  LogCommon(const char *fmt, ...);
 
 
 #ifdef LIB_WINDOWS
@@ -122,10 +128,10 @@ void  LogCommon( const char *fmt, ... );
 #define LOGCOMMON(s, args...) LogCommon( s, ##args)
 #endif // LIB_WINDOWS
 
-void ReOpenLogFile();
-void OpenLog();
-void CloseLog();
-BOOL IsOpenLog();
+YTSVRLIB_EXPORT void ReOpenLogFile();
+YTSVRLIB_EXPORT void OpenLog();
+YTSVRLIB_EXPORT void CloseLog();
+YTSVRLIB_EXPORT BOOL IsOpenLog();
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -140,7 +146,7 @@ static inline BYTE fromHex(const BYTE &x)
 }
 
 // URL加密
-inline std::string URLEncode(const std::string &sIn)
+YTSVRLIB_EXPORT inline std::string URLEncode(const std::string &sIn)
 {
 	std::string sOut;
 	for( size_t ix = 0; ix < sIn.size(); ix++ )
@@ -167,7 +173,7 @@ inline std::string URLEncode(const std::string &sIn)
 };
 
 // URL解密
-inline std::string URLDecode(const std::string &szToDecode)
+YTSVRLIB_EXPORT inline std::string URLDecode(const std::string &szToDecode)
 {
 	std::string result;  
 	int hex = 0;  
@@ -232,74 +238,84 @@ void SetConsoleCtrlHandler(signal_handle handle);
 #define DELTA_EPOCH_IN_MICROSECS 11644473600000000ULL
 #endif
 
-struct timezone 
+struct YTSVRLIB_EXPORT timezone
 {  
 	int  tz_minuteswest; // minutes W of Greenwich  
 	int  tz_dsttime;     // type of dst correction
 };
 
 // Windows版gettimeofday
-int gettimeofday(struct timeval *tv, struct timezone *tz);
+YTSVRLIB_EXPORT int gettimeofday(struct timeval *tv, struct timezone *tz);
 
 #endif // LIB_WINDOWS
 
 // 安全关闭当前进程[带垃圾清理]
-void SafeTerminateProcess();
+YTSVRLIB_EXPORT void SafeTerminateProcess();
 
 // UTF8字符串转换为UNICODE字符串
-int utf8tounicode(const char *utf8_buf, wchar_t* unicode_buf, int max_size);
+YTSVRLIB_EXPORT int utf8tounicode(const char *utf8_buf, wchar_t* unicode_buf, int max_size);
 // UNICODE字符串转换为UTF8字符串
-int unicodetoutf8(const wchar_t* unicode_buf, char* utf8_buf,int max_size);
+YTSVRLIB_EXPORT int unicodetoutf8(const wchar_t* unicode_buf, char* utf8_buf, int max_size);
 
 // 获取tNow之后的下一个星期wWeekDay的wHour时的UTC时间.(24小时制)
 // 例如GetNextWeekDayTime(tNow,SYS_WEEK_SUNDAY,2)表示获取下一个周日2点的时间
-__time32_t GetNextWeekDayTime(__time32_t tNow, WORD wWeekDay, WORD wHour);
+YTSVRLIB_EXPORT __time32_t GetNextWeekDayTime(__time32_t tNow, WORD wWeekDay, WORD wHour);
 
 // 计算出明天的年月日所表达的日期.例如20110802
-int CalcTomorrowYYYYMMDD();
+YTSVRLIB_EXPORT int CalcTomorrowYYYYMMDD();
 // 获取当前进程所在路径
-void GetModuleFilePath(char* pszOut, int nLen);
+YTSVRLIB_EXPORT void GetModuleFilePath(char* pszOut, int nLen);
 // 获取当前进程名称
-void GetModuleFileName(char* pszOut,int nLen);
+YTSVRLIB_EXPORT void GetModuleFileName(char* pszOut, int nLen);
 
-// 将一个UTC时间转换为字符串格式的时间(2011-09-02 22:11:02)
-// 特殊 : 0 = (0000-00-00 00:00:00)
-const wchar_t* CovertUTC2String(__time32_t tTime, wchar_t* pwzOut, int nOutMaxLen);
-const char* CovertUTC2String(__time32_t tTime, char* pszOut, int nOutMaxLen);
+// 将一个UTC时间转换为字符串格式的时间并且用pszQuote括起来.如果tTime=0则返回不带任何括号的NULL(2011-09-02 22:11:02)
+YTSVRLIB_EXPORT const wchar_t* CovertUTC2String(__time32_t tTime, wchar_t* pwzOut, int nOutMaxLen, const wchar_t* pwzQuote = L"'");
+YTSVRLIB_EXPORT const char* CovertUTC2String(__time32_t tTime, char* pszOut, int nOutMaxLen, const char* pszQuote = "'");
 
 //把 年|月|日|时|分|秒 的时间转换为时间
-__time32_t MakeStrTimeToUTC(LPCWSTR lpwzTime);
-__time32_t MakeStrTimeToUTC(LPCSTR lpwzTime);
+YTSVRLIB_EXPORT __time32_t MakeStrTimeToUTC(LPCWSTR lpwzTime);
+YTSVRLIB_EXPORT __time32_t MakeStrTimeToUTC(LPCSTR lpwzTime);
 
 //把 月|日|时|分|秒 的时间依据给定的年份转换为时间
-__time32_t MakeStrTimeToUTC_NoYear(LPCWSTR lpwzTime, UINT nYear);
-__time32_t MakeStrTimeToUTC_NoYear(LPCSTR lpwzTime, UINT nYear);
+YTSVRLIB_EXPORT __time32_t MakeStrTimeToUTC_NoYear(LPCWSTR lpwzTime, UINT nYear);
+YTSVRLIB_EXPORT __time32_t MakeStrTimeToUTC_NoYear(LPCSTR lpwzTime, UINT nYear);
 
 // 生成一串随机的字符串
-LPCSTR MakeRandomKey(LPSTR pszOut, UINT nOutMaxLen,UINT nNeedLen);
-LPCWSTR MakeRandomKey(LPWSTR pszOut, UINT nOutMaxLen,UINT nNeedLen);
+YTSVRLIB_EXPORT LPCSTR MakeRandomKey(LPSTR pszOut, UINT nOutMaxLen, UINT nNeedLen);
+YTSVRLIB_EXPORT LPCWSTR MakeRandomKey(LPWSTR pszOut, UINT nOutMaxLen, UINT nNeedLen);
 
 // 给引号(')和双引号(")之前添加转义斜杠(\)
 // 注意.不要多次调用.已经添加的还会再添加一次
-void AddSlashes(const wchar_t* pwzIn, wchar_t* pwzOut, int nLen);
-void AddSlashes(const char* pszIn, char* pszOut, int nLen);
+YTSVRLIB_EXPORT void AddSlashes(const wchar_t* pwzIn, wchar_t* pwzOut, int nLen);
+YTSVRLIB_EXPORT void AddSlashes(const char* pszIn, char* pszOut, int nLen);
 
 // 将 xx|xx|xx 格式的礼包打散成vector
-void WINAPI ParseListStr(LPCWSTR pwzList, std::vector< std::vector<int> >& vctOut);
-void WINAPI ParseListStr(LPCSTR pszList, std::vector< std::vector<int> >& vctOut);
+YTSVRLIB_EXPORT void WINAPI ParseListStr(LPCWSTR pwzList, std::vector< std::vector<int> >& vctOut);
+YTSVRLIB_EXPORT void WINAPI ParseListStr(LPCSTR pszList, std::vector< std::vector<int> >& vctOut);
 
 // 将字符串全部转换为小写
-int StringToLowcase(LPCWSTR lpwzSrc, LPWSTR lpwzOut, int nLen);
-int StringToLowcase(LPCSTR lpszSrc, LPSTR lpszOut, int nLen);
+YTSVRLIB_EXPORT int StringToLowcase(LPCWSTR lpwzSrc, LPWSTR lpwzOut, int nLen);
+YTSVRLIB_EXPORT int StringToLowcase(LPCSTR lpszSrc, LPSTR lpszOut, int nLen);
 
 //移除字符串前后空格
-void RemoveSpace(LPCWSTR pwzSrc, LPWSTR pwzDst, int nLen);
-void RemoveSpace(LPCSTR pszSrc, LPSTR pszDst, int nLen);
+YTSVRLIB_EXPORT void RemoveSpace(LPCWSTR pwzSrc, LPWSTR pwzDst, int nLen);
+YTSVRLIB_EXPORT void RemoveSpace(LPCSTR pszSrc, LPSTR pszDst, int nLen);
 
 // 获取本机IP
-void GetLocalIP(vector<string>& vctIPList);
+YTSVRLIB_EXPORT void GetLocalIP(vector<string>& vctIPList);
 
 // 检查是否是debug版本
-bool CheckDebugVersion();
+YTSVRLIB_EXPORT bool CheckDebugVersion();
 // 检查是否是零时区
-bool CheckTimezoneZero();
+YTSVRLIB_EXPORT bool CheckTimezoneZero();
+
+// 不分大小写字符串查找
+YTSVRLIB_EXPORT const char* _stristr(const char* _Src, const char* _Search);
+
+YTSVRLIB_EXPORT int GetLocalTimeZone();
+
+YTSVRLIB_EXPORT __time32_t time32();
+
+typedef DOUBLE longtime_t;
+
+YTSVRLIB_EXPORT longtime_t GetLongTime();

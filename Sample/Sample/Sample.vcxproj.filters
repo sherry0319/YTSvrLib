@@ -92,7 +92,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="UserServer.rc">
+    <ResourceCompile Include="Sample.rc">
       <Filter>资源文件</Filter>
     </ResourceCompile>
   </ItemGroup>

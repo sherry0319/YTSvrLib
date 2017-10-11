@@ -47,7 +47,7 @@ void signal_handle_function(int nSignal)
 }
 #endif // LIB_WINDOWS
 
-extern YTSvrLib::CServerApplication gApp;
+
 
 #ifdef LIB_WINDOWS
 int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
@@ -62,10 +62,10 @@ int main(int argc, char* argv[])
 #endif // LIB_WINDOWS
 
 	//×¢²áÊÂ¼þ
-	gApp.RegisterEvent( EAppEvent::eAppGMSvrSocketEvent, CGMSvrParser::OnMsgRecv );
-	gApp.RegisterEvent( EAppEvent::eAppGMSvrSocketDisconnectEvent, CGMSvrParser::OnDisconnectMsgRecv );
-	gApp.RegisterEvent( EAppEvent::eAppGameDB, CDBManager::OnDataRecv );
-	gApp.RegisterEvent(EAppEvent::eAppTimerMgrOnTimer, CTimerMgr::OnTimer );
+	YTSvrLib::CServerApplication::GetInstance()->RegisterEvent( EAppEvent::eAppGMSvrSocketEvent, CGMSvrParser::OnMsgRecv );
+	YTSvrLib::CServerApplication::GetInstance()->RegisterEvent( EAppEvent::eAppGMSvrSocketDisconnectEvent, CGMSvrParser::OnDisconnectMsgRecv );
+	YTSvrLib::CServerApplication::GetInstance()->RegisterEvent( EAppEvent::eAppGameDB, CDBManager::OnDataRecv );
+	YTSvrLib::CServerApplication::GetInstance()->RegisterEvent(EAppEvent::eAppTimerMgrOnTimer, CTimerMgr::OnTimer );
 
 	//¶ÁÈ¡ÅäÖÃ
 	CConfig::GetInstance();
@@ -100,7 +100,7 @@ int main(int argc, char* argv[])
 		CDBManager::GetInstance()->Init();
 	}
 
-	gApp.Run();
+	YTSvrLib::CServerApplication::GetInstance()->Run();
 	LOG("System is closing...");
 	CDBManager::GetInstance()->WaitForAllRequestDone();
 

@@ -92,7 +92,7 @@ namespace YTSvrLib
 	typedef CLogBuffer<wchar_t> CLogBufferW;
 
 #ifdef LIB_WINDOWS
-	class CLogManager
+	class YTSVRLIB_EXPORT CLogManager
 	{
 	public:
 		CLogManager();
@@ -142,10 +142,14 @@ namespace YTSvrLib
 		BOOL LockSyncFile()
 		{
 			m_lockSynFile.Lock();
+
+			return TRUE;
 		}
 		BOOL UnlockSyncFile()
 		{
 			m_lockSynFile.UnLock();
+
+			return TRUE;
 		}
 	protected:
 		CHAR						m_wzFilePath[128];
@@ -161,7 +165,7 @@ namespace YTSvrLib
 		char m_szFileExt[16];
 	};
 
-	class CLogManagerW
+	class YTSVRLIB_EXPORT CLogManagerW
 	{
 	public:
 		CLogManagerW();
@@ -212,11 +216,15 @@ namespace YTSvrLib
 		BOOL LockSyncFile()
 		{
 			m_lockSynFile.Lock();
+
+			return TRUE;
 		}
 
 		BOOL UnlockSyncFile()
 		{
 			m_lockSynFile.UnLock();
+
+			return TRUE;
 		}
 	protected:
 		CHAR						m_wzFilePath[128];

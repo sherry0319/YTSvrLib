@@ -25,7 +25,7 @@ SOFTWARE.*/
 
 namespace YTSvrLib
 {
-	class ITCPMUTICLIENTCONTROLLER : public ITCPEVENTTHREAD
+	class YTSVRLIB_EXPORT ITCPMUTICLIENTCONTROLLER : public ITCPEVENTTHREAD
 	{
 	public:
 		ITCPMUTICLIENTCONTROLLER()
@@ -39,7 +39,11 @@ namespace YTSvrLib
 		}
 
 	public:
-		BOOL CreateClientController();
+		BOOL CreateEvent();
+
+		BOOL CreateThread();
+	private:
+		YTSvrLib::CLock m_lockThread;
 	};
 }
 

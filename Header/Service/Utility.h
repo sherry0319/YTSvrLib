@@ -22,6 +22,8 @@ SOFTWARE.*/
 #ifndef __UTILITY_H_
 #define __UTILITY_H_
 
+#include <random>
+
 //---------------------------------------
 //
 //	bool IsDirExist(char *lpszDir)
@@ -35,15 +37,15 @@ SOFTWARE.*/
 //			false-- 不存在
 //		
 //---------------------------------------
-bool IsDirExist(char *lpszDir);
+YTSVRLIB_EXPORT bool IsDirExist(char *lpszDir);
 
 //================================文件处理函数=======================================
 #ifdef LIB_WINDOWS
-inline void StringUpr(std::string& s)
+YTSVRLIB_EXPORT inline void StringUpr(std::string& s)
 {
 	_strupr_s((char*)(s.c_str()), s.length());
 }
-inline void StringLwr(std::string& s)
+YTSVRLIB_EXPORT inline void StringLwr(std::string& s)
 {
 	_strlwr_s((char*)(s.c_str()), s.length());
 }
@@ -61,8 +63,8 @@ inline void StringLwr(std::string& s)
 //	返回:	处理后的字串
 //
 //-------------------------------------------------
-char* Trim(char* lpszStr );
-wchar_t* TrimW(wchar_t* lpswStr );
+YTSVRLIB_EXPORT char* Trim(char* lpszStr);
+YTSVRLIB_EXPORT wchar_t* TrimW(wchar_t* lpswStr);
 
 //--------------------------------------------------
 //
@@ -76,8 +78,8 @@ wchar_t* TrimW(wchar_t* lpswStr );
 //	返回:	处理后的字串
 //
 //--------------------------------------------------
-char* TrimR(char* lpszStr);
-wchar_t* TrimRW(wchar_t* lpswStr);
+YTSVRLIB_EXPORT char* TrimR(char* lpszStr);
+YTSVRLIB_EXPORT wchar_t* TrimRW(wchar_t* lpswStr);
 
 
 //--------------------------------------------------
@@ -92,8 +94,8 @@ wchar_t* TrimRW(wchar_t* lpswStr);
 //	返回:	处理后的字串
 //
 //--------------------------------------------------
-char* TrimL(char* lpszStr );
-wchar_t* TrimLW(wchar_t* lpswStr );
+YTSVRLIB_EXPORT char* TrimL(char* lpszStr);
+YTSVRLIB_EXPORT wchar_t* TrimLW(wchar_t* lpswStr);
 
 //--------------------------------------------------
 //	功能:	以lpszDelimiter中包含的字符分割字串lpszStr,
@@ -106,15 +108,15 @@ wchar_t* TrimLW(wchar_t* lpswStr );
 //	返回:	无
 //		
 //-----------------------------------------------
-void StrDelimiter(const char *lpszSrc, const char *lpszDelimiter, std::vector<std::string> &vecResult);
-void StrDelimiter( std::string& strSrc, const char* lpzDelimiter, std::vector<std::string> &vctResult );
-void StrDelimiter(const char *lpszSrc, const char *lpszDelimiter, std::vector<int> &vctResult);
-void StrDelimiter(std::string& strSrc, const char *lpszDelimiter, std::vector<int> &vctResult);
+YTSVRLIB_EXPORT void StrDelimiter(const char *lpszSrc, const char *lpszDelimiter, std::vector<std::string> &vecResult);
+YTSVRLIB_EXPORT void StrDelimiter(std::string& strSrc, const char* lpzDelimiter, std::vector<std::string> &vctResult);
+YTSVRLIB_EXPORT void StrDelimiter(const char *lpszSrc, const char *lpszDelimiter, std::vector<int> &vctResult);
+YTSVRLIB_EXPORT void StrDelimiter(std::string& strSrc, const char *lpszDelimiter, std::vector<int> &vctResult);
 
-void StrDelimiter( const wchar_t* lpwzSrc, const wchar_t* lpwzDelimiter, std::vector<std::wstring> &vctResult );
-void StrDelimiter( std::wstring& wstrSrc, const wchar_t* lpwzDelimiter, std::vector<std::wstring> &vctResult );
-void StrDelimiter(const wchar_t* lpwzSrc, const wchar_t* lpwzDelimiter, std::vector<int> &vctResult);
-void StrDelimiter( std::wstring& wstrSrc, const wchar_t* lpwzDelimiter, std::vector<int> &vctResult);
+YTSVRLIB_EXPORT void StrDelimiter(const wchar_t* lpwzSrc, const wchar_t* lpwzDelimiter, std::vector<std::wstring> &vctResult);
+YTSVRLIB_EXPORT void StrDelimiter(std::wstring& wstrSrc, const wchar_t* lpwzDelimiter, std::vector<std::wstring> &vctResult);
+YTSVRLIB_EXPORT void StrDelimiter(const wchar_t* lpwzSrc, const wchar_t* lpwzDelimiter, std::vector<int> &vctResult);
+YTSVRLIB_EXPORT void StrDelimiter(std::wstring& wstrSrc, const wchar_t* lpwzDelimiter, std::vector<int> &vctResult);
 //拆分参数串
 
 
@@ -122,7 +124,7 @@ void StrDelimiter( std::wstring& wstrSrc, const wchar_t* lpwzDelimiter, std::vec
 //	参数:	pBuf			-- [in out]要填充的字符串,必须确保长度足够
 //			cDelimiter		-- [in]分割标志字符
 //			cFill			-- [int]填充的字符
-void FillSpacing(char* pBuf, char cDelimiter, char cFill);
+YTSVRLIB_EXPORT void FillSpacing(char* pBuf, char cDelimiter, char cFill);
 
 //-----------------------------------------------
 //
@@ -137,7 +139,7 @@ void FillSpacing(char* pBuf, char cDelimiter, char cFill);
 //		处理后的字符串
 //
 //-----------------------------------------------
-char *DelSpace(char *s);
+YTSVRLIB_EXPORT char *DelSpace(char *s);
 
 //-----------------------------------------------
 //
@@ -153,7 +155,7 @@ char *DelSpace(char *s);
 //		处理后的字符串
 //
 //-----------------------------------------------
-std::string HexDump(const BYTE* pData, int len, const char *delim=" ");
+YTSVRLIB_EXPORT std::string HexDump(const BYTE* pData, int len, const char *delim = " ");
 
 //-----------------------------------------------
 //	功能:
@@ -166,21 +168,63 @@ std::string HexDump(const BYTE* pData, int len, const char *delim=" ");
 //		处理后的字符串
 //
 //-----------------------------------------------
-void StrReplace(char *szSource, int nLen,const char *pszOldstring,const char *pszNewstring);
-void StrReplace(wchar_t *wzSource, int nLen,const wchar_t *pwzOldstring,const wchar_t *pwzNewstring);
+YTSVRLIB_EXPORT void StrReplace(char *szSource, int nLen, const char *pszOldstring, const char *pszNewstring);
+YTSVRLIB_EXPORT void StrReplace(wchar_t *wzSource, int nLen, const wchar_t *pwzOldstring, const wchar_t *pwzNewstring);
 
-void StrReplace(std::string&strSource,const std::string&strOldstring,const std::string&strNewstring);
-void StrReplace(std::wstring&strSource,const std::wstring&strOldstring,const std::wstring&strNewstring);
+YTSVRLIB_EXPORT void StrReplace(std::string&strSource, const std::string&strOldstring, const std::string&strNewstring);
+YTSVRLIB_EXPORT void StrReplace(std::wstring&strSource, const std::wstring&strOldstring, const std::wstring&strNewstring);
+
+// 通配符字符串格式化.例如StrFormat("something {0} to {1} with {2}","123","kkk","???"); 将会得到something 123 to kkk with ???.注意通配符必须从{0}开始标.
+YTSVRLIB_EXPORT std::string StrFormat(const char* format, ...);
+YTSVRLIB_EXPORT std::string vStrFormat(const char* format, va_list va);
+
+// 将任何类型转换为const char*类型
+class YTSVRLIB_EXPORT string_coverter
+{
+public:
+	string_coverter()
+	{
+		m_vctSave.clear();
+	}
+
+	virtual ~string_coverter()
+	{
+		for (size_t i = 0; i < m_vctSave.size();++i)
+		{
+			delete[] m_vctSave[i];
+		}
+		m_vctSave.clear();
+	}
+
+	template<typename T>
+	const char* tostring(T value)
+	{
+		std::ostringstream s;
+		s << value;
+		char* buffer = new char[s.str().size() + 1];
+		ZeroMemory(buffer, s.str().size() + 1);
+#ifdef LIB_WINDOWS
+		strncpy_s(buffer, (s.str().size()+1), s.str().c_str(), s.str().size());
+#else
+		strncpy_s(buffer, s.str().c_str(), s.str().size());
+#endif
+		m_vctSave.push_back(buffer);
+		return buffer;
+	}
+
+private:
+	std::vector<char*> m_vctSave;
+};
 
 #ifdef LIB_WINDOWS
-BOOL WCharToMByte( LPCWSTR lpcwszStr, LPSTR lpszStr, DWORD dwSize);
-BOOL MByteToWChar(LPCSTR lpszStr, LPWSTR lpcwszStr, DWORD dwSize);
+YTSVRLIB_EXPORT BOOL WCharToMByte(LPCWSTR lpcwszStr, LPSTR lpszStr, DWORD dwSize);
+YTSVRLIB_EXPORT BOOL MByteToWChar(LPCSTR lpszStr, LPWSTR lpcwszStr, DWORD dwSize);
 #endif // LIB_WINDOWS
 
 // 多字节强转ANSI格式字符串.注意.编码不换
-BOOL WChar2Ansi( LPCWSTR lpcwszStr, LPSTR lpszStr, int nStrLenMax );
+YTSVRLIB_EXPORT BOOL WChar2Ansi(LPCWSTR lpcwszStr, LPSTR lpszStr, int nStrLenMax);
 // ANSI字符串强转多字节字符串.注意.编码不换
-BOOL Ansi2WChar( LPCSTR lpszStr, LPWSTR lpwszStr, int nWStrLenMax );
+YTSVRLIB_EXPORT BOOL Ansi2WChar(LPCSTR lpszStr, LPWSTR lpwszStr, int nWStrLenMax);
 
 template<class T>
 T S2Var(const std::string& strValue)
@@ -203,43 +247,33 @@ std::string Var2S(const T nValue)
 }
 
 //================================数学计算函数================================
+class RandomHelper
+{
+public:
+	template<typename T>
+	static T random_real(T min, T max)
+	{
+		std::uniform_real_distribution<T> dist(min, max);
+		auto &mt = RandomHelper::getEngine();
+		return dist(mt);
+	}
 
-//------------------------------------------------------
-//
-//	int Random(int nFirst,int nEnd)
-//	
-//	功能:	取nFirst到nEnd之间的随机数(包括nFirst,nEnd)
-//		
-//	参数:	nFirst -- 起始值
-//			nEnd   -- 结束值	
-//
-//	返回:	int	-- 得到的随机数
-//
-//------------------------------------------------------
-int Random(int nFirst,int nEnd);
+	template<typename T>
+	static T random_int(T min, T max)
+	{
+		std::uniform_int_distribution<T> dist(min, max);
+		auto &mt = RandomHelper::getEngine();
+		return dist(mt);
+	}
+private:
+	static std::mt19937 &getEngine();
+};
 
-//------------------------------------------------------
-//
-//	unsigned int Random(unsigned int nEnd)
-//	
-//	功能:	取0到nEnd-1之间的随机数
-//		
-//	参数:	nEnd   -- 结束值
-//
-//	返回:	unsigned int	-- 得到的随机数，该值低于0x1000
-//
-//------------------------------------------------------
-unsigned int Random(unsigned int nEnd);
-
-#ifdef LIB_WINDOWS
-// Windows 下必须使用InitGenRandomFunction初始化随机数生成器
-bool InitGenRandomFunction();
-bool ReleaseGenRandomFunction();
-#endif
-
-int Random2( int nMax, int nMin = 0 ); //介于 nMin~nMax-1的随机数
-LONGLONG Random2(LONGLONG nMax, LONGLONG nMin = 0);//介于 nMin~nMax-1的随机数
-DOUBLE Random2(DOUBLE dMax, DOUBLE dMin = 0.000000, int nPrecision = 0);//介于 dMin~dMax的随机数.精度取nPrecision
+YTSVRLIB_EXPORT int Random2(int nMax, int nMin = 0); //介于 nMin~nMax-1的随机数
+YTSVRLIB_EXPORT UINT Random2(UINT nMax, UINT nMin = 0); //介于 nMin~nMax-1的随机数
+YTSVRLIB_EXPORT long Random2(long nMax, long nMin = 0); //介于 nMin~nMax-1的随机数
+YTSVRLIB_EXPORT LONGLONG Random2(LONGLONG nMax, LONGLONG nMin = 0);//介于 nMin~nMax-1的随机数
+YTSVRLIB_EXPORT DOUBLE Random2(DOUBLE dMax, DOUBLE dMin = 0.000000);//介于 dMin~dMax的随机数
 
 //================================时间函数================================
 
@@ -261,22 +295,22 @@ DOUBLE Random2(DOUBLE dMax, DOUBLE dMin = 0.000000, int nPrecision = 0);//介于 d
 //		得到的时间日期字符串
 //
 //-----------------------------------------------------------
-char* GetDateTime(char *lpszTimeBuf, int nLen, char Flag='A');
-wchar_t* GetDateTime(wchar_t *lpwzTimeBuf, int nLen, char Flag='A');
+YTSVRLIB_EXPORT char* GetDateTime(char *lpszTimeBuf, int nLen, char Flag = 'A');
+YTSVRLIB_EXPORT wchar_t* GetDateTime(wchar_t *lpwzTimeBuf, int nLen, char Flag = 'A');
 
 //判断一天是不是当月的第一天
-bool IsFirstDayOfMonth( const time_t& tTime );
+YTSVRLIB_EXPORT bool IsFirstDayOfMonth(const time_t& tTime);
 
 //判断一天是不是当月的最后一天
-bool IsLastDayOfMonth( const time_t& tTime );
+YTSVRLIB_EXPORT bool IsLastDayOfMonth(const time_t& tTime);
 
 //取以nBegin开始、长度为nSize的一个随机不重复串
-std::vector<int> ProduceRandSerial(int nBegin, int nSize);
+YTSVRLIB_EXPORT std::vector<int> ProduceRandSerial(int nBegin, int nSize);
 
 //捕获异常
 #ifdef LIB_WINDOWS
 //异常捕获回调函数
-LONG __stdcall TheCrashHandlerFunction ( EXCEPTION_POINTERS * pExPtrs );
+YTSVRLIB_EXPORT LONG __stdcall TheCrashHandlerFunction(EXCEPTION_POINTERS * pExPtrs);
 
 //================================捕获异常宏定义================================
 //是否捕获异常
@@ -320,17 +354,14 @@ void LogRaiseException();
 
 
 
-void InitlogManager( LPCSTR pszFilePrefix );
-void DelLogManager();
+YTSVRLIB_EXPORT void InitlogManager(LPCSTR pszFilePrefix);
+YTSVRLIB_EXPORT void DelLogManager();
 
-#ifdef LIB_WINDOWS
-__time32_t SystemTimeToTime_t( LPSYSTEMTIME pst );
-#endif
+YTSVRLIB_EXPORT __time32_t SystemTimeToTime_t(LPSYSTEMTIME pst);
 
-int GetCPUCoreCount();// 获取cpu核心数
+YTSVRLIB_EXPORT int GetCPUCoreCount();// 获取cpu核心数
 
-int lwchartoutf8(LPCWSTR p, LPSTR pdst, int cbMultiByte);
-DWORD WINAPI    GetPrimeNumInRange(DWORD dwLow, DWORD dwHigh);
-
+YTSVRLIB_EXPORT int lwchartoutf8(LPCWSTR p, LPSTR pdst, int cbMultiByte);
+YTSVRLIB_EXPORT DWORD WINAPI GetPrimeNumInRange(DWORD dwLow, DWORD dwHigh);
 
 #endif

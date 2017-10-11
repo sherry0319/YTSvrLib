@@ -29,7 +29,7 @@ SOFTWARE.*/
 
 namespace YTSvrLib
 {
-	class CXMLDocument
+	class YTSVRLIB_EXPORT CXMLDocument
 	{
 	public:
 		CXMLDocument();

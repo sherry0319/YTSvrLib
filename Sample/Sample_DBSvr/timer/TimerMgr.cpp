@@ -1,11 +1,11 @@
 #include "stdafx.h"
 #include "TimerMgr.h"
 #include "../db/DBLogMgr.h"
-extern YTSvrLib::CServerApplication gApp;
+
 
 void CTimerMgr::SetEvent()
 {
-	gApp.SetEvent(EAppEvent::eAppTimerMgrOnTimer);
+	YTSvrLib::CServerApplication::GetInstance()->SetEvent(EAppEvent::eAppTimerMgrOnTimer);
 }
 
 CTimerMgr::CTimerMgr(void)

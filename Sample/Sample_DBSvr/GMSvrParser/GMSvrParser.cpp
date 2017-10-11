@@ -16,15 +16,15 @@ CGMSvrParser::~CGMSvrParser(void)
 
 extern time_t gTime;
 
-extern YTSvrLib::CServerApplication gApp;
+
 void CGMSvrParser::SetEvent()
 {
-	gApp.SetEvent( EAppEvent::eAppGMSvrSocketEvent );
+	YTSvrLib::CServerApplication::GetInstance()->SetEvent( EAppEvent::eAppGMSvrSocketEvent );
 }
 
 void CGMSvrParser::SetDisconnectEvent()
 {
-	gApp.SetEvent( EAppEvent::eAppGMSvrSocketDisconnectEvent );
+	YTSvrLib::CServerApplication::GetInstance()->SetEvent( EAppEvent::eAppGMSvrSocketDisconnectEvent );
 }
 
 BOOL CGMSvrParser::IsValidIP( const char* pszRemoteIP )

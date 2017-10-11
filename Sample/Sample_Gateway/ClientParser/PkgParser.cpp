@@ -32,15 +32,15 @@ CPkgParser::~CPkgParser()
 
 extern time_t gTime;
 
-extern YTSvrLib::CServerApplication gApp;
+
 void CPkgParser::SetEvent()
 {
-    gApp.SetEvent( EAppEvent::eAppClientSocketEvent );
+    YTSvrLib::CServerApplication::GetInstance()->SetEvent( EAppEvent::eAppClientSocketEvent );
 }
 
 void CPkgParser::SetDisconnectEvent()
 {
-    gApp.SetEvent( EAppEvent::eAppClientSocketDisconnectEvent );
+    YTSvrLib::CServerApplication::GetInstance()->SetEvent( EAppEvent::eAppClientSocketDisconnectEvent );
 }
 
 BOOL CPkgParser::IsValidIP( const char* pszRemoteIP )

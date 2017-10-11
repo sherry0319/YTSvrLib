@@ -35,8 +35,8 @@ SOFTWARE.*/
 
 namespace YTSvrLib
 {
-	void SetPrivateLastError(UINT nErrorCode);
-	UINT GetPrivateLastError();
+	YTSVRLIB_EXPORT void SetPrivateLastError(UINT nErrorCode);
+	YTSVRLIB_EXPORT UINT GetPrivateLastError();
 
 	typedef void(*EventProc)();//event handle function define
 
@@ -49,11 +49,11 @@ namespace YTSvrLib
 		}
 	}EVENTINFO, *PEVENTINFO;
 
-	class CServerApplication
+	class YTSVRLIB_EXPORT CServerApplication : public CSingle<CServerApplication>
 	{
 	public:
 		explicit CServerApplication();
-		~CServerApplication();
+		virtual ~CServerApplication();
 
 		// call it to enter event loop.waiting for event to handle.make sure all config has been prepaired.主线程进入阻塞状态，用于等待及处理事件，由main()调用.调用之前确保配置都已经准备完毕.
 		void Run();

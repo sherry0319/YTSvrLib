@@ -85,7 +85,7 @@ typedef LPHW_PROFILE_INFOA LPHW_PROFILE_INFO;
 
 ////////////////////////////// Classes //////////////////////////////
 
-class CExceptionLogger
+class YTSVRLIB_EXPORT CExceptionLogger
 {
 public:
 //Constructors / Destructors

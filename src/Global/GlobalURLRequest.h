@@ -32,8 +32,8 @@ namespace YTSvrLib
 
 	public:
 		static size_t curl_writer(void* data, size_t size, size_t nmemb, void* content);
-		int SendHTTPGETMessage(const char* url, std::string& outdata);
-		int SendHTTPPOSTMessage(const char* url, const char* postdata, std::string& outdata);
+		int SendHTTPGETMessage(const char* url, std::string* outdata = NULL);
+		int SendHTTPPOSTMessage(const char* url, const char* postdata, std::string* outdata = NULL);
 	private:
 		void Init();
 	private:

@@ -26,7 +26,7 @@ SOFTWARE.*/
 
 namespace YTSvrLib
 {
-	struct sSndBufferBlock : public CRecycle
+	struct YTSVRLIB_EXPORT sSndBufferBlock : public CRecycle
 	{
 		char m_szBlock[SNDBUFFER_BLOCK_SIZE];
 		int m_nDataLen;
@@ -72,11 +72,11 @@ namespace YTSvrLib
 		}
 	};
 
-	class CSendBuffer
+	class YTSVRLIB_EXPORT CSendBuffer
 	{
 	public:
 		CSendBuffer(void);
-		~CSendBuffer(void);
+		virtual ~CSendBuffer(void);
 
 		sSndBufferBlock* AllocateBlock()
 		{
@@ -193,7 +193,7 @@ namespace YTSvrLib
 	};
 
 #ifdef LIB_WINDOWS
-	class CWinsock
+	class YTSVRLIB_EXPORT CWinsock
 	{
 	public:
 		explicit CWinsock(BYTE mVers = '2', BYTE sVers = '2')

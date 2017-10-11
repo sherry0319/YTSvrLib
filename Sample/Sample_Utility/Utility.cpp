@@ -41,10 +41,6 @@ void Test_StringReplace()
 
 void Test_Random()
 {
-#ifdef LIB_WINDOWS
-	InitGenRandomFunction();
-#endif
-
 #define GET_RANDOM_COUNT	10
 	cout << "get " << GET_RANDOM_COUNT<<" random int value between 0-10000 >> " << endl;
 
@@ -57,7 +53,7 @@ void Test_Random()
 
 	for (int i = 0; i < GET_RANDOM_COUNT; ++i)
 	{
-		cout << "[" << Random2(1.0000,0.0000,4) << "] ";
+		cout << "[" << Random2(1.0000) << "] ";
 	}
 	cout << endl;
 }

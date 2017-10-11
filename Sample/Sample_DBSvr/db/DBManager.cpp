@@ -25,10 +25,10 @@ DWORD MYSQLQueryCallBack(UINT nErrorCode, ULONG nEffectRows, void* nKey, YTSvrLi
 	CDBManager::GetInstance()->ParseResponse(nErrorCode, nEffectRows, nKey, pResSet, bAsync);
     return 0;
 }
-extern YTSvrLib::CServerApplication gApp;
+
 void CDBManager::SetEvent()
 {
-	gApp.SetEvent( EAppEvent::eAppGameDB );
+	YTSvrLib::CServerApplication::GetInstance()->SetEvent( EAppEvent::eAppGameDB );
 }
 
 BOOL CDBManager::Init()

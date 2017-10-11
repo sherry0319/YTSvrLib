@@ -31,7 +31,7 @@ SOFTWARE.*/
 namespace YTSvrLib
 {
 
-	typedef struct _PKGINFO : public CRecycle
+	typedef struct YTSVRLIB_EXPORT _PKGINFO : public CRecycle
 	{
 		YTSvrLib::ITCPBASE *pSocket;
 		std::string sContent;
@@ -42,7 +42,7 @@ namespace YTSvrLib
 		}
 	}MsgPkg, *PMsgPkg;
 
-	typedef struct _DISCONNECTINFO : public CRecycle
+	typedef struct YTSVRLIB_EXPORT _DISCONNECTINFO : public CRecycle
 	{
 		EType        eType;
 		YTSvrLib::ITCPBASE* pSocket;
@@ -54,7 +54,7 @@ namespace YTSvrLib
 		}
 	}DisconnectPkg, *PDisconnectPkg;
 
-	class CParserBase
+	class YTSVRLIB_EXPORT CParserBase
 	{
 	protected:
 		CParserBase() :m_PoolMsgPkg("MsgPkg"), m_PoolDisconnectPkg("DisconnectPkg")
@@ -97,7 +97,7 @@ namespace YTSvrLib
 
 	typedef void(*CLTEVENTHTTPFUNC)(evhttp_request* req);
 
-	class CEventHttpParser
+	class YTSVRLIB_EXPORT CEventHttpParser
 	{
 	protected:
 		CEventHttpParser()
@@ -126,7 +126,7 @@ namespace YTSvrLib
 
 	typedef int(*CLTPSRFUNC)(YTSvrLib::ITCPBASE* pSocket, const char* pBuf, int nLen);
 
-	class CPkgParserBase :public CParserBase
+	class YTSVRLIB_EXPORT CPkgParserBase :public CParserBase
 	{
 	protected:
 		std::unordered_map<int, CLTPSRFUNC> m_CltMsgProcs;
@@ -145,7 +145,7 @@ namespace YTSvrLib
 	typedef std::unordered_map<std::string, std::string> CMapString;
 	typedef void(*CLTPSRHTTPFUNC)(YTSvrLib::ITCPBASE* pSocket, CMapString& mapParam);
 
-	class CHttpParserBase :public CParserBase
+	class YTSVRLIB_EXPORT CHttpParserBase :public CParserBase
 	{
 	protected:
 		std::unordered_map<int, CLTPSRHTTPFUNC> m_CltMsgProcs;

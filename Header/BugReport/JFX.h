@@ -1,6 +1,6 @@
 /*----------------------------------------------------------------------
 Debugging Applications for Microsoft .NET and Microsoft Windows
-Copyright © 1997-2003 John Robbins -- All rights reserved.
+Copyright ?1997-2003 John Robbins -- All rights reserved.
 ----------------------------------------------------------------------*/
 #ifndef _JFX_H
 #define _JFX_H
