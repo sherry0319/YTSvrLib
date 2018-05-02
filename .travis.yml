@@ -10,6 +10,6 @@ before_install:
 - sudo apt-get install -qq autoconf automake libmysqlclient-dev cmake clang
 - sudo chmod 755 install-dependencies.sh configure.sh configure_clang.sh configure_cmake.sh makeall.sh makeall_release.sh src/configure src/linux_debug/install.sh src/linux_release/install.sh
 install:
-- ./install-dependencies.sh
-- ./configure.sh
+- sudo ./install-dependencies.sh
+- sudo ./configure.sh
 script: ./makeall_release.sh
