@@ -18,6 +18,7 @@ cd libiconv-1.14
 cd ..
 unzip mysqlpp.zip
 cd mysqlpp
+chmod 755 configure
 ./configure && make install
 cd ..
 tar -xzf libwebsockets-2.4.2.tar.gz
