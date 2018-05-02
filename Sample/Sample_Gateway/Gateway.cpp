@@ -58,13 +58,13 @@ int main(int argc, char* argv[])
 #else
 	SetConsoleCtrlHandler(signal_handle_function);
 #endif // LIB_WINDOWS
-
+	auto app = YTSvrLib::CServerApplication::GetInstance();
 	//×¢²áÊÂ¼þ
-	YTSvrLib::CServerApplication::GetInstance()->RegisterEvent( EAppEvent::eAppClientSocketEvent, CPkgParser::OnMsgRecv );
-	YTSvrLib::CServerApplication::GetInstance()->RegisterEvent( EAppEvent::eAppClientSocketDisconnectEvent, CPkgParser::OnDisconnectMsgRecv );
-	YTSvrLib::CServerApplication::GetInstance()->RegisterEvent( EAppEvent::eAppServerSocketEvent, CServerParser::OnMsgRecv );
-	YTSvrLib::CServerApplication::GetInstance()->RegisterEvent( EAppEvent::eAppServerSocketDisconnectEvent, CServerParser::OnDisconnectMsgRecv );
-	YTSvrLib::CServerApplication::GetInstance()->RegisterEvent(EAppEvent::eAppTimerMgrOnTimer, CTimerMgr::OnTimer );
+	app->RegisterEvent( EAppEvent::eAppClientSocketEvent, CPkgParser::OnMsgRecv );
+	app->RegisterEvent( EAppEvent::eAppClientSocketDisconnectEvent, CPkgParser::OnDisconnectMsgRecv );
+	app->RegisterEvent( EAppEvent::eAppServerSocketEvent, CServerParser::OnMsgRecv );
+	app->RegisterEvent( EAppEvent::eAppServerSocketDisconnectEvent, CServerParser::OnDisconnectMsgRecv );
+	app->RegisterEvent(EAppEvent::eAppTimerMgrOnTimer, CTimerMgr::OnTimer );
 
 	//¶ÁÈ¡ÅäÖÃ
 	CConfig::GetInstance();
@@ -90,7 +90,7 @@ int main(int argc, char* argv[])
 	_snprintf_s( szTitle, 127, "GatewaySvr=P[%d] L[%d] Online Client=%d ...",CConfig::GetInstance()->m_nPublicSvrID,CConfig::GetInstance()->m_nLocalSvrID,CPkgParser::GetInstance()->GetCurClientCount() );
 	SetConsoleTitleA( szTitle );
 
-	YTSvrLib::CServerApplication::GetInstance()->Run();
+	app->Run();
 
 	LOG("System is closed.");
 	Sleep(3000);

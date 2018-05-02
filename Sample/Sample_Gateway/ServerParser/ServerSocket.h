@@ -1,6 +1,5 @@
 #pragma once
 #include "GWMsgDef.h"
-#include "ClientParser/ClientDef.h"
 #include "Socket/YTSocketClient.h"
 
 #define MAX_CONNECTING_RETRY	10

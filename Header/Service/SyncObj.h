@@ -266,7 +266,7 @@ namespace YTSvrLib
 		explicit CSpinLock(void);
 		~CSpinLock(void);
 
-		BOOL Lock(void);
+		void Lock(void);
 		void UnLock(void);
 	private:
 		pthread_spinlock_t m_lock;

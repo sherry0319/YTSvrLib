@@ -66,9 +66,6 @@ public:
 
 	std::string m_strWarningDest;
 	std::string m_strWarningPage;
-
-	//LARGE_INTEGER m_Freq;
-	BOOL m_bCrossSvrOpened;
 private:
 	BOOL m_bCfgInited;
 };

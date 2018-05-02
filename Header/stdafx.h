@@ -13,13 +13,7 @@
 
 #define WIN32_LEAN_AND_MEAN             // 从 Windows 头中排除极少使用的资料
 
-using namespace std;
 #include "YTSvrLib.h"
-
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 
 
 

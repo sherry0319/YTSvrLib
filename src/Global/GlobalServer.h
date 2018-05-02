@@ -85,6 +85,13 @@ typedef enum
 	eCount
 } EType;
 
+enum WSEType
+{
+	WSEType_Invalid,// 
+	WSEType_ClientAccept,// 客户端连接
+	WSEType_ClientClose,// 客户端断线
+};
+
 typedef	std::vector<std::string> CStringVct;
 
 enum EM_LOG_LEVEL
@@ -319,3 +326,5 @@ YTSVRLIB_EXPORT __time32_t time32();
 typedef DOUBLE longtime_t;
 
 YTSVRLIB_EXPORT longtime_t GetLongTime();
+
+YTSVRLIB_EXPORT void SetSysLastError(int nErrno);

@@ -107,7 +107,7 @@
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>./mysql/include/;./libevent/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./mysql/include/;./libevent/;./libwebsockets/include/;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WIN64;NDEBUG;YTSVRLIB_NO_DLL;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -123,11 +123,12 @@
     <PostBuildEvent>
       <Command>xcopy /d /i /f /y $(TargetPath) $(SolutionDir)Lib\
 xcopy /d /i /e /r /f /y $(ProjectDir)*.h $(SolutionDir)Header\
-xcopy /d /i /e /r /f /y $(ProjectDir)*.dll $(SolutionDir)Header\</Command>
+xcopy /d /i /e /r /f /y $(ProjectDir)*.dll $(SolutionDir)Header\
+svn ci $(SolutionDir)Header\ -m ""
+svn ci $(SolutionDir)Lib\ -m ""</Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>
-      </Command>
+      <Command>svn up $(SolutionDir)</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release64DLL|x64'">
@@ -140,7 +141,7 @@ xcopy /d /i /e /r /f /y $(ProjectDir)*.dll $(SolutionDir)Header\</Command>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>./mysql/include/;./libevent/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./mysql/include/;./libevent/;./libwebsockets/include/;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WIN64;NDEBUG;YTSVRLIB_MAKE_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -148,7 +149,7 @@ xcopy /d /i /e /r /f /y $(ProjectDir)*.dll $(SolutionDir)Header\</Command>
       <WarningLevel>Level4</WarningLevel>
       <TreatWarningAsError>false</TreatWarningAsError>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <DisableSpecificWarnings>4275;4505;4512;4127;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4275;4505;4512;4127;4251;4273;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ExceptionHandling>Async</ExceptionHandling>
       <ProgramDataBaseFileName>$(TargetDir)$(TargetName).pdb</ProgramDataBaseFileName>
     </ClCompile>
@@ -157,14 +158,15 @@ xcopy /d /i /e /r /f /y $(ProjectDir)*.dll $(SolutionDir)Header\</Command>
       <Command>xcopy /d /i /f /y $(OutputPath)$(TargetName).lib $(SolutionDir)Lib\
 xcopy /d /i /f /y $(OutputPath)$(TargetName).dll $(SolutionDir)Lib\
 xcopy /d /i /e /r /f /y $(ProjectDir)*.h $(SolutionDir)Header\
-xcopy /d /i /e /r /f /y $(ProjectDir)*.dll $(SolutionDir)Header\</Command>
+xcopy /d /i /e /r /f /y $(ProjectDir)*.dll $(SolutionDir)Header\
+svn ci $(SolutionDir)Header\ -m ""
+svn ci $(SolutionDir)Lib\ -m ""</Command>
     </PostBuildEvent>
     <Link>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
     <PreBuildEvent>
-      <Command>
-      </Command>
+      <Command>svn up $(SolutionDir)</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'">
@@ -177,14 +179,12 @@ xcopy /d /i /e /r /f /y $(ProjectDir)*.dll $(SolutionDir)Header\</Command>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>./mysql/include/;./libevent/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./mysql/include/;./libevent/;./libwebsockets/include/;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WIN64;DEBUG64;YTSVRLIB_NO_DLL;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AssemblerOutput>All</AssemblerOutput>
       <WarningLevel>Level4</WarningLevel>
-      <TreatWarningAsError>false</TreatWarningAsError>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <DisableSpecificWarnings>4275;4505;4512;4127;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -197,11 +197,12 @@ xcopy /d /i /e /r /f /y $(ProjectDir)*.dll $(SolutionDir)Header\</Command>
       <Command>xcopy /F /Y $(TargetPath) $(SolutionDir)Lib\
 xcopy $(ProjectDir)*.h $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
 xcopy $(ProjectDir)*.dll $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
-xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
+xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k
+svn ci $(SolutionDir)Header\ -m ""
+svn ci $(SolutionDir)Lib\ -m ""</Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>
-      </Command>
+      <Command>svn up $(SolutionDir)</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug64DLL|x64'">
@@ -214,7 +215,7 @@ xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>./mysql/include/;./libevent/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./mysql/include/;./libevent/;./libwebsockets/include/;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WIN64;DEBUG64;_LIB;YTSVRLIB_MAKE_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -235,14 +236,15 @@ xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
 xcopy /d /i /f /y $(OutputPath)$(TargetName).dll $(SolutionDir)Lib\
 xcopy $(ProjectDir)*.h $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
 xcopy $(ProjectDir)*.dll $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
-xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
+xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k
+svn ci $(SolutionDir)Header\ -m ""
+svn ci $(SolutionDir)Lib\ -m ""</Command>
     </PostBuildEvent>
     <Link>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
     <PreBuildEvent>
-      <Command>
-      </Command>
+      <Command>svn up $(SolutionDir)</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -269,7 +271,10 @@ xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
     <ClCompile Include="Service\TimerThread.cpp" />
     <ClCompile Include="Service\YTThread.cpp" />
     <ClCompile Include="Service\Utility.cpp" />
+    <ClCompile Include="sha\sha1.cpp" />
     <ClCompile Include="Socket\SendBuffer.cpp" />
+    <ClCompile Include="Socket\WebSocket\YTWSConnector.cpp" />
+    <ClCompile Include="Socket\WebSocket\YTWSServer.cpp" />
     <ClCompile Include="Socket\YTSocketBase.cpp" />
     <ClCompile Include="Socket\YTSocketClient.cpp" />
     <ClCompile Include="Socket\YTSocketConnector.cpp" />
@@ -473,6 +478,9 @@ xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
     <ClInclude Include="mysql\mysqlpp\wnp_connection.h" />
     <ClInclude Include="mysql\MYSQLRecordSet.h" />
     <ClInclude Include="Service\TimerHandler.h" />
+    <ClInclude Include="sha\sha1.h" />
+    <ClInclude Include="Socket\WebSocket\YTWSConnector.h" />
+    <ClInclude Include="Socket\WebSocket\YTWSServer.h" />
     <ClInclude Include="tinyxml\tinyxml2.h" />
     <ClInclude Include="tinyxml\XMLDocument.h" />
     <ClInclude Include="tinyxml\XMLNode.h" />

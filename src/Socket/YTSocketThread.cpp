@@ -58,9 +58,9 @@ namespace YTSvrLib
 	{
 		m_bRun = TRUE;
 
-		m_Thread = std::thread(&ITCPEVENTTHREAD::EventLoop,this);
+		std::thread t(&ITCPEVENTTHREAD::EventLoop,this);
 
-		m_Thread.detach();
+		t.detach();
 	}
 
 	void ITCPEVENTTHREAD::CleanThread()

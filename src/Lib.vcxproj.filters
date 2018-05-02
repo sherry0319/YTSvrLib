@@ -114,6 +114,12 @@
     <Filter Include="MySQL\mysqlpp">
       <UniqueIdentifier>{53aae19f-bbab-47e9-8e04-f3431a7aa6dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sha">
+      <UniqueIdentifier>{3cd87f59-ae06-4e30-9c09-44ab2f192faa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Socket\WebSocket">
+      <UniqueIdentifier>{c105e1ef-5649-4b40-9ee7-2fcc6b7b201a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -229,6 +235,15 @@
     </ClCompile>
     <ClCompile Include="mysql\MYSQLRecordSet.cpp">
       <Filter>MySQL</Filter>
+    </ClCompile>
+    <ClCompile Include="sha\sha1.cpp">
+      <Filter>sha</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket\WebSocket\YTWSServer.cpp">
+      <Filter>Socket\WebSocket</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket\WebSocket\YTWSConnector.cpp">
+      <Filter>Socket\WebSocket</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1158,6 +1173,15 @@
     </ClInclude>
     <ClInclude Include="mysql\MYSQLRecordSet.h">
       <Filter>MySQL</Filter>
+    </ClInclude>
+    <ClInclude Include="sha\sha1.h">
+      <Filter>sha</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\WebSocket\YTWSConnector.h">
+      <Filter>Socket\WebSocket</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\WebSocket\YTWSServer.h">
+      <Filter>Socket\WebSocket</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

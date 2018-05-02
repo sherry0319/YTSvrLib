@@ -13,8 +13,6 @@ DWORD MYSQLQueryCallBack(UINT nErrorCode, ULONG nEffectRows, void* nKey, YTSvrLi
 	return 0;
 }
 
-
-
 CDBManager::CDBManager():CMYSQLManagerBase()
 {
 #undef DB_PARSE

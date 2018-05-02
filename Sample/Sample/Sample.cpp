@@ -17,8 +17,6 @@
 #include <sys/time.h>
 #endif // LIB_WINDOWS
 
-
-
 void DestroyAllObj()
 {
 	// 服务器进程销毁时处理
@@ -65,11 +63,13 @@ int main(int argc, char* argv[])
 #else
 	SetConsoleCtrlHandler(signal_handle_function);
 #endif // LIB_WINDOWS
+
+	auto app = YTSvrLib::CServerApplication::GetInstance();
 	//注册事件
-	YTSvrLib::CServerApplication::GetInstance()->RegisterEvent( EAppEvent::eAppGWSvrSocketEvent, CGWSvrParser::OnMsgRecv );
-	YTSvrLib::CServerApplication::GetInstance()->RegisterEvent( EAppEvent::eAppGWSvrSocketDisconnectEvent, CGWSvrParser::OnDisconnectMsgRecv );
-	YTSvrLib::CServerApplication::GetInstance()->RegisterEvent( EAppEvent::eAppGameDB, CDBManager::OnDataRecv );
-	YTSvrLib::CServerApplication::GetInstance()->RegisterEvent( EAppEvent::eAppTimerMgrOnTimer, CTimerMgr::OnTimer );
+	app->RegisterEvent(EAppEvent::eAppGWSvrSocketEvent, CGWSvrParser::OnMsgRecv);
+	app->RegisterEvent(EAppEvent::eAppGWSvrSocketDisconnectEvent, CGWSvrParser::OnDisconnectMsgRecv);
+	app->RegisterEvent(EAppEvent::eAppGameDB, CDBManager::OnDataRecv);
+	app->RegisterEvent(EAppEvent::eAppTimerMgrOnTimer, CTimerMgr::OnTimer);
 
 	CConfig::GetInstance();
 	CDBManager::GetInstance()->SetConnection(	CConfig::GetInstance()->m_sDBConnectInfo.m_strMySQLDB.c_str(),
@@ -89,7 +89,7 @@ int main(int argc, char* argv[])
 
 	CDBManager::GetInstance()->OnServerStart();
 
-	YTSvrLib::CServerApplication::GetInstance()->Run();
+	app->Run();
 
 	return 0;
 }

@@ -53,7 +53,7 @@ void Test_Random()
 
 	for (int i = 0; i < GET_RANDOM_COUNT; ++i)
 	{
-		cout << "[" << Random2(1.0000) << "] ";
+		cout << "[" << Random2(1.0000,0.0000) << "] ";
 	}
 	cout << endl;
 }

@@ -23,7 +23,7 @@ SOFTWARE.*/
 
 #ifndef _MYSQLDBSYS_H_
 #define _MYSQLDBSYS_H_
-
+#pragma warning(disable:4005)
 #include "mysqlpp/mysql++.h"
 #include "MYSQLCommand.h"
 #include "MYSQLRecordSet.h"

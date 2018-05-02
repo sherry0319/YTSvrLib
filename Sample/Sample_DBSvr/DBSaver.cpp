@@ -60,12 +60,12 @@ int main(int argc, char* argv[])
 #else
 	SetConsoleCtrlHandler(signal_handle_function);
 #endif // LIB_WINDOWS
-
+	auto app = YTSvrLib::CServerApplication::GetInstance();
 	//×¢²áÊÂ¼þ
-	YTSvrLib::CServerApplication::GetInstance()->RegisterEvent( EAppEvent::eAppGMSvrSocketEvent, CGMSvrParser::OnMsgRecv );
-	YTSvrLib::CServerApplication::GetInstance()->RegisterEvent( EAppEvent::eAppGMSvrSocketDisconnectEvent, CGMSvrParser::OnDisconnectMsgRecv );
-	YTSvrLib::CServerApplication::GetInstance()->RegisterEvent( EAppEvent::eAppGameDB, CDBManager::OnDataRecv );
-	YTSvrLib::CServerApplication::GetInstance()->RegisterEvent(EAppEvent::eAppTimerMgrOnTimer, CTimerMgr::OnTimer );
+	app->RegisterEvent(EAppEvent::eAppGMSvrSocketEvent, CGMSvrParser::OnMsgRecv);
+	app->RegisterEvent(EAppEvent::eAppGMSvrSocketDisconnectEvent, CGMSvrParser::OnDisconnectMsgRecv);
+	app->RegisterEvent(EAppEvent::eAppGameDB, CDBManager::OnDataRecv);
+	app->RegisterEvent(EAppEvent::eAppTimerMgrOnTimer, CTimerMgr::OnTimer);
 
 	//¶ÁÈ¡ÅäÖÃ
 	CConfig::GetInstance();
@@ -100,7 +100,7 @@ int main(int argc, char* argv[])
 		CDBManager::GetInstance()->Init();
 	}
 
-	YTSvrLib::CServerApplication::GetInstance()->Run();
+	app->Run();
 	LOG("System is closing...");
 	CDBManager::GetInstance()->WaitForAllRequestDone();
 

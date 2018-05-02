@@ -64,38 +64,18 @@ YTSVRLIB_EXPORT inline void StringLwr(std::string& s)
 //
 //-------------------------------------------------
 YTSVRLIB_EXPORT char* Trim(char* lpszStr);
-YTSVRLIB_EXPORT wchar_t* TrimW(wchar_t* lpswStr);
-
-//--------------------------------------------------
-//
-//	char* TrimR(char *lpszStr)
-//
-//	功能:	截去字符串lpszStr尾部的空字符
-//			空字符包括 ' ','\f','\r','\n','\t','\v'
-//
-//	参数:	lpszStr -- 要处理的字符串
-//
-//	返回:	处理后的字串
-//
-//--------------------------------------------------
+YTSVRLIB_EXPORT wchar_t* Trim(wchar_t* lpswStr);
 YTSVRLIB_EXPORT char* TrimR(char* lpszStr);
-YTSVRLIB_EXPORT wchar_t* TrimRW(wchar_t* lpswStr);
-
-
-//--------------------------------------------------
-//
-//	char* TrimL(char *lpszStr)
-//
-//	功能:	截去字符串lpszStr头部的空字符
-//			空字符包括 ' ','\f','\r','\n','\t','\v'	
-//
-//	参数:	lpszStr -- 要处理的字符串	
-//
-//	返回:	处理后的字串
-//
-//--------------------------------------------------
+YTSVRLIB_EXPORT wchar_t* TrimR(wchar_t* lpswStr);
 YTSVRLIB_EXPORT char* TrimL(char* lpszStr);
-YTSVRLIB_EXPORT wchar_t* TrimLW(wchar_t* lpswStr);
+YTSVRLIB_EXPORT wchar_t* TrimL(wchar_t* lpswStr);
+
+YTSVRLIB_EXPORT string& Trim(string& str);
+YTSVRLIB_EXPORT wstring& Trim(wstring& str);
+YTSVRLIB_EXPORT string& TrimR(string& str);
+YTSVRLIB_EXPORT wstring& TrimR(wstring& str);
+YTSVRLIB_EXPORT string& TrimL(string& str);
+YTSVRLIB_EXPORT wstring& TrimL(wstring& str);
 
 //--------------------------------------------------
 //	功能:	以lpszDelimiter中包含的字符分割字串lpszStr,
@@ -226,26 +206,6 @@ YTSVRLIB_EXPORT BOOL WChar2Ansi(LPCWSTR lpcwszStr, LPSTR lpszStr, int nStrLenMax
 // ANSI字符串强转多字节字符串.注意.编码不换
 YTSVRLIB_EXPORT BOOL Ansi2WChar(LPCSTR lpszStr, LPWSTR lpwszStr, int nWStrLenMax);
 
-template<class T>
-T S2Var(const std::string& strValue)
-{
-    T Result;
-    std::stringstream s;
-    s = strValue;
-    s >> Result;
-    return Result;
-}
-
-template<class T>
-std::string Var2S(const T nValue)
-{
-    std::string Result;
-    std::stringstream s;
-    s << nValue;
-	Result = s;
-    return Result;
-}
-
 //================================数学计算函数================================
 class RandomHelper
 {
@@ -309,6 +269,21 @@ YTSVRLIB_EXPORT std::vector<int> ProduceRandSerial(int nBegin, int nSize);
 
 //捕获异常
 #ifdef LIB_WINDOWS
+class YTSVRLIB_EXPORT CWinsock
+{
+public:
+	explicit CWinsock(BYTE mVers = '2', BYTE sVers = '2')
+	{
+		WSADATA      wsd;
+
+		::WSAStartup(MAKEWORD(mVers, sVers), &wsd);
+	}
+	virtual ~CWinsock(void)
+	{
+		::WSACleanup();
+	}
+};
+
 //异常捕获回调函数
 YTSVRLIB_EXPORT LONG __stdcall TheCrashHandlerFunction(EXCEPTION_POINTERS * pExPtrs);
 

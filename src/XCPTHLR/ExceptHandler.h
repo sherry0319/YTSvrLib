@@ -54,7 +54,10 @@ to maintain a single distribution point for the source code.
 //#include <dbghelp.h>
 #include <tlhelp32.h>
 #include <psapi.h>
+#pragma warning( push )
+#pragma warning(disable:4005)
 #include <Wtsapi32.h>
+#pragma warning( pop )
 
 //Taken from WinBase.h 
 #ifndef HW_PROFILE_GUIDLEN

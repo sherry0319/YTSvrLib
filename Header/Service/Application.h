@@ -63,6 +63,13 @@ namespace YTSvrLib
 
 		// add a new event to event loop.and activate the event.
 		void SetEvent(DWORD dwEventIndex);
+
+		void SetLogLevel(EM_LOG_LEVEL emLogLevel);
+
+		EM_LOG_LEVEL GetLogLevel() const
+		{
+			return m_emLogLevel;
+		}
 	private:
 		// 初始化服务器
 		void GlobalInit();
@@ -89,6 +96,7 @@ namespace YTSvrLib
 		std::list<DWORD>		m_listEventQueue;// event queue.事件队列
 		YTSvrLib::CLock			m_lockQueue;// lock for event queue.事件队列锁
 		YTSvrLib::CSemaphore	m_semQueue;// sem for event queue.事件队列信号量
+		EM_LOG_LEVEL			m_emLogLevel;// 开启的日志等级.高于这个级别的日志才会记录
 	};
 }
 

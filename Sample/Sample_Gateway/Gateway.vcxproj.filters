@@ -27,9 +27,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ClientParser\ClientDef.h">
-      <Filter>ClientParser</Filter>
-    </ClInclude>
     <ClInclude Include="ClientParser\GameSocket.h">
       <Filter>ClientParser</Filter>
     </ClInclude>
@@ -44,9 +41,6 @@
     </ClInclude>
     <ClInclude Include="ServerParser\GWMsgDef.h">
       <Filter>ServerParser</Filter>
-    </ClInclude>
-    <ClInclude Include="ClientParser\MsgRetDef.h">
-      <Filter>ClientParser</Filter>
     </ClInclude>
     <ClInclude Include="timer\TimerMgr.h">
       <Filter>Timer</Filter>

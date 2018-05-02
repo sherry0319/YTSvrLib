@@ -1001,3 +1001,12 @@ longtime_t GetLongTime()
 
 	return tNow;
 }
+
+void SetSysLastError(int nErrno)
+{
+#ifdef LIB_WINDOWS
+	SetLastError((DWORD)nErrno);
+#else
+	errno = nErrno;
+#endif
+}

@@ -24,6 +24,175 @@ SOFTWARE.*/
 
 namespace YTSvrLib
 {
+	CWSSendBuffer::CWSSendBuffer() : m_poolBlock("WSSndBuffBlock")
+	{
+		m_pBlockSending = NULL;
+		m_nQueueLenMax = 0;
+	}
+
+	CWSSendBuffer::~CWSSendBuffer()
+	{
+
+	}
+
+	WSSndBuffBlock* CWSSendBuffer::AllocateBlock()
+	{
+		return m_poolBlock.ApplyObj();
+	}
+	void CWSSendBuffer::ReleaseBlock(WSSndBuffBlock* pObj)
+	{
+		m_poolBlock.ReclaimObj(pObj);
+	}
+
+	BOOL CWSSendBuffer::IsSending()
+	{
+		return (m_pBlockSending != NULL);
+	}
+
+	BOOL CWSSendBuffer::AddBlock(const char* buf, int len, lws_write_protocol type)
+	{
+		if (m_pBlockSending == NULL)
+		{
+			m_pBlockSending = AllocateBlock();
+			if (m_pBlockSending == NULL)
+			{
+				LOG("Allocate sSndBufferBlock Failed : %d", GetLastError());
+				return FALSE;
+			}
+			m_pBlockSending->SetMsg(buf, len, type);
+		}
+		else if (IsQueueFulled())
+		{
+			LOG("The Queue Is Fulled CurQueue=%d MaxQueue=%d", GetQueueLen(), m_nQueueLenMax);
+			return FALSE;
+		}
+		else
+		{
+			WSSndBuffBlock* pBlock = AllocateBlock();
+			if (pBlock == NULL)
+			{
+				LOG("Allocate sSndBufferBlock Failed : %d", GetLastError());
+				return FALSE;
+			}
+			pBlock->SetMsg(buf, len, type);
+			m_queueSnd.push_back(pBlock);
+		}
+		return TRUE;
+	}
+	const char* CWSSendBuffer::GetDataToSend()
+	{
+		if (m_pBlockSending)
+			return m_pBlockSending->GetMsgData();
+		return NULL;
+	}
+	int CWSSendBuffer::GetDataLenToSend()
+	{
+		if (m_pBlockSending)
+			return m_pBlockSending->GetMsgLen();
+		return 0;
+	}
+	lws_write_protocol CWSSendBuffer::GetDataTypeToSend()
+	{
+		if (m_pBlockSending)
+			return m_pBlockSending->m_type;
+		return LWS_WRITE_TEXT;
+	}
+	BOOL CWSSendBuffer::OnSend()
+	{	//仍有数据要发送，返回TRUE，否则返回FALSE
+		if (m_pBlockSending)
+		{
+			ReleaseBlock(m_pBlockSending);
+			m_pBlockSending = NULL;
+		}
+		while (m_pBlockSending == NULL && m_queueSnd.size() > 0)
+		{
+			m_pBlockSending = m_queueSnd.pop_front();
+			if (m_pBlockSending->GetMsgLen() <= 0)
+			{
+				ReleaseBlock(m_pBlockSending);
+				m_pBlockSending = NULL;
+			}
+		}
+		if (m_pBlockSending)
+			return TRUE;
+		return FALSE;
+	}
+	void CWSSendBuffer::Clear()
+	{
+		if (m_pBlockSending)
+		{
+			ReleaseBlock(m_pBlockSending);
+			m_pBlockSending = NULL;
+		}
+		while (m_queueSnd.size() > 0)
+		{
+			WSSndBuffBlock* pBlock = m_queueSnd.pop_front();
+			if (pBlock)
+			{
+				ReleaseBlock(pBlock);
+				pBlock = NULL;
+			}
+		}
+	}
+	int CWSSendBuffer::GetQueueLen()
+	{
+		return m_queueSnd.size();
+	}
+	void CWSSendBuffer::SetQueueLenMax(int nMax)
+	{
+		m_nQueueLenMax = nMax;
+	}
+	BOOL CWSSendBuffer::IsQueueFulled()
+	{
+		if (m_nQueueLenMax <= 0)
+			return FALSE;
+		return (GetQueueLen() > m_nQueueLenMax);
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+
+	void sSndBufferBlock::Init()
+	{
+		m_nDataLen = 0;
+	}
+	char* sSndBufferBlock::GetBlock()
+	{
+		return m_szBlock;
+	}
+	int sSndBufferBlock::GetDataLen()
+	{
+		return m_nDataLen;
+	}
+	int sSndBufferBlock::SetData(LPCSTR pszData, int nLen)
+	{
+		if (pszData == NULL || nLen <= 0)
+			return 0;
+		if (nLen > SNDBUFFER_BLOCK_SIZE)
+		{
+			memcpy(m_szBlock, pszData, SNDBUFFER_BLOCK_SIZE);
+			m_nDataLen = SNDBUFFER_BLOCK_SIZE;
+		}
+		else
+		{
+			memcpy(m_szBlock, pszData, nLen);
+			m_nDataLen = nLen;
+		}
+		return m_nDataLen;
+	}
+	void sSndBufferBlock::OnSend(int nLength)
+	{
+		if (nLength >= m_nDataLen)
+		{
+			m_nDataLen = 0;
+			return;
+		}
+		m_nDataLen -= nLength;
+		memcpy(m_szBlock, m_szBlock + nLength, m_nDataLen);
+		return;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+
 	CSendBuffer::CSendBuffer(void) : m_poolBlock("sSndBufferBlock")
 	{
 		m_pBlockSending = NULL;
@@ -38,5 +207,111 @@ namespace YTSvrLib
 		if (m_nQueueLenMax <= 0)
 			return FALSE;
 		return (GetQueueLen() > m_nQueueLenMax);
+	}
+
+	sSndBufferBlock* CSendBuffer::AllocateBlock()
+	{
+		return m_poolBlock.ApplyObj();
+	}
+	void CSendBuffer::ReleaseBlock(sSndBufferBlock* pObj)
+	{
+		m_poolBlock.ReclaimObj(pObj);
+	}
+
+	BOOL CSendBuffer::IsSending()
+	{
+		return (m_pBlockSending != NULL);
+	}
+	///向缓冲区中增加一段内容，
+	BOOL CSendBuffer::AddBuffer(const char* buf, int nSize)
+	{
+		int nWrote = 0;
+		if (m_pBlockSending == NULL)
+		{
+			m_pBlockSending = AllocateBlock();
+			if (m_pBlockSending == NULL)
+			{
+				LOG("Allocate sSndBufferBlock Failed : %d", GetLastError());
+				return FALSE;
+			}
+			nWrote += m_pBlockSending->SetData(buf + nWrote, nSize - nWrote);
+		}
+		else if (IsQueueFulled())
+		{
+			LOG("The Queue Is Fulled CurQueue=%d MaxQueue=%d", GetQueueLen(), m_nQueueLenMax);
+			return FALSE;
+		}
+		while (nWrote < nSize)
+		{
+			sSndBufferBlock* pBlock = AllocateBlock();
+			if (pBlock == NULL)
+			{
+				LOG("Allocate sSndBufferBlock Failed : %d", GetLastError());
+				return FALSE;
+			}
+			nWrote += pBlock->SetData(buf + nWrote, nSize - nWrote);
+			m_queueSnd.push_back(pBlock);
+		}
+		return TRUE;
+	}
+	char* CSendBuffer::GetDataToSend()
+	{
+		if (m_pBlockSending)
+			return m_pBlockSending->GetBlock();
+		return NULL;
+	}
+	int CSendBuffer::GetDataLenToSend()
+	{
+		if (m_pBlockSending)
+			return m_pBlockSending->GetDataLen();
+		return 0;
+	}
+	BOOL CSendBuffer::OnSend(int nLength)
+	{	//仍有数据要发送，返回TRUE，否则返回FALSE
+		if (m_pBlockSending)
+		{
+			m_pBlockSending->OnSend(nLength);
+			if (m_pBlockSending->GetDataLen() > 0)
+				return TRUE;
+			ReleaseBlock(m_pBlockSending);
+			m_pBlockSending = NULL;
+		}
+		while (m_pBlockSending == NULL && m_queueSnd.size() > 0)
+		{
+			m_pBlockSending = m_queueSnd.pop_front();
+			if (m_pBlockSending->GetDataLen() <= 0)
+			{
+				ReleaseBlock(m_pBlockSending);
+				m_pBlockSending = NULL;
+			}
+		}
+		if (m_pBlockSending)
+			return TRUE;
+		return FALSE;
+	}
+	void CSendBuffer::Clear()
+	{
+		if (m_pBlockSending)
+		{
+			ReleaseBlock(m_pBlockSending);
+			m_pBlockSending = NULL;
+		}
+		while (m_queueSnd.size() > 0)
+		{
+			sSndBufferBlock* pBlock = m_queueSnd.pop_front();
+			if (pBlock)
+			{
+				ReleaseBlock(pBlock);
+				pBlock = NULL;
+			}
+		}
+	}
+	int CSendBuffer::GetQueueLen()
+	{
+		return m_queueSnd.size();
+	}
+	void CSendBuffer::SetQueueLenMax(int nMax)
+	{
+		m_nQueueLenMax = nMax;
 	}
 }

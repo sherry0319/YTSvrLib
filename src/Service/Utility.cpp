@@ -269,10 +269,10 @@ char* Trim(char* lpszStr)
 
     return lpszStr;
 }
-wchar_t* TrimW(wchar_t* lpswStr )
+wchar_t* Trim(wchar_t* lpswStr )
 {
-	TrimLW( lpswStr );
-	TrimRW( lpswStr );
+	TrimL( lpswStr );
+	TrimR( lpswStr );
 	return lpswStr;
 }
 char* TrimL(char *lpszStr)
@@ -299,7 +299,7 @@ char* TrimL(char *lpszStr)
 
     return lpszStr;
 }
-wchar_t* TrimLW(wchar_t* lpswStr )
+wchar_t* TrimL(wchar_t* lpswStr )
 {
 	if(lpswStr == NULL)	
 	{
@@ -348,7 +348,7 @@ char* TrimR(char *lpszStr)
 
     return lpszStr;
 }
-wchar_t* TrimRW(wchar_t* lpswStr)
+wchar_t* TrimR(wchar_t* lpswStr)
 {
 	if(lpswStr == NULL)
 	{
@@ -371,6 +371,97 @@ wchar_t* TrimRW(wchar_t* lpswStr)
 
 	return lpswStr;
 }
+
+string& Trim(string& str)
+{
+	TrimL(str);
+	TrimR(str);
+	return str;
+}
+
+wstring& Trim(wstring& str)
+{
+	TrimL(str);
+	TrimR(str);
+	return str;
+}
+
+string& TrimR(string& str)
+{
+	int len = 0;
+	for (int i = (int)(str.size()-1); i >= 0; --i)
+	{
+		if (str[i] == '\r' || str[i] == '\n' || str[i] == '\t' || str[i] == ' ')
+		{
+			len++;
+		}
+		else
+		{
+			break;
+		}
+	}
+	str.erase(str.size()-len, len);
+
+	return str;
+}
+
+wstring& TrimR(wstring& str)
+{
+	int len = 0;
+	for (int i = (int) (str.size() - 1); i >= 0; --i)
+	{
+		if (str[i] == L'\r' || str[i] == L'\n' || str[i] == L'\t' || str[i] == L' ')
+		{
+			len++;
+		}
+		else
+		{
+			break;
+		}
+	}
+	str.erase(str.size() - len, len);
+
+	return str;
+}
+
+string& TrimL(string& str)
+{
+	int len = 0;
+	for (size_t i = 0; i < str.size(); ++i)
+	{
+		if (str[i] == '\r' || str[i] == '\n' || str[i] == '\t' || str[i] == ' ')
+		{
+			len++;
+		}
+		else
+		{
+			break;
+		}
+	}
+	str.erase(0, len);
+
+	return str;
+}
+
+wstring& TrimL(wstring& str)
+{
+	int len = 0;
+	for (size_t i = 0; i < str.size(); ++i)
+	{
+		if (str[i] == L'\r' || str[i] == L'\n' || str[i] == L'\t' || str[i] == L' ')
+		{
+			len++;
+		}
+		else
+		{
+			break;
+		}
+	}
+	str.erase(0, len);
+
+	return str;
+}
+
 char* GetDateTime(char *lpszTimeBuf, int nLen, char Flag)
 {
     if(lpszTimeBuf == NULL) return NULL;
@@ -419,18 +510,18 @@ char* GetDateTime(char *lpszTimeBuf, int nLen, char Flag)
 	switch (Flag)
 	{
 	case 'A'://2003-10-20 11:20:35_0520
-		sprintf_s(lpszTimeBuf, nLen, "%d-%.2d-%.2d %.2d:%.2d:%.2d_%.6d",
+		sprintf_s(lpszTimeBuf, nLen, "%d-%.2d-%.2d %.2d:%.2d:%.2d_%.6ld",
 				  (timenow.tm_year+1900),(timenow.tm_mon+1),timenow.tm_mday,timenow.tm_hour,timenow.tm_min,timenow.tm_sec,tv.tv_usec);
 		break;
 	case 'S'://10-20 11:20:35_0520
-		sprintf_s(lpszTimeBuf, nLen, "%.2d-%.2d %.2d:%.2d:%.2d_%.6d",
+		sprintf_s(lpszTimeBuf, nLen, "%.2d-%.2d %.2d:%.2d:%.2d_%.6ld",
 				 (timenow.tm_mon+1),timenow.tm_mday,timenow.tm_hour,timenow.tm_min,timenow.tm_sec,tv.tv_usec);
 		break;
 	case 'D'://2003-10-20
 		sprintf_s(lpszTimeBuf, nLen, "%d-%.2d-%.2d", (timenow.tm_year+1900),(timenow.tm_mon+1),timenow.tm_mday);
 		break;
 	case 'T'://11:20:35
-		sprintf_s(lpszTimeBuf, nLen, "%.2d:%.2d:%.2d_%.6d", timenow.tm_hour,timenow.tm_min,timenow.tm_sec,tv.tv_usec);
+		sprintf_s(lpszTimeBuf, nLen, "%.2d:%.2d:%.2d_%.6ld", timenow.tm_hour,timenow.tm_min,timenow.tm_sec,tv.tv_usec);
 		break;
 	case 'W'://2003-10
 		sprintf_s(lpszTimeBuf, nLen, "%d-%.2d", (timenow.tm_year+1900),(timenow.tm_mon+1));

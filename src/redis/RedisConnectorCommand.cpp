@@ -70,7 +70,7 @@ namespace YTSvrLib
 	BOOL CRedisConnectorPool::EXPIRE(const char* key, __time32_t tSec, int nHash /* = 0 */)
 	{
 		char szCmd[1024] = { 0 };
-		_snprintf_s(szCmd, 1023, "EXPIRE %s %d", key, tSec);
+		_snprintf_s(szCmd, 1023, "EXPIRE %s %ld", key, tSec);
 
 		return ExcuteAsyncCommand(nHash, szCmd);
 	}
@@ -78,7 +78,7 @@ namespace YTSvrLib
 	BOOL CRedisConnectorPool::EXPIREAT(const char* key, __time32_t tExpired, int nHash /* = 0 */)
 	{
 		char szCmd[1024] = { 0 };
-		_snprintf_s(szCmd, 1023, "EXPIREAT %s %d", key, tExpired);
+		_snprintf_s(szCmd, 1023, "EXPIREAT %s %ld", key, tExpired);
 
 		return ExcuteAsyncCommand(nHash, szCmd);
 	}

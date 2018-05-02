@@ -49,6 +49,11 @@ namespace YTSvrLib
 	{
 		m_lockThread.Lock();
 
+		if (IsThreadRuning())
+		{
+			m_lockThread.UnLock();
+			return TRUE;
+		}
 		if (IsRuning())
 		{
 			m_lockThread.UnLock();
@@ -56,6 +61,8 @@ namespace YTSvrLib
 		}
 
 		ITCPEVENTTHREAD::CreateThread();
+
+		m_bThreadRuning = TRUE;
 
 		m_lockThread.UnLock();
 

@@ -58,6 +58,7 @@ namespace YTSvrLib
 
 	CServerApplication::CServerApplication()
 	{
+		m_emLogLevel = LOG_LEVEL_TRACE;
 #ifdef LIB_WINDOWS
 		WSADATA      wsd;
 		::WSAStartup(MAKEWORD((BYTE) 2, (BYTE) 2), &wsd);
@@ -74,6 +75,11 @@ namespace YTSvrLib
 #endif // LIB_WINDOWS
 
 		GlobalInit();
+	}
+
+	void CServerApplication::SetLogLevel(EM_LOG_LEVEL emLogLevel)
+	{
+		m_emLogLevel = emLogLevel;
 	}
 
 	CServerApplication::~CServerApplication()

@@ -30,7 +30,7 @@ namespace YTSvrLib
 		if (dwKey == NULL)
 		{
 
-			LOG("CMYSQLManagerBase::ParseResponseÊý¾Ý¿â²Ù×÷Ê§°Ü");
+			LOG("CMYSQLManagerBase::ParseResponse Database Handle Failed");
 			if (pResSet)
 			{
 				m_DBSys.ReclaimRecSet(pResSet);

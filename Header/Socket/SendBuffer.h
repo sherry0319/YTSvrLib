@@ -22,54 +22,107 @@ SOFTWARE.*/
 #pragma once
 #include "../stl/wqueue.h"
 
+#pragma warning( push )
+#pragma warning(disable:4273)
+#pragma warning(disable:4100)
+#include "libwebsockets.h"
+#pragma warning( pop )
+
 #define SNDBUFFER_BLOCK_SIZE	1024
 
 namespace YTSvrLib
 {
+	struct YTSVRLIB_EXPORT WSSndBuffBlock : public CRecycle
+	{
+		std::string m_msg;
+		lws_write_protocol m_type;
+
+		virtual void Init()
+		{
+			m_msg.clear();
+			m_msg.shrink_to_fit();
+			m_type = LWS_WRITE_TEXT;
+		}
+
+		std::string& GetMsg()
+		{
+			return m_msg;
+		}
+
+		const char* GetMsgData()
+		{// 用libwebsockets发送者要自己预留出填充帧头部信息的空间.见:https://libwebsockets.org/lws-api-doc-master/html/group__sending-data.html 中的 IMPORTANT NOTICE!
+			return (m_msg.c_str() + LWS_PRE);
+		}
+
+		int GetMsgLen()
+		{// 用libwebsockets发送者要自己预留出填充帧头部信息的空间.见:https://libwebsockets.org/lws-api-doc-master/html/group__sending-data.html 中的 IMPORTANT NOTICE!
+			return (int) (m_msg.size() - LWS_PRE);
+		}
+
+		void SetMsg(const char* msg, int len, lws_write_protocol type)
+		{
+			std::string prefix;
+			prefix.assign(LWS_PRE, '\0');
+			std::string real;
+			real.assign(msg, len);
+
+			m_msg = prefix + real;
+			m_type = type;
+		}
+	};
+
+	class YTSVRLIB_EXPORT CWSSendBuffer
+	{
+	public:
+		CWSSendBuffer();
+		virtual ~CWSSendBuffer();
+
+	public:
+		WSSndBuffBlock* AllocateBlock();
+		void ReleaseBlock(WSSndBuffBlock* pObj);
+
+		BOOL IsSending();
+
+		BOOL AddBlock(const char* buf, int len, lws_write_protocol type);
+
+		const char* GetDataToSend();
+
+		int GetDataLenToSend();
+
+		lws_write_protocol GetDataTypeToSend();
+
+		BOOL OnSend();
+
+		void Clear();
+
+		int GetQueueLen();
+
+		void SetQueueLenMax(int nMax);
+
+		BOOL IsQueueFulled();
+	private:
+		WSSndBuffBlock* m_pBlockSending;
+		CWQueue<WSSndBuffBlock*> m_queueSnd;
+		int m_nQueueLenMax;
+		CPool<WSSndBuffBlock, 64> m_poolBlock;
+	};
+
+	//////////////////////////////////////////////////////////////////////////
+
 	struct YTSVRLIB_EXPORT sSndBufferBlock : public CRecycle
 	{
 		char m_szBlock[SNDBUFFER_BLOCK_SIZE];
 		int m_nDataLen;
 
-		virtual void Init()
-		{
-			m_nDataLen = 0;
-		}
-		char* GetBlock()
-		{
-			return m_szBlock;
-		}
-		int GetDataLen()
-		{
-			return m_nDataLen;
-		}
-		int SetData(LPCSTR pszData, int nLen)
-		{
-			if (pszData == NULL || nLen <= 0)
-				return 0;
-			if (nLen > SNDBUFFER_BLOCK_SIZE)
-			{
-				memcpy(m_szBlock, pszData, SNDBUFFER_BLOCK_SIZE);
-				m_nDataLen = SNDBUFFER_BLOCK_SIZE;
-			}
-			else
-			{
-				memcpy(m_szBlock, pszData, nLen);
-				m_nDataLen = nLen;
-			}
-			return m_nDataLen;
-		}
-		void OnSend(int nLength)
-		{
-			if (nLength >= m_nDataLen)
-			{
-				m_nDataLen = 0;
-				return;
-			}
-			m_nDataLen -= nLength;
-			memcpy(m_szBlock, m_szBlock + nLength, m_nDataLen);
-			return;
-		}
+		virtual void Init();
+
+		char* GetBlock();
+
+		int GetDataLen();
+
+		int SetData(LPCSTR pszData, int nLen);
+
+		void OnSend(int nLength);
 	};
 
 	class YTSVRLIB_EXPORT CSendBuffer
@@ -78,111 +131,27 @@ namespace YTSvrLib
 		CSendBuffer(void);
 		virtual ~CSendBuffer(void);
 
-		sSndBufferBlock* AllocateBlock()
-		{
-			return m_poolBlock.ApplyObj();
-		}
-		void ReleaseBlock(sSndBufferBlock* pObj)
-		{
-			m_poolBlock.ReclaimObj(pObj);
-		}
+		sSndBufferBlock* AllocateBlock();
 
-		BOOL IsSending()
-		{
-			return (m_pBlockSending != NULL);
-		}
+		void ReleaseBlock(sSndBufferBlock* pObj);
+
+		BOOL IsSending();
+
 		///向缓冲区中增加一段内容，
-		BOOL AddBuffer(const char* buf, int nSize)
-		{
-			int nWrote = 0;
-			if (m_pBlockSending == NULL)
-			{
-				m_pBlockSending = AllocateBlock();
-				if (m_pBlockSending == NULL)
-				{
-					LOG("Allocate sSndBufferBlock Failed : %d", GetLastError());
-					return FALSE;
-				}
-				nWrote += m_pBlockSending->SetData(buf + nWrote, nSize - nWrote);
-			}
-			else if (IsQueueFulled())
-			{
-				LOG("The Queue Is Fulled CurQueue=%d MaxQueue=%d", GetQueueLen(), m_nQueueLenMax);
-				return FALSE;
-			}
-			while (nWrote < nSize)
-			{
-				sSndBufferBlock* pBlock = AllocateBlock();
-				if (pBlock == NULL)
-				{
-					LOG("Allocate sSndBufferBlock Failed : %d", GetLastError());
-					return FALSE;
-				}
-				nWrote += pBlock->SetData(buf + nWrote, nSize - nWrote);
-				m_queueSnd.push_back(pBlock);
-			}
-			return TRUE;
-		}
-		char* GetDataToSend()
-		{
-			if (m_pBlockSending)
-				return m_pBlockSending->GetBlock();
-			return NULL;
-		}
-		int GetDataLenToSend()
-		{
-			if (m_pBlockSending)
-				return m_pBlockSending->GetDataLen();
-			return 0;
-		}
-		BOOL OnSend(int nLength)
-		{	//仍有数据要发送，返回TRUE，否则返回FALSE
-			if (m_pBlockSending)
-			{
-				m_pBlockSending->OnSend(nLength);
-				if (m_pBlockSending->GetDataLen() > 0)
-					return TRUE;
-				ReleaseBlock(m_pBlockSending);
-				m_pBlockSending = NULL;
-			}
-			while (m_pBlockSending == NULL && m_queueSnd.size() > 0)
-			{
-				m_pBlockSending = m_queueSnd.pop_front();
-				if (m_pBlockSending->GetDataLen() <= 0)
-				{
-					ReleaseBlock(m_pBlockSending);
-					m_pBlockSending = NULL;
-				}
-			}
-			if (m_pBlockSending)
-				return TRUE;
-			return FALSE;
-		}
-		void Clear()
-		{
-			if (m_pBlockSending)
-			{
-				ReleaseBlock(m_pBlockSending);
-				m_pBlockSending = NULL;
-			}
-			while (m_queueSnd.size() > 0)
-			{
-				sSndBufferBlock* pBlock = m_queueSnd.pop_front();
-				if (pBlock)
-				{
-					ReleaseBlock(pBlock);
-					pBlock = NULL;
-				}
-			}
-		}
-		int GetQueueLen()
-		{
-			return m_queueSnd.size();
-		}
-		void SetQueueLenMax(int nMax)
-		{
-			m_nQueueLenMax = nMax;
-		}
+		BOOL AddBuffer(const char* buf, int nSize);
+
+		char* GetDataToSend();
+
+		int GetDataLenToSend();
+
+		BOOL OnSend(int nLength);
+
+		void Clear();
+
+		int GetQueueLen();
+
+		void SetQueueLenMax(int nMax);
+
 		BOOL IsQueueFulled();
 
 	private:
@@ -192,22 +161,7 @@ namespace YTSvrLib
 		CPool<sSndBufferBlock, 64> m_poolBlock;
 	};
 
-#ifdef LIB_WINDOWS
-	class YTSVRLIB_EXPORT CWinsock
-	{
-	public:
-		explicit CWinsock(BYTE mVers = '2', BYTE sVers = '2')
-		{
-			WSADATA      wsd;
-
-			::WSAStartup(MAKEWORD(mVers, sVers), &wsd);
-		}
-		virtual ~CWinsock(void)
-		{
-			::WSACleanup();
-		}
-	};
-#endif // LIB_WINDOWS
+	//////////////////////////////////////////////////////////////////////////
 
 	template<size_t size>
 	class CBuffer

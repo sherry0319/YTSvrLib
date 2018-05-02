@@ -37,6 +37,9 @@ Socket/YTSocketClient.cpp \
 Socket/YTSocketServer.cpp \
 Socket/YTSocketMutiClient.cpp \
 Socket/YTSocketMutiClientController.cpp \
+Socket/WebSocket/YTWSServer.cpp \
+Socket/WebSocket/YTWSConnector.cpp \
+sha/sha1.cpp \
 tinyxml/tinyxml2.cpp \
 tinyxml/XMLParser.cpp \
 tinyxml/XMLDocument.cpp \

@@ -30,7 +30,7 @@ namespace YTSvrLib
 	public:
 		ITCPMUTICLIENTCONTROLLER()
 		{
-
+			m_bThreadRuning = FALSE;
 		}
 
 		virtual ~ITCPMUTICLIENTCONTROLLER()
@@ -39,11 +39,17 @@ namespace YTSvrLib
 		}
 
 	public:
+		BOOL IsThreadRuning() const
+		{
+			return m_bThreadRuning;
+		}
+
 		BOOL CreateEvent();
 
 		BOOL CreateThread();
 	private:
 		YTSvrLib::CLock m_lockThread;
+		BOOL m_bThreadRuning;
 	};
 }
 

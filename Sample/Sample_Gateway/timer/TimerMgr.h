@@ -56,6 +56,8 @@ private:
 	__time32_t m_tNext30Sec;
 
 	int		m_nLocalTimeZoneSeconds;
+
+	__time32_t m_tTimeZone;
 };
 
 

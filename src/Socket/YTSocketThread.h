@@ -67,7 +67,6 @@ namespace YTSvrLib
 		void StopEvent();
 	private:
 		event_base* m_eventbase;
-		std::thread m_Thread;
 		BOOL m_bRun;
 		BOOL m_bRuning;
 	};

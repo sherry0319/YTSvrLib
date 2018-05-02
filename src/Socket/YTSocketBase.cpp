@@ -23,7 +23,6 @@ SOFTWARE.*/
 #include "YTSocketBase.h"
 #ifndef LIB_WINDOWS
 #include <fcntl.h>
-#include <linux/tcp.h>
 #endif // !LIB_WINDOWS
 
 namespace YTSvrLib

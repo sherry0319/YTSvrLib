@@ -4,7 +4,6 @@
 CConfig::CConfig(void)
 {
 	m_bCfgInited = FALSE;
-	m_bCrossSvrOpened = FALSE;
 	ReadConfig();
 }
 

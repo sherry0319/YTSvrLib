@@ -127,7 +127,7 @@ namespace YTSvrLib
 	CMYSQLClient* CMYSQLDBSystem::GetClientHash(long nHashParm)
 	{
 		size_t nCursor = HashAlloteDBServer(nHashParm);
-		if (nCursor < 0 || nCursor >= (int) GetThreadCount())
+		if (nCursor >= (int) GetThreadCount())
 		{
 			LOG("CMYSQLDBSystem_AddSQLRequest HashAlloteDBServer=%d Failed!", nCursor);
 			return  NULL;

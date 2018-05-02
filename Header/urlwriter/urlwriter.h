@@ -45,6 +45,7 @@ namespace YTSvrLib
 			m_nReturnCode = 0;
 			m_pFuncCallBack = NULL;
 			ZeroMemory(m_ayParam, sizeof(m_ayParam));
+			m_nReadTimeout = 0;
 		}
 
 		std::string m_strRequestURL;
@@ -52,6 +53,7 @@ namespace YTSvrLib
 		int m_nReturnCode;
 		std::string m_strReturn;
 		URLPARAM m_ayParam[4];
+		int m_nReadTimeout;
 		_REQUEST_CALLBACK m_pFuncCallBack;
 	};
 
@@ -78,8 +80,10 @@ namespace YTSvrLib
 		// Be careful the callback function will be called by mutithread in a single queue.
 		// And the param YTSvrLib::CURLRequest* passed by the callback will be released immediately after the callback function returned.
 		// You should copy the data by yourself if you want to use it after callback returned. 
-		void AddURLRequest(LPCSTR lpszReq, LPCSTR lpszPost, URLPARAM nParam1 = 0, URLPARAM nParam2 = 0, URLPARAM nParam3 = 0, URLPARAM nParam4 = 0, _REQUEST_CALLBACK pFunction = NULL);
-		void AddURLRequest(LPCSTR lpszReq, URLPARAM nParam1 = 0, URLPARAM nParam2 = 0, URLPARAM nParam3 = 0, URLPARAM nParam4 = 0, _REQUEST_CALLBACK pFunction = NULL);
+		void AddURLRequest(LPCSTR lpszReq, LPCSTR lpszPost, URLPARAM nParam1 = 0, URLPARAM nParam2 = 0, URLPARAM nParam3 = 0, URLPARAM nParam4 = 0, 
+						   _REQUEST_CALLBACK pFunction = NULL, int nReadTimeout = 0);
+		void AddURLRequest(LPCSTR lpszReq, URLPARAM nParam1 = 0, URLPARAM nParam2 = 0, URLPARAM nParam3 = 0, URLPARAM nParam4 = 0, 
+						   _REQUEST_CALLBACK pFunction = NULL, int nReadTimeout = 0);
 
 		void WaitForAllRequestDone();
 

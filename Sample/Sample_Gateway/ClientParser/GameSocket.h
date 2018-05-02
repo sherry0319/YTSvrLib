@@ -1,5 +1,4 @@
 #pragma once
-#include "ClientDef.h"
 #include  <algorithm>
 #include "Socket/YTSocketConnector.h"
 

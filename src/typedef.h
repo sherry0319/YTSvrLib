@@ -160,6 +160,7 @@ typedef LONGLONG __time64_t;
 #define ZeroMemory(_Dst,_Size) memset((_Dst),0,(_Size))
 
 #define printf_s		printf
+#define fprintf_s		fprintf
 
 #define GetLastError() errno
 #define WSAGetLastError() errno

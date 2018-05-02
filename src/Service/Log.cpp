@@ -71,6 +71,11 @@ void LogBin(const char* pszData, int nDataLen)
 
 void LogErrorASync(const char* szFile, const int nLine, EM_LOG_LEVEL emLevel, const char *fmt, ...)
 {
+	if (emLevel < YTSvrLib::CServerApplication::GetInstance()->GetLogLevel())
+	{
+		return;
+	}
+
 	char cTime[128] = { 0 };
 	GetDateTime(cTime, 127, 'S');
 	cTime[127] = '\0';
@@ -112,7 +117,7 @@ void LogErrorASync(const char* szFile, const int nLine, EM_LOG_LEVEL emLevel, co
 #ifdef LIB_WINDOWS
 		GetCurrentThreadId()
 #else
-		pthread_self()
+		(int)pthread_self()
 #endif // LIB_WINDOWS
 		, pszFileShort, nLine, lpszBuf,
 #ifdef LIB_WINDOWS
@@ -131,15 +136,16 @@ void LogErrorASync(const char* szFile, const int nLine, EM_LOG_LEVEL emLevel, co
 		case LOG_LEVEL_ERROR:
 		{
 #ifdef LIB_WINDOWS
-			cout << pLogBuffer->GetBuffer();
+			printf_s(pLogBuffer->GetBuffer());
+#else
+			fprintf_s(stderr, "%s",pLogBuffer->GetBuffer());
 #endif
-			cerr << pLogBuffer->GetBuffer();
 		}
 			break;
 		default:
 		{
 #ifdef LIB_WINDOWS
-			cout << pLogBuffer->GetBuffer();
+			printf_s(pLogBuffer->GetBuffer());
 #endif
 		}
 			break;
@@ -256,7 +262,7 @@ namespace YTSvrLib
 	void CLogManager::WriteSynLog(CLogManager* pLogMgr, CLogBufferA* pBuffer)
 	{
 		pLogMgr->LockSyncFile();
-		cout << pBuffer->GetBuffer();
+		printf_s(pBuffer->GetBuffer());
 		DWORD dwIOSize = 0;
 		HANDLE hFileHandle = pLogMgr->GetSyncFileHandle();
 		if (hFileHandle != INVALID_HANDLE_VALUE)
@@ -338,7 +344,7 @@ namespace YTSvrLib
 					pThis->ReOpenAsynLogFile();
 					continue;
 				}
-				cout << "LogThread OnExit..." << endl;
+				printf_s("LogThread OnExit...");
 				break;
 			}
 			pLogBuffer = (CLogBufferA*) pOL;
@@ -633,7 +639,7 @@ namespace YTSvrLib
 					pThis->ReOpenAsynLogFile();
 					continue;
 				}
-				cout << "LogThread OnExit..." << endl;
+				printf_s("LogThread OnExit...");
 				break;
 			}
 			pLogBuffer = (CLogBufferW*) pOL;
@@ -875,8 +881,6 @@ namespace YTSvrLib
 	{
 		pLogMgr->LockSyncFile();
 
-		cout << pBuffer->GetBuffer() << endl;
-
 		DWORD dwIOSize = 0;
 
 		FILE* pSyncFile = pLogMgr->GetSyncFileHandle();
@@ -942,7 +946,7 @@ namespace YTSvrLib
 		strcat_s(lpszCurDir, 256, pstrFileName);
 		strcat_s(lpszCurDir, 256, "/");
 
-		DWORD dwProcessID = getpid();
+		int nProcessID = getpid();
 
 		tm timenow;
 		time_t tCurTime = time(NULL);
@@ -973,10 +977,10 @@ namespace YTSvrLib
 
 		if (m_szFilePrefix[0] != '\0')
 			sprintf_s(szFinalFileName, MAX_PATH, ("%s%s%.2d-%.2d-%.2d-%.2d-%.2d-%.2d-[%d]%s.%s"), szFullPath, m_szFilePrefix,
-			(timenow.tm_year + 1900), (timenow.tm_mon + 1), timenow.tm_mday, timenow.tm_hour, timenow.tm_min, timenow.tm_sec, dwProcessID, pstrFileName, m_szFileExt);
+			(timenow.tm_year + 1900), (timenow.tm_mon + 1), timenow.tm_mday, timenow.tm_hour, timenow.tm_min, timenow.tm_sec, nProcessID, pstrFileName, m_szFileExt);
 		else
 			sprintf_s(szFinalFileName, MAX_PATH, ("%s%.2d-%.2d-%.2d-%.2d-%.2d-%.2d-[%d]%s.%s"), szFullPath,
-			(timenow.tm_year + 1900), (timenow.tm_mon + 1), timenow.tm_mday, timenow.tm_hour, timenow.tm_min, timenow.tm_sec, dwProcessID, pstrFileName, m_szFileExt);
+			(timenow.tm_year + 1900), (timenow.tm_mon + 1), timenow.tm_mday, timenow.tm_hour, timenow.tm_min, timenow.tm_sec, nProcessID, pstrFileName, m_szFileExt);
 
 		// printf("Cur Asyn LOG Path = [%s]\n", szFinalFileName);
 
@@ -1074,6 +1078,8 @@ namespace YTSvrLib
 		m_lockAsynFile.UnLock();
 
 		m_semAsynLog.UnLock(1);
+
+		return TRUE;
 	}
 
 	void CLogManager::ShutDown()
@@ -1253,7 +1259,7 @@ namespace YTSvrLib
 		strcat_s(lpszCurDir, 256, pstrFileName);
 		strcat_s(lpszCurDir, 256, "/");
 
-		DWORD dwProcessID = getpid();
+		int nProcessID = getpid();
 
 		tm timenow;
 		time_t tCurTime = time(NULL);
@@ -1284,10 +1290,10 @@ namespace YTSvrLib
 
 		if (m_szFilePrefix[0] != '\0')
 			sprintf_s(szFinalFileName, MAX_PATH, ("%s%s%.2d-%.2d-%.2d-%.2d-%.2d-%.2d-[%d]%s.%s"), szFullPath, m_szFilePrefix,
-			(timenow.tm_year + 1900), (timenow.tm_mon + 1), timenow.tm_mday, timenow.tm_hour, timenow.tm_min, timenow.tm_sec, dwProcessID, pstrFileName, m_szFileExt);
+			(timenow.tm_year + 1900), (timenow.tm_mon + 1), timenow.tm_mday, timenow.tm_hour, timenow.tm_min, timenow.tm_sec, nProcessID, pstrFileName, m_szFileExt);
 		else
 			sprintf_s(szFinalFileName, MAX_PATH, ("%s%.2d-%.2d-%.2d-%.2d-%.2d-%.2d-[%d]%s.%s"), szFullPath,
-			(timenow.tm_year + 1900), (timenow.tm_mon + 1), timenow.tm_mday, timenow.tm_hour, timenow.tm_min, timenow.tm_sec, dwProcessID, pstrFileName, m_szFileExt);
+			(timenow.tm_year + 1900), (timenow.tm_mon + 1), timenow.tm_mday, timenow.tm_hour, timenow.tm_min, timenow.tm_sec, nProcessID, pstrFileName, m_szFileExt);
 
 		// printf("Cur Asyn LOG Path = [%s]\n", szFinalFileName);
 
@@ -1399,6 +1405,8 @@ namespace YTSvrLib
 		m_lockAsynFile.UnLock();
 
 		m_semAsynLog.UnLock(1);
+
+		return TRUE;
 	}
 
 #endif // LIB_WINDOWS

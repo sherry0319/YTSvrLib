@@ -45,6 +45,9 @@ extern "C" {
 
 #ifdef LIB_WINDOWS
 
+#pragma comment(lib, "openssl/lib/libeay32.lib")
+#pragma comment(lib, "openssl/lib/ssleay32.lib")
+
 #ifdef YTSVRLIB_USE_STATIC_LIB
 #define YTSVRLIB_NO_DLL
 #pragma comment(lib, "ws2_32.lib")
@@ -61,6 +64,8 @@ extern "C" {
 #pragma comment(lib, "libcurl/lib/static/libcurl.lib")
 #pragma comment(lib, "zlib/lib/static/zlib.lib")
 #pragma comment(lib, "redis/lib/hiredis.lib")
+#pragma comment(lib, "libwebsockets/lib/websockets_static.lib")
+#pragma comment(lib, "protobuf/lib/static/libprotobuf.lib")
 #ifdef DEBUG64
 #pragma comment(lib, "YTSvrLibSD.lib" )
 #else
@@ -94,6 +99,8 @@ extern "C" {
 #pragma comment(lib, "libcurl/lib/dll/libcurl.lib")
 #pragma comment(lib, "zlib/lib/dll/zlib.lib")
 #pragma comment(lib, "redis/lib/hiredis.lib")
+#pragma comment(lib, "libwebsockets/lib/websockets.lib")
+#pragma comment(lib, "protobuf/lib/dll/libprotobuf.lib")
 #elif !defined(YTSVRLIB_NO_DLL)
 #define YTSVRLIB_EXPORT __declspec(dllimport)
 #else // MAKING STATIC LIB
@@ -106,7 +113,6 @@ extern "C" {
 #define YTSVRLIB_EXPORT
 #endif
 
-using namespace std;
 #ifdef LIB_WINDOWS
 #include <winsock2.h>
 #include <Mswsock.h>
@@ -175,7 +181,7 @@ extern "C"
 #include <unordered_set>
 #include <sstream>
 #include <istream>
-
+using namespace std;
 #ifdef LIB_WINDOWS
 #include "BugReport/BugslayerUtil.h"
 #endif // LIB_WINDOWS
@@ -206,6 +212,7 @@ extern "C"
 #include "./mysql/MYSQLManagerBase.h"
 #include "./mysql/MYSQLDBSys.h"
 #include "./Base64/Base64.h"
+#include "./sha/sha1.h"
 #include "./md5/md5.h"
 #include "./Filter/Filter.h"
 #include "./tinyxml/XMLDocument.h"
@@ -219,5 +226,6 @@ extern "C"
 #include "./Socket/YTSocketServer.h"
 #include "./Socket/YTSocketMutiClient.h"
 #include "./Socket/YTSocketMutiClientController.h"
+#include "./Socket/WebSocket/YTWSServer.h"
 
 #endif

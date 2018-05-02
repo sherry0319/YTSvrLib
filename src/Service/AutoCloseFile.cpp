@@ -45,7 +45,7 @@ namespace YTSvrLib
 		}
 
 		size_t nTrimR = 0;
-		for (size_t i = strSrc.size() - 1; i >= 0; --i)
+		for (int i = (int)strSrc.size() - 1; i >= 0; --i)
 		{
 			if (strSrc[i] == ' ' || strSrc[i] == '\r' || strSrc[i] == '\t' || strSrc[i] == '\f' || strSrc[i] == '\v')
 			{

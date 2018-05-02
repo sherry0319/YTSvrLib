@@ -286,12 +286,12 @@ namespace YTSvrLib
 			return m_hSynFileHandle;
 		}
 
-		BOOL LockSyncFile()
+		void LockSyncFile()
 		{
 			m_lockSynFile.Lock();
 		}
 
-		BOOL UnlockSyncFile()
+		void UnlockSyncFile()
 		{
 			m_lockSynFile.UnLock();
 		}
@@ -358,11 +358,11 @@ namespace YTSvrLib
 		{
 			return m_hSynFileHandle;
 		}
-		BOOL LockSyncFile()
+		void LockSyncFile()
 		{
 			m_lockSynFile.Lock();
 		}
-		BOOL UnlockSyncFile()
+		void UnlockSyncFile()
 		{
 			m_lockSynFile.UnLock();
 		}

@@ -76,6 +76,26 @@ namespace YTSvrLib
 		return GetInstance()->Encode(lpData, dwDataLength, lpBuf);
 	}
 
+	string CBase64::Base64Encode(LPBYTE lpData, DWORD dwDataLength)
+	{
+		DWORD dwSize = CalcEncodeBufSize(dwDataLength);
+
+		char* buffer = new char[dwSize+1];
+		ZeroMemory(buffer, dwSize+1);
+
+		GetInstance()->Encode(lpData, dwDataLength, (LPBYTE)buffer);
+
+		string output = buffer;
+
+		delete[]  buffer;
+
+		return output;
+	}
+	string CBase64::Base64Encode(const string& data)
+	{
+		return Base64Encode((LPBYTE) data.c_str(), (DWORD)data.length());
+	}
+
 	size_t CBase64::Encode(LPBYTE lpData, DWORD dwDataLength, LPBYTE lpBuf)
 	{
 		_ASSERTE(lpData);
@@ -125,6 +145,25 @@ namespace YTSvrLib
 	size_t CBase64::Base64Decode(LPBYTE lpBuf, DWORD dwBufLength, LPBYTE lpData)
 	{
 		return GetInstance()->Decode(lpBuf, dwBufLength, lpData);
+	}
+
+	string CBase64::Base64Decode(LPBYTE lpBuf, DWORD dwBufLength)
+	{
+		char* buffer = new char[dwBufLength+1];
+		ZeroMemory(buffer, dwBufLength+1);
+
+		GetInstance()->Decode(lpBuf, dwBufLength, (LPBYTE) buffer);
+
+		string output = buffer;
+
+		delete[] buffer;
+
+		return output;
+	}
+
+	string CBase64::Base64Decode(const string& data)
+	{
+		return Base64Decode((LPBYTE)data.c_str(), (DWORD)data.length());
 	}
 
 	size_t CBase64::Decode(LPBYTE lpBuf, DWORD dwBufLength, LPBYTE lpData)

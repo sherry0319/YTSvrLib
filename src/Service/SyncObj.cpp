@@ -38,7 +38,7 @@ namespace YTSvrLib
 		pthread_spin_destroy(&m_lock);
 	}
 
-	BOOL CSpinLock::Lock()
+	void CSpinLock::Lock()
 	{
 		pthread_spin_lock(&m_lock);
 	}

@@ -66,10 +66,11 @@ int main(int argc, char* argv[])
 	SetConsoleCtrlHandler(signal_handle_function);
 #endif // LIB_WINDOWS
 	//×¢²áÊÂ¼ş
-	YTSvrLib::CServerApplication::GetInstance()->RegisterEvent( EAppEvent::eAppGWSvrSocketEvent, CGWSvrParser::OnMsgRecv );
-	YTSvrLib::CServerApplication::GetInstance()->RegisterEvent( EAppEvent::eAppGWSvrSocketDisconnectEvent, CGWSvrParser::OnDisconnectMsgRecv );
-	YTSvrLib::CServerApplication::GetInstance()->RegisterEvent( EAppEvent::eAppGameDB, CDBManager::OnDataRecv );
-	YTSvrLib::CServerApplication::GetInstance()->RegisterEvent( EAppEvent::eAppTimerMgrOnTimer, CTimerMgr::OnTimer );
+	auto app = YTSvrLib::CServerApplication::GetInstance();
+	app->RegisterEvent(EAppEvent::eAppGWSvrSocketEvent, CGWSvrParser::OnMsgRecv);
+	app->RegisterEvent(EAppEvent::eAppGWSvrSocketDisconnectEvent, CGWSvrParser::OnDisconnectMsgRecv);
+	app->RegisterEvent(EAppEvent::eAppGameDB, CDBManager::OnDataRecv);
+	app->RegisterEvent(EAppEvent::eAppTimerMgrOnTimer, CTimerMgr::OnTimer);
 
 	CConfig::GetInstance();
 	CDBManager::GetInstance()->SetConnection(	CConfig::GetInstance()->m_sDBConnectInfo.m_strMySQLDB.c_str(),
@@ -89,7 +90,7 @@ int main(int argc, char* argv[])
 
 	CDBManager::GetInstance()->OnServerStart();
 
-	YTSvrLib::CServerApplication::GetInstance()->Run();
+	app->Run();
 
 	return 0;
 }

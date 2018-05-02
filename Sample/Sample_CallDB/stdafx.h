@@ -4,10 +4,8 @@
 //
 
 #pragma once
-#if (defined(_WIN32) || defined(__WIN32__) || defined(_WIN64))
+
 #include "targetver.h"
-#pragma execution_character_set("utf-8")
-#endif
 
 //基础库的定义
 #include "YTSvrLib.h"

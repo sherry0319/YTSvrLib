@@ -65,7 +65,7 @@ namespace YTSvrLib
 	public:
 		void Start();
 
-		LONGLONG Stop();
+		void Stop();
 
 		LONGLONG GetSpan(timeval& begin, timeval& end);
 

@@ -41,10 +41,16 @@ namespace YTSvrLib
 
 		// 加密
 		static size_t Base64Encode(LPBYTE lpData, DWORD dwDataLength, LPBYTE lpBuf);
+		static string Base64Encode(LPBYTE lpData, DWORD dwDataLength);
+		static string Base64Encode(const string& data);
+
 		size_t Encode(LPBYTE lpData, DWORD dwDataLength, LPBYTE lpBuf);
 
 		// 解密
 		static size_t Base64Decode(LPBYTE lpBuf, DWORD dwBufLength, LPBYTE lpData);
+		static string Base64Decode(LPBYTE lpBuf, DWORD dwBufLength);
+		static string Base64Decode(const string& data);
+
 		size_t Decode(LPBYTE lpBuf, DWORD dwBufLength, LPBYTE lpData);
 	private:
 		// 初始化Base64

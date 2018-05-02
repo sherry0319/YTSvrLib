@@ -42,7 +42,10 @@ src/Socket/YTSocketConnector.cpp
 src/Socket/YTSocketClient.cpp 
 src/Socket/YTSocketServer.cpp 
 src/Socket/YTSocketMutiClient.cpp 
-src/Socket/YTSocketMutiClientController.cpp 
+src/Socket/YTSocketMutiClientController.cpp
+src/Socket/WebSocket/YTWSServer.cpp
+src/Socket/WebSocket/YTWSConnector.cpp
+src/sha/sha1.cpp
 src/tinyxml/tinyxml2.cpp 
 src/tinyxml/XMLParser.cpp 
 src/tinyxml/XMLDocument.cpp 
@@ -85,6 +88,7 @@ IF(UNIX)
 	pthread
 	mysqlpp
 	hiredis
+	websockets
 	tcmalloc_minimal
 	)
 ENDIF()

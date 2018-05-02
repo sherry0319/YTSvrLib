@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "TimerMgr.h"
 
-
-
 void CTimerMgr::SetEvent()
 {
 	YTSvrLib::CServerApplication::GetInstance()->SetEvent(EAppEvent::eAppTimerMgrOnTimer);

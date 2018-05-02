@@ -112,7 +112,7 @@ namespace YTSvrLib
 		m_lasttick.tv_usec = m_begintick.tv_usec;
 	}
 
-	LONGLONG PerformanceWatch::Stop()
+	void PerformanceWatch::Stop()
 	{
 		gettimeofday(&m_endtick, NULL);
 	}
