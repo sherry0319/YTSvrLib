@@ -16,11 +16,6 @@ unzip libiconv-1.14.zip
 cd libiconv-1.14
 ./configure && make install
 cd ..
-unzip mysqlpp.zip
-cd mysqlpp
-chmod 755 configure
-./configure && make install
-cd ..
 wget https://dev.mysql.com/get/Downloads/Connector-C/mysql-connector-c-6.1.11-src.zip
 unzip mysql-connector-c-6.1.11-src.zip
 cd mysql-connector-c-6.1.11-src
@@ -29,6 +24,11 @@ cd build
 cmake ..
 make install
 cd ..
+cd ..
+unzip mysqlpp.zip
+cd mysqlpp
+chmod 755 configure
+./configure && make install
 cd ..
 tar -xzf libwebsockets-2.4.2.tar.gz
 cd libwebsockets-2.4.2
