@@ -12,4 +12,4 @@ before_install:
 install:
 - sudo ./install-dependencies.sh
 - sudo ./configure_clang.sh
-script: ./makeall_release.sh
+script: sudo ./makeall_release.sh
