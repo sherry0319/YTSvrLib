@@ -1,5 +1,6 @@
-# YTSvrLib [![TravisCI Status](https://travis-ci.org/sherry0319/YTSvrLib.svg?branch=master)](https://travis-ci.org/sherry0319/YTSvrLib)  [![AppVeyor Status](https://ci.appveyor.com/api/projects/status/github/sherry0319/ytsvrlib?branch=master&svg=true)](https://ci.appveyor.com/project/sherry0319/ytsvrlib)
-a simple game server library for linux/windows
+# YTSvrLib [![TravisCI Status](https://travis-ci.org/sherry0319/YTSvrLib.svg?branch=master)](https://travis-ci.org/sherry0319/YTSvrLib)  [![AppVeyor Status](https://ci.appveyor.com/api/projects/status/github/sherry0319/ytsvrlib?branch=master&svg=true)](https://ci.appveyor.com/project/sherry0319/ytsvrlib)
+A simple game server library for linux/windows. Easy access to network(TCP and websocket), database, thread management, common game server features. Quickly develop your game server.
+一个简单的网络游戏服务器库.轻松获得网络,数据库,线程管理以及常用游戏算法.
 
 # Install Windows
 1.Install Visual Studio 2013.
@@ -42,3 +43,12 @@ See the project "Sample".
 
 # 如何使用
 请参考"Sample"项目了解使用方法.
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+主要特性:
+1.创建服务器或客户端TCP连接.
+2.创建一个基于websocket的服务器监听并处理数据.
+3.创建一个连接到MySQL或MariaDB的数据库连接.并且同步或异步的接收查询返回.基于连接池的多个连接.
+4.创建连接到redis的同步或异步连接.
+5.完善的基础功能.日志系统.时间处理.文件操作.
