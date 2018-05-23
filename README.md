@@ -7,7 +7,7 @@ A simple game server library for linux/windows. Easy access to network(TCP and w
 ## 快速开始你的工作
 只需要在Sample中根据你的需要做出简单修改.就可以快速连通各环节开始编写你的游戏服务器!
 
-## 在Windows上用Visual Studio写游戏.在Linux上编译并运行.
+## 在Windows上用Visual Studio写游戏并运行调试.同时允许在Linux上编译并运行.
 可以愉快的使用Visual Studio强大的功能加速你的开发.同时又不影响在Linux上编译运行.
 
 ## 简单易用,逻辑清晰的接口封装
