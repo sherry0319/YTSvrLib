@@ -1,6 +1,22 @@
 # YTSvrLib [![TravisCI Status](https://travis-ci.org/sherry0319/YTSvrLib.svg?branch=master)](https://travis-ci.org/sherry0319/YTSvrLib)  [![AppVeyor Status](https://ci.appveyor.com/api/projects/status/github/sherry0319/ytsvrlib?branch=master&svg=true)](https://ci.appveyor.com/project/sherry0319/ytsvrlib)
+一个简单但完善的网络游戏服务器库.轻松获得网络,数据库,线程管理以及常用游戏算法.
 A simple game server library for linux/windows. Easy access to network(TCP and websocket), database, thread management, common game server features. Quickly develop your game server.
-一个简单的网络游戏服务器库.轻松获得网络,数据库,线程管理以及常用游戏算法.
+
+# 主要特性
+
+## 快速开始你的工作
+只需要在Sample中根据你的需要做出简单修改.就可以快速连通各环节开始编写你的游戏服务器!
+
+## 在Windows上用Visual Studio写游戏.在Linux上编译并运行.
+可以愉快的使用Visual Studio强大的功能加速你的开发.同时又不影响在Linux上编译运行.
+
+## 简单易用,逻辑清晰的接口封装
+尽量做到一个调用完成一个操作
+
+## 完善的功能
+异步日志.异常捕获.对象池.各种锁都实现了抹平平台差异的封装.
+
+# 有任何问题欢迎提Issue或联系QQ:81045135
 
 # Install Windows
 1.Install Visual Studio 2013.
