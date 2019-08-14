@@ -7,7 +7,7 @@ os:
 - linux
 before_install:
 - sudo apt-get update -qq
-- sudo apt-get install -qq autoconf automake cmake clang libmysqlclient-dev libuv-dev libhiredis-dev libgoogle-perftools-dev libgoogle-perftools4
+- sudo apt-get install -qq autoconf automake cmake clang libmysqlclient18 libmysqlclient-dev libuv-dev libhiredis-dev libgoogle-perftools-dev libgoogle-perftools4
 - sudo chmod 755 install-dependencies.sh configure.sh configure_clang.sh configure_cmake.sh makeall.sh makeall_release.sh src/configure src/linux_debug/install.sh src/linux_release/install.sh
 install:
 - sudo ./install-dependencies.sh
