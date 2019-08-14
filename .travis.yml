@@ -13,6 +13,6 @@ install:
 - sudo ./install-dependencies.sh
 - sudo ./configure_clang.sh
 - sudo updatedb
-- sudo locate libcurl.so.4
+- sudo locate libmysqlclient.so
 - sudo ldconfig
 script: sudo ./makeall_release.sh
