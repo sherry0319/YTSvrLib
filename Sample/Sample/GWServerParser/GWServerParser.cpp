@@ -58,7 +58,6 @@ void CGWSvrParser::OnGWSvrConnected(CGWSvrSocket* pGWSvrSocket)
 void CGWSvrParser::OnGWSvrDisconnect(CGWSvrSocket* pSocket)
 {
 	LOG("CGWSvrSocket Disconnected : %s:%d On Socket(%d)", pSocket->GetAddrIp(), pSocket->GetAddrPort(), pSocket->GetSocket());
-	pSocket->SafeClose();
 }
 
 void CGWSvrParser::SendClientMsg(CGWSvrSocket* pGWSocket, LPCSTR pszMsg, int nLen)

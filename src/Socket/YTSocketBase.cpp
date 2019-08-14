@@ -23,6 +23,7 @@ SOFTWARE.*/
 #include "YTSocketBase.h"
 #ifndef LIB_WINDOWS
 #include <fcntl.h>
+#include <netinet/tcp.h>
 #endif // !LIB_WINDOWS
 
 namespace YTSvrLib
@@ -104,7 +105,7 @@ namespace YTSvrLib
 
 	int ITCPBASE::OnSocketRecv()
 	{
-		if (m_pbufferevent == NULL)
+		if (m_pbufferevent == NULL || m_bIsClosed || IsDisconnecting())
 		{
 			return -1;
 		}
@@ -116,7 +117,7 @@ namespace YTSvrLib
 
 		if (nRealRead == 0)
 		{
-			SafeClose();
+			OnDisconnecting();
 			return -1;
 		}
 
@@ -172,7 +173,7 @@ namespace YTSvrLib
 		if (bError)
 		{
 			LOG("Send AddBuffer Error");
-			SafeClose();
+			OnDisconnecting();
 		}
 	}
 
@@ -223,7 +224,7 @@ namespace YTSvrLib
 #endif // LIB_WINDOWS
 				{
 					LOG("Send Data Error : %d.Error : %d", nSend, dwCode);
-					SafeClose();
+					OnDisconnecting();
 					break;
 				}
 #ifdef LIB_WINDOWS
@@ -242,7 +243,7 @@ namespace YTSvrLib
 					int ret = select((int)GetSocket()+1,NULL,&fds,NULL,&timeout);
 					if (ret <= 0)
 					{
-						SafeClose();
+						OnDisconnecting();
 						break;
 					}
 				}

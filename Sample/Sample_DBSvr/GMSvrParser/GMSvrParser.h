@@ -60,6 +60,8 @@ public:
 
 	virtual void ProcessDisconnectMsg(YTSvrLib::ITCPBASE* pSocket);
 
+	void OnDisconnected(CGMSvrSocket* pGMSock);
+
 	virtual void OnServerClose()
 	{
 		CloseAllClients();

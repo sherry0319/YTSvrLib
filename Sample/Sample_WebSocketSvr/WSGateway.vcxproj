@@ -19,18 +19,19 @@
     <SccLocalPath>Svn</SccLocalPath>
     <SccProvider>SubversionScc</SccProvider>
     <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release64|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -70,8 +71,8 @@
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\Header\;$(SolutionDir)..\Header\mysql\include\;$(SolutionDir)..\Header\libevent\;$(SolutionDir)..\Header\libwebsockets\include\</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_WIN64;_CONSOLE;YTSVRLIB_USE_STATIC_LIB;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\Header\;$(SolutionDir)..\Header\mysql\include\;$(SolutionDir)..\Header\libevent\;$(SolutionDir)..\Header\asio\</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WIN64;_CONSOLE;YTSVRLIB_USE_STATIC_LIB;_WEBSOCKETPP_CPP11_TYPE_TRAITS_;ASIO_STANDALONE;YTLIB_WITH_WEBSOCKET;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -100,8 +101,8 @@
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>$(SolutionDir)\Header\;$(SolutionDir)\Header\mysql\include\;$(SolutionDir)\Header\libevent\;$(SolutionDir)\Header\libwebsockets\include\;$(SolutionDir)\Header\protobuf\include\</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_WIN64;_CONSOLE;YTSVRLIB_USE_STATIC_LIB;DEBUG64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\Header\;$(SolutionDir)..\Header\mysql\include\;$(SolutionDir)..\Header\libevent\;$(SolutionDir)..\Header\protobuf\include\;$(SolutionDir)..\Header\asio\</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WIN64;_CONSOLE;YTSVRLIB_USE_STATIC_LIB;_WEBSOCKETPP_CPP11_TYPE_TRAITS_;ASIO_STANDALONE;YTLIB_WITH_WEBSOCKET;DEBUG64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -152,9 +153,6 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="timer\TimerMgr.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="WSGateway.rc" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

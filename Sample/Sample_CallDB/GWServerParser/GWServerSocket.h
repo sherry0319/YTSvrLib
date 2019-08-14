@@ -20,21 +20,21 @@ public:
 	CGWSvrSocket(void);
 	virtual ~CGWSvrSocket(void);
 
-	DWORD m_nRecvSeqNo;
-	DWORD m_nSendSeqNo;
 	virtual void Init()
 	{
 		YTSvrLib::ITCPCONNECTOR::Clean();
-		m_nRecvSeqNo = 0;
-		m_nSendSeqNo = 0;
 		m_nGWID = 0;
+		m_bClientClosed = FALSE;
+
 	}    
 
 public:
 	virtual int		OnSocketRecv();
 	virtual int     OnRecved( const char* pBuf, int nLen );
 
+	virtual void	OnDisconnect();
 	virtual void	OnClosed();
+
 	virtual void    PostMsg( const char* pBuf, int nLen );
 	virtual void    PostDisconnectMsg( EType eType ); 
 
@@ -44,4 +44,5 @@ public:
 	UINT GetGWID() { return m_nGWID; }
 private:
 	UINT m_nGWID;
+	BOOL m_bClientClosed;
 };

@@ -63,8 +63,8 @@ extern "C" {
 #pragma comment(lib, "jsoncpp/lib/static/jsoncpp.lib")
 #pragma comment(lib, "libcurl/lib/static/libcurl.lib")
 #pragma comment(lib, "zlib/lib/static/zlib.lib")
+#pragma comment(lib, "lz4/lib/static/liblz4_static.lib")
 #pragma comment(lib, "redis/lib/hiredis.lib")
-#pragma comment(lib, "libwebsockets/lib/websockets_static.lib")
 #pragma comment(lib, "protobuf/lib/static/libprotobuf.lib")
 #ifdef DEBUG64
 #pragma comment(lib, "YTSvrLibSD.lib" )
@@ -98,8 +98,8 @@ extern "C" {
 #pragma comment(lib, "jsoncpp/lib/dll/jsoncpp.lib")
 #pragma comment(lib, "libcurl/lib/dll/libcurl.lib")
 #pragma comment(lib, "zlib/lib/dll/zlib.lib")
+#pragma comment(lib, "lz4/lib/dll/liblz4.lib")
 #pragma comment(lib, "redis/lib/hiredis.lib")
-#pragma comment(lib, "libwebsockets/lib/websockets.lib")
 #pragma comment(lib, "protobuf/lib/dll/libprotobuf.lib")
 #elif !defined(YTSVRLIB_NO_DLL)
 #define YTSVRLIB_EXPORT __declspec(dllimport)
@@ -194,9 +194,12 @@ using namespace std;
 #include "./Global/GlobalServer.h"
 #include "./libcurl/curl.h"
 #include "./zlib/zlib.h"
+#include "./lz4/lz4.h"
+#include "./lz4/lz4frame.h"
 #include "./jsoncpp/json/json.h"
 #include "./Global/Performance.h"
 #include "./Single/Single.h"
+#include "./lz4/lz4feasy.h"
 #include "./Service/SyncObj.h"
 #include "./dice/dice.h"
 #include "./findpath/JPS.h"
@@ -226,6 +229,9 @@ using namespace std;
 #include "./Socket/YTSocketServer.h"
 #include "./Socket/YTSocketMutiClient.h"
 #include "./Socket/YTSocketMutiClientController.h"
+#ifdef YTLIB_WITH_WEBSOCKET
 #include "./Socket/WebSocket/YTWSServer.h"
+#include "./Socket/WebSocket/YTWSConnector.h"
+#endif // WITH_WEBSOCKET
 
 #endif

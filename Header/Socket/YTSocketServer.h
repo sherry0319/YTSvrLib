@@ -55,6 +55,8 @@ namespace YTSvrLib
 
 		void StopListen();
 
+		BOOL IsListening();
+
 		virtual ITCPCONNECTOR* AllocateConnector() = 0;
 
 		virtual void ReleaseConnector(ITCPCONNECTOR* pConnect) = 0;

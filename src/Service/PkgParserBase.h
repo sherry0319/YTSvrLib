@@ -30,67 +30,6 @@ SOFTWARE.*/
 
 namespace YTSvrLib
 {
-	struct YTSVRLIB_EXPORT WSMSG : public CRecycle
-	{
-		void* ctx;
-		void* session;
-		std::string msg;
-
-		virtual void Init()
-		{
-			ctx = NULL;
-			msg.clear();
-		}
-	};
-
-	struct YTSVRLIB_EXPORT WSEVENT : public CRecycle
-	{
-		void* ctx;
-		void* session;
-		WSEType eType;
-		virtual void Init()
-		{
-			ctx = NULL;
-			eType = WSEType_Invalid;
-		}
-	};
-
-	class YTSVRLIB_EXPORT CWSParserBase
-	{
-	protected:
-		CWSParserBase();
-
-		virtual void SetEvent() = 0;
-
-		virtual void SetDisconnectEvent() = 0;
-	public:
-		virtual void onWSMsgRecv();
-
-		virtual void onWSEventRecv();
-	public:
-		virtual void ProcessMessage(void* ctx, void* session, const char *msg, int len) = 0;
-
-		virtual void ProcessDisconnectMsg(void* ctx, void* session) = 0;
-
-		virtual void ProcessAcceptedMsg(void* ctx, void* session) = 0;
-	protected:
-		virtual void postWSMsg(void* ctx, void* session, const char *msg, int len);
-
-		virtual void postWSEvent(void* ctx, void* session, WSEType type);
-
-		virtual void addWSMsg(WSMSG* pPkg);
-
-		virtual void addWSEvent(WSEVENT* pPkg);
-	protected:
-		CPool<WSMSG, 128>           m_PoolMsgPkg;
-		CPool<WSEVENT, 128>    m_PoolDisconnectPkg;
-
-		CWQueue<WSMSG*>		m_qMsg;
-		CWQueue<WSEVENT*>   m_qDisconnectMsg;
-	};
-
-	//////////////////////////////////////////////////////////////////////////
-
 	typedef struct YTSVRLIB_EXPORT _PKGINFO : public CRecycle
 	{
 		YTSvrLib::ITCPBASE *pSocket;
@@ -177,7 +116,7 @@ namespace YTSvrLib
 
 		virtual void Register(const char* path, CLTEVENTHTTPFUNC pFunc)
 		{
-			m_mapMsgProcs[string(path)] = pFunc;
+			m_mapMsgProcs[std::move(std::string(path))] = pFunc;
 		}
 	protected:
 		CWQueue<evhttp_request*> m_qMsg;

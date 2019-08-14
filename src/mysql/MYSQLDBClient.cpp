@@ -193,7 +193,7 @@ namespace YTSvrLib
 #endif
 					do
 					{
-						pResSet->AddResult(Res);
+						pResSet->AddResult(std::move(Res));
 
 						Res = CurQuery.store_next();
 					} while (CurQuery.more_results());

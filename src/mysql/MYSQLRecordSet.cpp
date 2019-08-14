@@ -48,7 +48,7 @@ namespace YTSvrLib
 		{
 			res.enable_exceptions();
 
-			m_CurQueryRes.push_back(res);
+			m_CurQueryRes.push_back(std::move(res));
 		}
 
 		BOOL CMYSQLRecordSet::IsEof()

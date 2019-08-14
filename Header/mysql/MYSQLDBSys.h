@@ -238,7 +238,7 @@ namespace YTSvrLib
 		///线程主体
 		virtual void Execute(void);
 	private:
-		BOOL m_bThreadSafe;
+		BOOL m_bThreadSafe{FALSE};
 		YTSvrLib::CLock m_RequestLock;
 		MYSQLCONNECT_INFO m_ConnectInfo;
 		CMYSQLDBSystem* m_pDBSystem;
@@ -250,9 +250,9 @@ namespace YTSvrLib
 		YTSvrLib::CSemaphore m_hSemaphore;
 		YTSvrLib::CLock m_PoolLock;
 		mysqlpp::Connection m_DBSys;
-		DWORD	m_dwExecuteCount;
-		size_t	m_nID;
-		BOOL	m_bNeedReset;
+		DWORD	m_dwExecuteCount{0};
+		size_t	m_nID{0};
+		BOOL	m_bNeedReset{FALSE};
 	};
 }
 

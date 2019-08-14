@@ -59,7 +59,7 @@ void StrDelimiter( std::wstring& wstrSrc, const wchar_t* lpwzDelimiter, std::vec
 
 		if (wstrToken.size() > 0)
 		{
-			vctResult.push_back(wstrToken);
+			vctResult.push_back(std::move(wstrToken));
 		}
 
 		nPosPrev = nPos + nDelimiterSize;
@@ -70,7 +70,7 @@ void StrDelimiter( std::wstring& wstrSrc, const wchar_t* lpwzDelimiter, std::vec
 	{
 		std::wstring wstrToken = wstrSrc.substr(nPosPrev,wstrSrc.size()-nPosPrev);
 
-		vctResult.push_back(wstrToken);
+		vctResult.push_back(std::move(wstrToken));
 	}
 }
 
@@ -119,7 +119,7 @@ void StrDelimiter( std::string& strSrc, const char* lpzDelimiter, std::vector<st
 
 		if (strToken.size() > 0)
 		{
-			vctResult.push_back(strToken);
+			vctResult.push_back(std::move(strToken));
 		}
 
 		nPosPrev = nPos + nDelimiterSize;
@@ -130,7 +130,7 @@ void StrDelimiter( std::string& strSrc, const char* lpzDelimiter, std::vector<st
 	{
 		std::string strToken = strSrc.substr(nPosPrev,strSrc.size()-nPosPrev);
 
-		vctResult.push_back(strToken);
+		vctResult.push_back(std::move(strToken));
 	}
 }
 

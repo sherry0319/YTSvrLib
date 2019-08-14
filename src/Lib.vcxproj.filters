@@ -120,6 +120,12 @@
     <Filter Include="Socket\WebSocket">
       <UniqueIdentifier>{c105e1ef-5649-4b40-9ee7-2fcc6b7b201a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="lz4">
+      <UniqueIdentifier>{9cfd5ab1-9df5-43c5-99ba-384d6c5c3d8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Socket\libevSocket">
+      <UniqueIdentifier>{ea79055c-03f3-4008-8975-c83c134e0b20}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -182,25 +188,7 @@
     <ClCompile Include="Filter\Filter.cpp">
       <Filter>Filter</Filter>
     </ClCompile>
-    <ClCompile Include="Socket\YTSocketBase.cpp">
-      <Filter>Socket</Filter>
-    </ClCompile>
-    <ClCompile Include="Socket\YTSocketClient.cpp">
-      <Filter>Socket</Filter>
-    </ClCompile>
-    <ClCompile Include="Socket\YTSocketConnector.cpp">
-      <Filter>Socket</Filter>
-    </ClCompile>
-    <ClCompile Include="Socket\YTSocketServer.cpp">
-      <Filter>Socket</Filter>
-    </ClCompile>
     <ClCompile Include="Socket\YTSocketThread.cpp">
-      <Filter>Socket</Filter>
-    </ClCompile>
-    <ClCompile Include="Socket\YTSocketMutiClient.cpp">
-      <Filter>Socket</Filter>
-    </ClCompile>
-    <ClCompile Include="Socket\YTSocketMutiClientController.cpp">
       <Filter>Socket</Filter>
     </ClCompile>
     <ClCompile Include="Service\Log.cpp">
@@ -244,6 +232,33 @@
     </ClCompile>
     <ClCompile Include="Socket\WebSocket\YTWSConnector.cpp">
       <Filter>Socket\WebSocket</Filter>
+    </ClCompile>
+    <ClCompile Include="lz4\lz4feasy.cpp">
+      <Filter>lz4</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket\WebSocket\WSPkgParser.cpp">
+      <Filter>Socket\WebSocket</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket\WebSocket\WSSendBuffer.cpp">
+      <Filter>Socket\WebSocket</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket\YTSocketBase.cpp">
+      <Filter>Socket\libevSocket</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket\YTSocketClient.cpp">
+      <Filter>Socket\libevSocket</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket\YTSocketConnector.cpp">
+      <Filter>Socket\libevSocket</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket\YTSocketMutiClient.cpp">
+      <Filter>Socket\libevSocket</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket\YTSocketMutiClientController.cpp">
+      <Filter>Socket\libevSocket</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket\YTSocketServer.cpp">
+      <Filter>Socket\libevSocket</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -676,25 +691,7 @@
     <ClInclude Include="Filter\Filter.h">
       <Filter>Filter</Filter>
     </ClInclude>
-    <ClInclude Include="Socket\YTSocketBase.h">
-      <Filter>Socket</Filter>
-    </ClInclude>
-    <ClInclude Include="Socket\YTSocketClient.h">
-      <Filter>Socket</Filter>
-    </ClInclude>
-    <ClInclude Include="Socket\YTSocketConnector.h">
-      <Filter>Socket</Filter>
-    </ClInclude>
-    <ClInclude Include="Socket\YTSocketServer.h">
-      <Filter>Socket</Filter>
-    </ClInclude>
     <ClInclude Include="Socket\YTSocketThread.h">
-      <Filter>Socket</Filter>
-    </ClInclude>
-    <ClInclude Include="Socket\YTSocketMutiClient.h">
-      <Filter>Socket</Filter>
-    </ClInclude>
-    <ClInclude Include="Socket\YTSocketMutiClientController.h">
       <Filter>Socket</Filter>
     </ClInclude>
     <ClInclude Include="Service\Log.h">
@@ -1182,6 +1179,42 @@
     </ClInclude>
     <ClInclude Include="Socket\WebSocket\YTWSServer.h">
       <Filter>Socket\WebSocket</Filter>
+    </ClInclude>
+    <ClInclude Include="lz4\lz4.h">
+      <Filter>lz4</Filter>
+    </ClInclude>
+    <ClInclude Include="lz4\lz4frame.h">
+      <Filter>lz4</Filter>
+    </ClInclude>
+    <ClInclude Include="lz4\lz4hc.h">
+      <Filter>lz4</Filter>
+    </ClInclude>
+    <ClInclude Include="lz4\lz4feasy.h">
+      <Filter>lz4</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\WebSocket\WSPkgParser.h">
+      <Filter>Socket\WebSocket</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\WebSocket\WSSendBuffer.h">
+      <Filter>Socket\WebSocket</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\YTSocketBase.h">
+      <Filter>Socket\libevSocket</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\YTSocketClient.h">
+      <Filter>Socket\libevSocket</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\YTSocketConnector.h">
+      <Filter>Socket\libevSocket</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\YTSocketMutiClient.h">
+      <Filter>Socket\libevSocket</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\YTSocketMutiClientController.h">
+      <Filter>Socket\libevSocket</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\YTSocketServer.h">
+      <Filter>Socket\libevSocket</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

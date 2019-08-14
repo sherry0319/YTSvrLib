@@ -115,3 +115,11 @@ void CGMSvrParser::CloseAllClients()
 	}
 	m_listClients.clear();
 }
+
+void CGMSvrParser::OnDisconnected(CGMSvrSocket* pGMSock)
+{
+	if (pGMSock)
+	{
+		m_listClients.erase(pGMSock);
+	}
+}

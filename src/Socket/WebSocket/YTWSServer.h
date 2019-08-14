@@ -22,74 +22,54 @@ SOFTWARE.*/
 
 #pragma once
 
-#include "YTWSConnector.h"
+#include <websocketpp/common/asio.hpp>
+#include <websocketpp/config/asio.hpp>
+#include <websocketpp/server.hpp>
+#include <asio/ssl.hpp>
+#include "WSSendBuffer.h"
+#include "WSPkgParser.h"
+
+typedef websocketpp::lib::shared_ptr<websocketpp::lib::asio::ssl::context> context_ptr;
 
 namespace YTSvrLib
 {
-	struct IWSSESSION
-	{
-		SOCKET socket;
-		char ip[32];
-		int port;
-	};
-
-	class YTSVRLIB_EXPORT IWSSERVER : public ITCPEVENTTHREAD, public CWSParserBase
+	class IWSCONNECTOR;
+	class YTSVRLIB_EXPORT IWSSERVER : public websocketpp::server<websocketpp::config::asio_tls>,public IASIOTHREAD, public CWSParserBase
 	{
 	public:
 		IWSSERVER();
 		virtual ~IWSSERVER();
-		BOOL isDebug()
-		{
-			return _debug;
-		}
 	public:
-		BOOL StartListen(int nPort, const char* ssl_cert_filepath = NULL, const char* ssl_private_key_filepath = NULL, BOOL debug = FALSE);
+		BOOL StartListen(int nPort, const char* ssl_cert_filepath = NULL, const char* ssl_private_key_filepath = NULL,BOOL bDebug = FALSE);
+
+		void StopListen();
 	public:
-		virtual bool OnClientPreConnect(void* ctx, IWSSESSION* session); // 当客户端即将连接成功.返回true则允许连接.返回false则拒绝连接
-
-		virtual void OnClientConnected(void* ctx, IWSSESSION* session); 
-
-		virtual void OnClientRecvedData(void* ctx, IWSSESSION* session, char* msg, size_t len);
-
-		virtual void OnClientDisconnect(void* ctx, IWSSESSION* session);
-
-		// 实际发送数据(注意,在不同的线程里注意加锁.不是我要这样做的.libwebsockets要求发送者线程不能和lws_callback在不同的线程)
-		// 返回true则正常继续.返回false连接断开
-		virtual bool OnSend(void* ctx);
+		// 注意,会从不同线程调入.加锁!
+		virtual IWSCONNECTOR* AllocateConnector() = 0;
+		virtual void ReleaseConnector(IWSCONNECTOR* pConn) = 0;
+		virtual bool validateClient(std::string& dstIP) = 0;
+		virtual IWSCONNECTOR* GetConnector(websocketpp::connection_hdl hdl);
 
 		// 注意,会从不同线程调入.加锁!
-		virtual IWSCONNECTOR* GetConnector(void* ctx);
-
-		// 注意,会从不同线程调入.加锁!
-		virtual void SetContextEnable(void* ctx,IWSCONNECTOR* connectior,bool enable);
-	public:
-		static int GetHeader(void* ctx, lws_token_indexes index, char* out, int len);
-	protected:
-		static int Send(void* ctx, const char* msg, int len, lws_write_protocol type = LWS_WRITE_TEXT);
-
-		static SOCKET GetSocket(void* ctx);
-
-		static void GetIPAddr(void* ctx, char* out, int len , int& port);
-
-		static void WaitWritable(void* ctx);
+		virtual void SetContextEnable(websocketpp::connection_hdl hdl,IWSCONNECTOR* connectior);
+		virtual void SetContextDisable(websocketpp::connection_hdl hdl);
 	private:
-		static void AddHeader(void* ctx, void* indata, const char* name, const char* value);
+		void onWSConnected(websocketpp::connection_hdl hdl);
 
-		static int lws_service_callback(lws *wsi, lws_callback_reasons reason, void *user, void* data, size_t len);
+		void onWSClosed(websocketpp::connection_hdl hdl);
 
-		static void lws_catch_syslog(int level, const char *line);
+		void onWSDataRecv(websocketpp::connection_hdl hdl, message_ptr msg);
+
+		context_ptr onWSTLSInit(websocketpp::connection_hdl hdl);
+
+		bool onWSValidate(websocketpp::connection_hdl hdl);
 	private:
-		friend void IWSCONNECTOR::OnSend();
-		friend void IWSCONNECTOR::Close();
-		friend void IWSCONNECTOR::WaitWritable();
-
-		static lws_protocols _protocols[2];
+		std::string _ssl_cert;
+		std::string _ssl_key;
 		int _port;
-		BOOL _debug;
-		lws_context* _core;
 
 		YTSvrLib::CLock _connector_lock;
-		typedef std::unordered_map<void*,IWSCONNECTOR*> CEnableContext;
+		typedef std::map<websocketpp::connection_hdl,IWSCONNECTOR*,std::owner_less<websocketpp::connection_hdl>> CEnableContext;
 		CEnableContext _enabled_map;
 	};
 }

@@ -153,7 +153,7 @@ string CXMLParser::GetXmlStr()
     }
     catch(...)
     {
-		return string("");
+		return std::string("");
     }
 
     return result;

@@ -27,33 +27,33 @@
     <SccLocalPath>Svn</SccLocalPath>
     <SccProvider>SubversionScc</SccProvider>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug64DLL|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release64|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release64DLL|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -107,8 +107,8 @@
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>./mysql/include/;./libevent/;./libwebsockets/include/;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_WIN64;NDEBUG;YTSVRLIB_NO_DLL;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>./mysql/include/;./libevent/;./asio/;./libwebsockets/include/;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>YTLIB_WITH_WEBSOCKET;_WEBSOCKETPP_CPP11_TYPE_TRAITS_;ASIO_STANDALONE;_WIN64;NDEBUG;YTSVRLIB_NO_DLL;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -117,18 +117,18 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <DisableSpecificWarnings>4275;4505;4512;4127;</DisableSpecificWarnings>
       <ExceptionHandling>Async</ExceptionHandling>
-      <ProgramDataBaseFileName>$(TargetDir)$(TargetName).pdb</ProgramDataBaseFileName>
     </ClCompile>
     <Lib />
     <PostBuildEvent>
-      <Command>xcopy /d /i /f /y $(TargetPath) $(SolutionDir)Lib\
-xcopy /d /i /e /r /f /y $(ProjectDir)*.h $(SolutionDir)Header\
-xcopy /d /i /e /r /f /y $(ProjectDir)*.dll $(SolutionDir)Header\</Command>
+      <Command>xcopy /d /i /f /y $(OutputPath)$(TargetName).lib $(SolutionDir)Lib\
+xcopy /d /i /f /y $(OutputPath)$(TargetName).dll $(SolutionDir)Lib\
+xcopy $(ProjectDir)*.h $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
+xcopy $(ProjectDir)*.hpp $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
+xcopy $(ProjectDir)*.ipp $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
+xcopy $(ProjectDir)*.dll $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
+xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
     </PostBuildEvent>
-    <PreBuildEvent>
-      <Command>
-      </Command>
-    </PreBuildEvent>
+    <PreBuildEvent />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release64DLL|x64'">
     <Midl>
@@ -140,8 +140,8 @@ xcopy /d /i /e /r /f /y $(ProjectDir)*.dll $(SolutionDir)Header\</Command>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>./mysql/include/;./libevent/;./libwebsockets/include/;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_WIN64;NDEBUG;YTSVRLIB_MAKE_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>./mysql/include/;./libevent/;./asio/;./libwebsockets/include/;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>YTLIB_WITH_WEBSOCKET;_WEBSOCKETPP_CPP11_TYPE_TRAITS_;ASIO_STANDALONE;_WIN64;NDEBUG;YTSVRLIB_MAKE_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -150,22 +150,21 @@ xcopy /d /i /e /r /f /y $(ProjectDir)*.dll $(SolutionDir)Header\</Command>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <DisableSpecificWarnings>4275;4505;4512;4127;4251;4273;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ExceptionHandling>Async</ExceptionHandling>
-      <ProgramDataBaseFileName>$(TargetDir)$(TargetName).pdb</ProgramDataBaseFileName>
     </ClCompile>
     <Lib />
     <PostBuildEvent>
       <Command>xcopy /d /i /f /y $(OutputPath)$(TargetName).lib $(SolutionDir)Lib\
 xcopy /d /i /f /y $(OutputPath)$(TargetName).dll $(SolutionDir)Lib\
-xcopy /d /i /e /r /f /y $(ProjectDir)*.h $(SolutionDir)Header\
-xcopy /d /i /e /r /f /y $(ProjectDir)*.dll $(SolutionDir)Header\</Command>
+xcopy $(ProjectDir)*.h $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
+xcopy $(ProjectDir)*.hpp $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
+xcopy $(ProjectDir)*.ipp $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
+xcopy $(ProjectDir)*.dll $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
+xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
     </PostBuildEvent>
     <Link>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
-    <PreBuildEvent>
-      <Command>
-      </Command>
-    </PreBuildEvent>
+    <PreBuildEvent />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'">
     <Midl>
@@ -177,8 +176,8 @@ xcopy /d /i /e /r /f /y $(ProjectDir)*.dll $(SolutionDir)Header\</Command>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>./mysql/include/;./libevent/;./libwebsockets/include/;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_WIN64;DEBUG64;YTSVRLIB_NO_DLL;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>./mysql/include/;./libevent/;./asio/;./libwebsockets/include/;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>YTLIB_WITH_WEBSOCKET;_WEBSOCKETPP_CPP11_TYPE_TRAITS_;ASIO_STANDALONE;_WIN64;DEBUG64;YTSVRLIB_NO_DLL;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -188,19 +187,18 @@ xcopy /d /i /e /r /f /y $(ProjectDir)*.dll $(SolutionDir)Header\</Command>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <OmitFramePointers>false</OmitFramePointers>
       <ExceptionHandling>Async</ExceptionHandling>
-      <ProgramDataBaseFileName>$(TargetDir)$(TargetName).pdb</ProgramDataBaseFileName>
     </ClCompile>
     <Lib />
     <PostBuildEvent>
-      <Command>xcopy /F /Y $(TargetPath) $(SolutionDir)Lib\
+      <Command>xcopy /d /i /f /y $(OutputPath)$(TargetName).lib $(SolutionDir)Lib\
+xcopy /d /i /f /y $(OutputPath)$(TargetName).dll $(SolutionDir)Lib\
 xcopy $(ProjectDir)*.h $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
+xcopy $(ProjectDir)*.hpp $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
+xcopy $(ProjectDir)*.ipp $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
 xcopy $(ProjectDir)*.dll $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
 xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
     </PostBuildEvent>
-    <PreBuildEvent>
-      <Command>
-      </Command>
-    </PreBuildEvent>
+    <PreBuildEvent />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug64DLL|x64'">
     <Midl>
@@ -212,8 +210,8 @@ xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>./mysql/include/;./libevent/;./libwebsockets/include/;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_WIN64;DEBUG64;_LIB;YTSVRLIB_MAKE_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>./mysql/include/;./libevent/;./asio/;./libwebsockets/include/;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>YTLIB_WITH_WEBSOCKET;_WEBSOCKETPP_CPP11_TYPE_TRAITS_;ASIO_STANDALONE;_WIN64;DEBUG64;_LIB;YTSVRLIB_MAKE_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -225,23 +223,21 @@ xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <OmitFramePointers>false</OmitFramePointers>
       <ExceptionHandling>Async</ExceptionHandling>
-      <ProgramDataBaseFileName>$(TargetDir)$(TargetName).pdb</ProgramDataBaseFileName>
     </ClCompile>
     <Lib />
     <PostBuildEvent>
       <Command>xcopy /d /i /f /y $(OutputPath)$(TargetName).lib $(SolutionDir)Lib\
 xcopy /d /i /f /y $(OutputPath)$(TargetName).dll $(SolutionDir)Lib\
 xcopy $(ProjectDir)*.h $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
+xcopy $(ProjectDir)*.hpp $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
+xcopy $(ProjectDir)*.ipp $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
 xcopy $(ProjectDir)*.dll $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
 xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
     </PostBuildEvent>
     <Link>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
-    <PreBuildEvent>
-      <Command>
-      </Command>
-    </PreBuildEvent>
+    <PreBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Base64\Base64.cpp" />
@@ -249,6 +245,7 @@ xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
     <ClCompile Include="Global\GlobalServer.cpp" />
     <ClCompile Include="Global\Performance.cpp" />
     <ClCompile Include="Global\GlobalURLRequest.cpp" />
+    <ClCompile Include="lz4\lz4feasy.cpp" />
     <ClCompile Include="md5\md5.cpp" />
     <ClCompile Include="mysql\MYSQLCommand.cpp" />
     <ClCompile Include="mysql\MYSQLDBClient.cpp" />
@@ -269,6 +266,8 @@ xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
     <ClCompile Include="Service\Utility.cpp" />
     <ClCompile Include="sha\sha1.cpp" />
     <ClCompile Include="Socket\SendBuffer.cpp" />
+    <ClCompile Include="Socket\WebSocket\WSPkgParser.cpp" />
+    <ClCompile Include="Socket\WebSocket\WSSendBuffer.cpp" />
     <ClCompile Include="Socket\WebSocket\YTWSConnector.cpp" />
     <ClCompile Include="Socket\WebSocket\YTWSServer.cpp" />
     <ClCompile Include="Socket\YTSocketBase.cpp" />
@@ -328,6 +327,10 @@ xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
     <ClInclude Include="dice\dice.h" />
     <ClInclude Include="findpath\JPS.h" />
     <ClInclude Include="Global\GlobalURLRequest.h" />
+    <ClInclude Include="lz4\lz4.h" />
+    <ClInclude Include="lz4\lz4feasy.h" />
+    <ClInclude Include="lz4\lz4frame.h" />
+    <ClInclude Include="lz4\lz4hc.h" />
     <ClInclude Include="mysql\include\big_endian.h" />
     <ClInclude Include="mysql\include\binary_log_types.h" />
     <ClInclude Include="mysql\include\byte_order_generic.h" />
@@ -475,6 +478,8 @@ xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
     <ClInclude Include="mysql\MYSQLRecordSet.h" />
     <ClInclude Include="Service\TimerHandler.h" />
     <ClInclude Include="sha\sha1.h" />
+    <ClInclude Include="Socket\WebSocket\WSPkgParser.h" />
+    <ClInclude Include="Socket\WebSocket\WSSendBuffer.h" />
     <ClInclude Include="Socket\WebSocket\YTWSConnector.h" />
     <ClInclude Include="Socket\WebSocket\YTWSServer.h" />
     <ClInclude Include="tinyxml\tinyxml2.h" />

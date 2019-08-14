@@ -29,6 +29,7 @@ namespace YTSvrLib
 	{
 		m_setTimers.clear();
 		m_listFarTimer.clear();
+		m_setHighTimers.clear();
 	}
 
 	ITIMERHANDLER::~ITIMERHANDLER()
@@ -42,6 +43,16 @@ namespace YTSvrLib
 		}
 
 		m_setTimers.clear();
+
+		for (SetTimer::iterator it = m_setHighTimers.begin(); it != m_setHighTimers.end(); it++)
+		{
+			if (*it)
+			{
+				m_poolTimers.ReclaimObj(*it);
+			}
+		}
+
+		m_setHighTimers.clear();
 
 		for (ListTimer::iterator it = m_listFarTimer.begin(); it != m_listFarTimer.end();++it)
 		{
@@ -99,20 +110,27 @@ namespace YTSvrLib
 
 	void ITIMERHANDLER::AddNewTimer(LPSTimerInfo pTimer)
 	{
-		if (pTimer->GetEnd() < GetNearTime())
+		if (pTimer->GetLevel() == TLEVEL_NORMAL)
 		{
-			m_setTimers.insert(pTimer);
+			if (pTimer->GetEnd() < GetNearTime())
+			{
+				m_setTimers.insert(pTimer);
+			}
+			else
+			{
+				m_listFarTimer.push_back(pTimer);
+			}
 		}
 		else
 		{
-			m_listFarTimer.push_back(pTimer);
+			m_setHighTimers.insert(pTimer);
 		}
 
-		LOGTRACE("Set Timer=0x%x Type=%d UserID=%d Total=%d",
-				 pTimer, pTimer->m_nType, pTimer->m_nUserID, m_setTimers.size());
+		LOGTRACE("Set Timer=0x%x Level=%d Type=%d UserID=%d Total=%d",
+				 pTimer, pTimer->GetLevel(),pTimer->m_nType, pTimer->m_nUserID, m_setTimers.size());
 	}
 
-	LPSTimerInfo ITIMERHANDLER::SetNewTimer(int nTimerType, int nUserID, DOUBLE tBegin, DOUBLE tEnd, TIMER_PARAM nParam1, TIMER_PARAM nParam2, TIMER_PARAM nParam3, TIMER_PARAM nParam4)
+	LPSTimerInfo ITIMERHANDLER::SetNewTimer(EM_TIMER_LEVEL emLevel, int nTimerType, int nUserID, DOUBLE tBegin, DOUBLE tEnd, TIMER_PARAM nParam1, TIMER_PARAM nParam2, TIMER_PARAM nParam3, TIMER_PARAM nParam4)
 	{
 		LPSTimerInfo pTimer = AllocateTimer(nTimerType);
 		if (pTimer == NULL)
@@ -121,6 +139,7 @@ namespace YTSvrLib
 			return NULL;
 		}
 
+		pTimer->m_emLevel = emLevel;
 		pTimer->m_nType = nTimerType;
 		pTimer->m_nUserID = nUserID;
 		pTimer->m_ayParams[0] = nParam1;
@@ -134,9 +153,10 @@ namespace YTSvrLib
 		return pTimer;
 	}
 
-	LPSTimerInfo ITIMERHANDLER::SetNewTimer(int nTimerType, int nUserID, __time32_t tBegin, __time32_t tEnd, TIMER_PARAM nParam1, TIMER_PARAM nParam2 , TIMER_PARAM nParam3 , TIMER_PARAM nParam4)
+	LPSTimerInfo ITIMERHANDLER::SetNewTimer(EM_TIMER_LEVEL emLevel, int nTimerType, int nUserID, __time32_t tBegin, __time32_t tEnd, 
+											TIMER_PARAM nParam1, TIMER_PARAM nParam2, TIMER_PARAM nParam3, TIMER_PARAM nParam4)
 	{
-		return SetNewTimer(nTimerType, nUserID, (DOUBLE) tBegin, (DOUBLE) tEnd, nParam1, nParam2, nParam3, nParam4);
+		return SetNewTimer(emLevel, nTimerType, nUserID, (DOUBLE) tBegin, (DOUBLE) tEnd, nParam1, nParam2, nParam3, nParam4);
 	}
 
 	void ITIMERHANDLER::RemoveTimer(LPSTimerInfo pTimer)
@@ -153,24 +173,33 @@ namespace YTSvrLib
 			return;
 		}
 
-		if (pTimer->GetEnd() < GetNearTime())
+		if (pTimer->GetLevel() == TLEVEL_NORMAL)
 		{
-			SetTimer::iterator it = m_setTimers.find(pTimer);
-			if (it != m_setTimers.end())
-				m_setTimers.erase(it);
+			if (pTimer->GetEnd() < GetNearTime())
+			{
+				SetTimer::iterator it = m_setTimers.find(pTimer);
+				if (it != m_setTimers.end())
+					m_setTimers.erase(it);
+			}
+			else
+			{
+				ListTimer::iterator itFar = m_listFarTimer.begin();
+				while (itFar != m_listFarTimer.end())
+				{
+					if ((*itFar) == pTimer)
+					{
+						m_listFarTimer.erase(itFar);
+						break;
+					}
+					++itFar;
+				}
+			}
 		}
 		else
 		{
-			ListTimer::iterator itFar = m_listFarTimer.begin();
-			while (itFar != m_listFarTimer.end())
-			{
-				if ((*itFar) == pTimer)
-				{
-					m_listFarTimer.erase(itFar);
-					break;
-				}
-				++itFar;
-			}
+			SetTimer::iterator it = m_setHighTimers.find(pTimer);
+			if (it != m_setHighTimers.end())
+				m_setHighTimers.erase(it);
 		}
 
 		ReleaseTimer(pTimer);
@@ -178,38 +207,83 @@ namespace YTSvrLib
 
 	void ITIMERHANDLER::UpdateTimer(LPSTimerInfo pTimer, DOUBLE tNewBegin, DOUBLE tNewEnd)
 	{
-		if (pTimer->GetEnd() < GetNearTime())
+		if (pTimer->GetLevel() == TLEVEL_NORMAL)
 		{
-			SetTimer::iterator it = m_setTimers.find(pTimer);
-			if (it == m_setTimers.end())
+			if (pTimer->GetEnd() < GetNearTime())
+			{
+				SetTimer::iterator it = m_setTimers.find(pTimer);
+				if (it == m_setTimers.end())
+				{
+					LOGTRACE("TimerMgr_UpdateTimer Cannot Find Timer=0x%x Type=%d UserID=%d Error!", pTimer, pTimer->m_nType, pTimer->m_nUserID);
+					return;
+				}
+				m_setTimers.erase(it);
+				pTimer->ResetTimer(tNewBegin, tNewEnd);
+			}
+			else
+			{
+				ListTimer::iterator itFar = m_listFarTimer.begin();
+				while (itFar != m_listFarTimer.end())
+				{
+					if ((*itFar) == pTimer)
+					{
+						m_listFarTimer.erase(itFar);
+						pTimer->ResetTimer(tNewBegin, tNewEnd);
+						break;
+					}
+					++itFar;
+				}
+			}
+		}
+		else
+		{
+			SetTimer::iterator it = m_setHighTimers.find(pTimer);
+			if (it == m_setHighTimers.end())
 			{
 				LOGTRACE("TimerMgr_UpdateTimer Cannot Find Timer=0x%x Type=%d UserID=%d Error!", pTimer, pTimer->m_nType, pTimer->m_nUserID);
 				return;
 			}
-			m_setTimers.erase(it);
+			m_setHighTimers.erase(it);
 			pTimer->ResetTimer(tNewBegin, tNewEnd);
 		}
-		else
-		{
-			ListTimer::iterator itFar = m_listFarTimer.begin();
-			while (itFar != m_listFarTimer.end())
-			{
-				if ((*itFar) == pTimer)
-				{
-					m_listFarTimer.erase(itFar);
-					pTimer->ResetTimer(tNewBegin, tNewEnd);
-					break;
-				}
-				++itFar;
-			}
-		}
-
+		
 		AddNewTimer(pTimer);
 	}
 
 	void ITIMERHANDLER::UpdateTimer(LPSTimerInfo pTimer, DOUBLE tNewEnd)
 	{
 		UpdateTimer(pTimer, pTimer->GetBegin(), tNewEnd);
+	}
+
+	void ITIMERHANDLER::CheckHighTimer(DOUBLE tNow)
+	{
+		while (false == m_setHighTimers.empty())
+		{
+			SetTimer::iterator iter = m_setHighTimers.begin();
+			if ((*iter) && (*iter)->GetEnd() <= tNow)
+			{
+				LPSTimerInfo pTimer = (*iter);
+				m_setHighTimers.erase(iter);
+				pTimer->SetCalling(TRUE);
+				OnTimer(pTimer);
+				ReleaseTimer(pTimer);
+				continue;
+			}
+			DOUBLE tCurEnd = (*iter)->GetEnd();
+			SetTimer::iterator iterPre = iter;
+			LPSTimerInfo pTimerPre = (*iter);
+			iter++;
+			if (iter == m_setHighTimers.end())
+			{
+				break;
+			}
+			if (tCurEnd > (*iter)->GetEnd() || (tCurEnd - tNow) > (SEC_MINUTE * 3))
+			{
+				m_setHighTimers.erase(iterPre);
+				m_setHighTimers.insert(pTimerPre);
+			}
+			break;
+		}
 	}
 
 	void ITIMERHANDLER::CheckTimer(DOUBLE tNow)

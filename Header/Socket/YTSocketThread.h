@@ -25,16 +25,47 @@ SOFTWARE.*/
 #include <thread>
 #include <event.h>
 
+#ifdef YTLIB_WITH_WEBSOCKET
+#include <asio.hpp>
+#include <asio/io_service.hpp>
+#endif // YTLIB_WITH_WEBSOCKET
+
 namespace YTSvrLib
 {
-	class YTSVRLIB_EXPORT ITCPEVENTTHREAD
-	{
+	class YTSVRLIB_EXPORT ITHREAD {
 	public:
-		ITCPEVENTTHREAD()
-		{
-			m_eventbase = NULL;
+		ITHREAD() {
 			m_bRun = FALSE;
 			m_bRuning = FALSE;
+		}
+
+		BOOL IsRuning() const
+		{
+			return m_bRuning;
+		}
+
+		void CreateThread();
+
+		void Run();
+
+		virtual void EventLoop() = 0;
+
+		virtual void OnThreadEnd() {}// 线程结束
+
+		virtual void StopThread();
+
+		virtual void CleanThread();
+	protected:
+		BOOL m_bRun;
+		BOOL m_bRuning;
+	};
+
+	class YTSVRLIB_EXPORT ITCPEVENTTHREAD : public ITHREAD
+	{
+	public:
+		ITCPEVENTTHREAD() : ITHREAD()
+		{
+			m_eventbase = NULL;
 		}
 
 		virtual ~ITCPEVENTTHREAD()
@@ -44,32 +75,37 @@ namespace YTSvrLib
 
 		BOOL CreateEvent();
 
-		BOOL IsRuning() const
-		{
-			return m_bRuning;
-		}
-
-		void CreateThread();
-
 		event_base* GetEvent()
 		{
 			return m_eventbase;
 		}
 
 		virtual void EventLoop(); // 线程函数
-
-		virtual void OnThreadEnd(){}// 线程结束
 	protected:
-		virtual void CleanThread();
+		virtual void CleanThread() override;
 
-		void StopThread();
+		virtual void StopThread() override;
 
 		void StopEvent();
 	private:
 		event_base* m_eventbase;
-		BOOL m_bRun;
-		BOOL m_bRuning;
 	};
+
+#ifdef YTLIB_WITH_WEBSOCKET
+	class YTSVRLIB_EXPORT IASIOTHREAD : public ITHREAD {
+	public:
+		IASIOTHREAD() : ITHREAD()
+		{}
+
+		asio::io_service* GetCore() {
+			return &io;
+		}
+
+		virtual void EventLoop(); // 线程函数
+	private:
+		asio::io_service io;
+	};
+#endif // YTLIB_WITH_WEBSOCKET
 }
 
 #endif // !__YTSOCKET_THREAD_H_

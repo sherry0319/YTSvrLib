@@ -1,13 +1,31 @@
 #include "stdafx.h"
 #include "PkgParser.h"
+#include "../../Common/ClientDef.h"
+#include "../timer/TimerMgr.h"
+#include "../Global.h"
+#include "../../Common/MsgRetDef.h"
+#include "../ServerParser/ServerSocket.h"
+#include "../ServerParser/ServerParser.h"
 
-CPkgParser::CPkgParser():YTSvrLib::IWSSERVER(),m_PoolPlayer("GameSocket"), m_poolMessageTime("sMessageTime")
+//////////////////////////////////////////////////////////////////////////
+CPkgParser::CPkgParser() :YTSvrLib::IWSSERVER(), m_PoolPlayer("GameSocket"), m_poolMessageTime("sMessageTime")
 {
 	m_nNextClientID = 1;
+	m_pszRecvCompressBuff = new char[MAX_DATA_TO_ZIP];
+	m_pszSendCompressBuff = new char[MAX_DATA_TO_ZIP];
 }
 CPkgParser::~CPkgParser()
 {
-
+	if (m_pszRecvCompressBuff)
+	{
+		delete[] m_pszRecvCompressBuff;
+		m_pszRecvCompressBuff = NULL;
+	}
+	if (m_pszSendCompressBuff)
+	{
+		delete[] m_pszSendCompressBuff;
+		m_pszSendCompressBuff = NULL;
+	}
 }
 
 void CPkgParser::SetEvent()
@@ -24,36 +42,31 @@ void CPkgParser::CheckIdleSocket(__time32_t tNow)
 {
 	LOG("PkgParser::CheckIdleSocket");
 
-	std::unordered_set<void*> needRemove;
+	CAcceptedClient needRemove;
 
-	CAcceptedClient::iterator it = m_mapAccepted.begin();
-	while (it != m_mapAccepted.end())
+	for (auto& pSocket : m_mapAccepted)
 	{
-		if (it->first && it->second)
+		if (pSocket)
 		{
-			GameSocket* pSocket = it->second;
-			
-			if (pSocket)
+			__time32_t tExpired = pSocket->GetExpired();
+			if (tExpired < tNow)
 			{
-				__time32_t tExpired = pSocket->GetExpired();
-				if (tExpired < tNow)
-				{
-					LOG("WEBSOCKET ====>>> PkgParser::CheckIdleSocket ctx=%x Socket=%x to Close.", it->first,pSocket);
-					needRemove.insert(it->first);
-				}
+				LOG("WEBSOCKET ====>>> PkgParser::CheckIdleSocket Socket=%x CID=%d Expired=%ld to Close.", pSocket, pSocket->GetClientID(), tExpired);
+				needRemove.insert(pSocket);
 			}
 		}
-		++it;
 	}
 
 	for (auto& ctx : needRemove)
 	{
-		m_mapAccepted[ctx]->Close();
+		ctx->Close();
 	}
 }
 
 bool CPkgParser::IsValidIP(const char* ip)
 {
+	// 校验ip是否允许连接
+
 	return true;
 }
 
@@ -62,7 +75,7 @@ void CPkgParser::SendRespWithError(WORD wMsgType, int nError, int nMsgSeqNo, Gam
 	sClientMsg_RespHead sResp(wMsgType);
 	sResp.m_nRespRet = nError;
 	sResp.m_nMsgSeqNo = nMsgSeqNo;
-	pSocket->SendBinary((const char*) &sResp, sizeof(sResp));
+	pSocket->SendBinary((const char*)& sResp, sizeof(sResp));
 	if (bCloseSocket)
 	{
 		LOG("WEBSOCKET ====>>> Socket=%x Msg=%d Ret=%d Safe Close", pSocket, wMsgType, nError);
@@ -82,14 +95,14 @@ void CPkgParser::SetClientSocket(GameSocket* pNewClientSock)
 	}
 }
 
-void CPkgParser::ProcessMessage(void* ctx, void* session, const char *msg, int nLen)
+void CPkgParser::ProcessMessage(YTSvrLib::IWSCONNECTOR* pConn, const char* msg, int nLen)
 {
 	static const int HEAD_SIZE = sizeof(sClientMsg_Head);
-	YTSvrLib::IWSSESSION* s = (YTSvrLib::IWSSESSION*) session;
-	GameSocket* pClientSock = m_mapAccepted[ctx];
+
+	GameSocket* pClientSock = dynamic_cast<GameSocket*>(pConn);
 
 #ifdef DEBUG64
-	LOG("WEBSOCKET ====>>> ProcessMessage ctx=%x from=%x len=%d", ctx, pClientSock, nLen);
+	LOG("WEBSOCKET ====>>> ProcessMessage from=%x len=%d", pClientSock, nLen);
 #endif
 
 	if (pClientSock == NULL)
@@ -104,59 +117,106 @@ void CPkgParser::ProcessMessage(void* ctx, void* session, const char *msg, int n
 		return;
 	}
 
-	sClientMsg_Head* pMsgCommHead = (sClientMsg_Head*) msg;
+	sClientMsg_Head* pMsgCommHead = (sClientMsg_Head*)msg;
 	if (pMsgCommHead->m_nTCPFlag != TCPFLAG_SIGN_CLIENTMSG)
 	{
-		// ERROR
+		pClientSock->SetExpired(GET_TIME_NOW + HANGON_KEEP_ALIVE_EXPIRED);
+		SendRespWithError(RESP(pMsgCommHead->m_nMsgType), RET_FAIL, pMsgCommHead->m_nMsgSeqNo, pClientSock, TRUE);
 		return;
 	}
-
-	if (nLen >= sizeof(sClientMsg_ReqHead))//正常数据包
+	ZeroMemory(m_pszRecvCompressBuff, MAX_DATA_TO_ZIP);
+	if (pMsgCommHead->m_nZipEncrypFlag & _CLIENTMSG_FLAG_ZIPPED
+		/*&& GetInstance()->m_pfnZUncompress != NULL*/ && pMsgCommHead->m_nZipSrcLen < MAX_DATA_TO_ZIP)
 	{
-		sClientMsg_ReqHead* pReqHead = (sClientMsg_ReqHead*) pMsgCommHead;
+		memcpy(m_pszRecvCompressBuff, pMsgCommHead, sizeof(sClientMsg_Head));
+		ULONG nUnZippedBufLen = MAX_DATA_TO_ZIP - sizeof(sClientMsg_Head);
 
+#ifdef ZIP_LZ4
+		nUnZippedBufLen = YTSvrLib::LZ4FEasy::LZ4F_decompress((const char*)(pMsgCommHead + 1), (char*)(m_pszRecvCompressBuff + sizeof(sClientMsg_Head)), nLen - sizeof(sClientMsg_Head), MAX_DATA_TO_ZIP);
+		if (nUnZippedBufLen > 0)
+#else
+		int nRet = uncompress((Bytef*)(m_pszRecvCompressBuff + sizeof(sClientMsg_Head)), &nUnZippedBufLen, (BYTE*)(pMsgCommHead + 1), nLen - sizeof(sClientMsg_Head));
+		if (nRet == Z_OK)
+#endif
+		{
+			pMsgCommHead = (sClientMsg_Head*)m_pszRecvCompressBuff;
+			pMsgCommHead->m_nMsgLenTotal = sizeof(sClientMsg_Head) + nUnZippedBufLen;
+			nLen = pMsgCommHead->m_nMsgLenTotal;
+		}
+		else
+		{
+#ifdef ZIP_LZ4
+			LOG("Socket=%x CID=%d Msg=%d LZ4 decompress Error=%d", pClientSock, pClientSock->GetClientID(), pMsgCommHead->m_nMsgType, nUnZippedBufLen);
+#else
+			LOG("Socket=%x CID=%d Msg=%d UnZip Error=%d", pClientSock, pClientSock->GetClientID(), pMsgCommHead->m_nMsgType, nRet);
+#endif
+			return;
+		}
+#ifdef _DEBUG_LOG
+		LOG("Socket=%x CID=%d UnZip Msg=%d OK", pClientSock, pClientSock->GetClientID(), pMsgCommHead->m_nMsgType);
+#endif
+	}
+	if (nLen >= sizeof(sClientMsg_ReqHead))// 正常数据包
+	{
+		sClientMsg_ReqHead* pReqHead = (sClientMsg_ReqHead*)pMsgCommHead;
+		pReqHead->CheckData(nLen);
 
+		pClientSock->SetExpired(GET_TIME_NOW + DEFAULT_KEEP_ALIVE_EXPIRED);
+
+		SetClientSocket(pClientSock);
+		LPCSTR pszMsgBody = (LPCSTR)(pReqHead + 1);
+		int nBodyLen = nLen - sizeof(sClientMsg_ReqHead);
+
+		if (pReqHead->m_nMsgType > 0)
+		{
+			LOG("WEBSOCKET ====>>> Socket=%x CID=%d User=%d Recv Msg=%d Len=%d From=%s:%d",
+				pClientSock, pClientSock->GetClientID(),
+				pReqHead->m_nUserID, pReqHead->m_nMsgType, nBodyLen,
+				pClientSock->GetAddrIp(), pClientSock->GetAddrPort());
+		}
+
+		LOG("Handle Normal Client Req : Seqno=%d Type=%d Len=%d",pReqHead->m_nMsgSeqNo,pReqHead->m_nMsgType,pReqHead->m_nMsgLenTotal);
 	}
 	else
-	{
 		LOG("WEBSOCKET ====>>> Socket=%x CID=%d Recv Less DataLen=%d", pClientSock, pClientSock->GetClientID(), nLen);
-	}
 }
 
-void CPkgParser::ProcessDisconnectMsg(void* ctx, void* session)
+void CPkgParser::ProcessDisconnectMsg(YTSvrLib::IWSCONNECTOR* pConn)
 {
-	GameSocket* pSocket = m_mapAccepted[ctx];
+	GameSocket* pSocket = (GameSocket*)pConn;
+	LOG("WEBSOCKET ====>>> ProcessDisconnectMsg: GameSocket=%x", pSocket);
 	if (pSocket)
 	{
-		LOG("WEBSOCKET ====>>> ProcessDisconnectMsg: ctx=%x session=%x GameSocket=%x", ctx, session, pSocket);
 		OnClientDisconnect(pSocket);
 		m_mapClientSock.erase(pSocket->GetClientID());
 		pSocket->OnClosed();
-		m_PoolPlayer.ReclaimObj(pSocket);
 	}
-	else
-	{
-		LOG("WEBSOCKET ====>>> ProcessDisconnectMsg: ctx=%x session=%x", ctx, session);
-	}
-	m_mapAccepted.erase(ctx);
+	m_mapAccepted.erase(pSocket);
+	ReleaseConnector(pSocket);
 }
 
-void CPkgParser::ProcessAcceptedMsg(void* ctx, void* session)
+void CPkgParser::ProcessAcceptedMsg(YTSvrLib::IWSCONNECTOR* pConn)
 {
-	YTSvrLib::IWSSESSION* s = (YTSvrLib::IWSSESSION*) session;
-	GameSocket* pSocket = m_PoolPlayer.ApplyObj();
-	pSocket->Create(this, (lws*)ctx, s);
-	m_mapAccepted[ctx] = pSocket;
+	GameSocket* pSocket = (GameSocket*)pConn;
+	pSocket->InitData();
+	m_mapAccepted.insert(pSocket);
 	pSocket->SetClientID(GetNextClientID());
 	m_mapClientSock[pSocket->GetClientID()] = pSocket;
 	pSocket->SetExpired(GET_TIME_NOW + DEFAULT_KEEP_ALIVE_EXPIRED);
-	SetContextEnable(ctx, pSocket, true);
-	LOG("WEBSOCKET ====>>> ProcessAcceptedMsg: ctx=%x GameSocket=%x Accepted.", ctx,pSocket);
+	LOG("WEBSOCKET ====>>> ProcessAcceptedMsg: GameSocket=%x CID=%d Accepted.", pSocket, pSocket->GetClientID());
 }
 
-bool CPkgParser::OnClientPreConnect(void* ctx, YTSvrLib::IWSSESSION* session)
+bool CPkgParser::validateClient(std::string& dstIP)
 {
-	return IsValidIP(session->ip);
+	return IsValidIP(dstIP.c_str());
+}
+
+YTSvrLib::IWSCONNECTOR* CPkgParser::AllocateConnector() {
+	return m_PoolPlayer.ApplyObj();
+}
+
+void CPkgParser::ReleaseConnector(YTSvrLib::IWSCONNECTOR* pConn) {
+	m_PoolPlayer.ReclaimObj((GameSocket*)pConn);
 }
 
 int CPkgParser::SendBroadCastMsg(LPCSTR szBuf, int nSize)
@@ -188,6 +248,23 @@ int CPkgParser::GetNextClientID()
 void CPkgParser::OnClientDisconnect(GameSocket* pSocket)
 {
 	LOG("GameSocket=0x%x CID=%d OnClientDisconnect", pSocket, pSocket->GetClientID());
+
+	CServerSocket* pSvrSock = CServerParser::GetInstance()->GetUserSvrSocket();
+
+	sGWMsg_ClientDisconnect sGWMsg;
+	sGWMsg.m_From.m_emType = emAgent_GateWay;
+	sGWMsg.m_From.m_nAgentID = pSocket->GetClientID();
+	sGWMsg.m_To.m_emType = emAgent_UserSvr;
+	sGWMsg.m_To.m_nAgentID = pSvrSock->GetSvrID();
+	strncpy_s(sGWMsg.m_szClientIP, pSocket->GetAddrIp(), 31);
+	sGWMsg.m_nSvrID = CConfig::GetInstance()->m_nPublicSvrID;
+	sGWMsg.m_nGWID = CConfig::GetInstance()->m_nLocalSvrID;
+	sGWMsg.m_nClientID = pSocket->GetClientID();
+
+	if (pSvrSock && pSvrSock->IsConnectedSvr() == TRUE)
+	{
+		pSvrSock->Send((LPCSTR)(&sGWMsg), sizeof(sGWMsg));
+	}
 }
 
 GameSocket* CPkgParser::GetClientSocket(UINT nClientID)
@@ -205,7 +282,31 @@ GameSocket* CPkgParser::GetClientSocket(UINT nClientID)
 	return NULL;
 }
 
+void CPkgParser::OnUserServerDisconnect()
+{
+	LOG("OnUserServerDisconnect");
+	std::unordered_set<GameSocket*> needClose;
+	ClientID2ISock::iterator it = m_mapClientSock.begin();
+	while (it != m_mapClientSock.end())
+	{
+		GameSocket* pSocket = it->second;
+		if (pSocket)
+		{
+			needClose.insert(pSocket);
+		}
+
+		++it;
+	}
+
+	for (auto& gs : needClose)
+	{
+		gs->Close();
+	}
+
+	needClose.clear();
+}
+
 int CPkgParser::GetCurClientCount()
 {
-	return (int) m_mapClientSock.size();
+	return (int)m_mapClientSock.size();
 }

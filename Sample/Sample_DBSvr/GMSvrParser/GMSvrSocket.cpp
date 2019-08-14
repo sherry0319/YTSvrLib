@@ -46,9 +46,7 @@ int CGMSvrSocket::OnRecved(const char* pBuf, int nLen)
 		{
 			break;
 		}
-		++m_nRecvSeqNo;
 
-		++m_nRecvSeqNo;
 		PostMsg(pHead, nPkgLen);
 		pHead += nPkgLen;
 		nLen = nLen - nPkgLen;
@@ -57,9 +55,20 @@ int CGMSvrSocket::OnRecved(const char* pBuf, int nLen)
 	return nRead;
 }
 
+void CGMSvrSocket::OnDisconnect() {
+	LOG("[%x] CGMSvrSocket OnDisconnect", this);
+
+	if (!m_bClientClosed)
+	{
+		SafeClose();
+	}
+}
+
 void CGMSvrSocket::OnClosed()
 {
+	m_bClientClosed = TRUE;
 
+	CGMSvrParser::GetInstance()->OnDisconnected(this);
 }
 
 void CGMSvrSocket::PostMsg( const char* pBuf, int nLen )
@@ -74,8 +83,6 @@ void CGMSvrSocket::PostDisconnectMsg( EType eType )
 
 void CGMSvrSocket::Send( const char* buf, int nLen )
 { 
-	++m_nSendSeqNo;
-
  	LPSDBMsgHead pMsgHead = (LPSDBMsgHead)buf;
 
 	YTSvrLib::ITCPBASE::Send(buf, nLen);

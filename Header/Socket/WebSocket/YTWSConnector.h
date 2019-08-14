@@ -22,17 +22,20 @@ SOFTWARE.*/
 
 #pragma once
 
+#include <websocketpp/config/asio.hpp>
+#include <websocketpp/server.hpp>
+#include "WSSendBuffer.h"
+#include "YTWSServer.h"
+
 namespace YTSvrLib
 {
-	struct IWSSESSION;
-	class IWSSERVER;
 	class YTSVRLIB_EXPORT IWSCONNECTOR
 	{
 	public:
 		IWSCONNECTOR();
 		virtual ~IWSCONNECTOR();
 
-		virtual void Create(IWSSERVER* server, lws* ctx, IWSSESSION* session);
+		virtual void Create(IWSSERVER* server, IWSSERVER::connection_ptr& con);
 
 		bool IsEnable();
 
@@ -40,27 +43,20 @@ namespace YTSvrLib
 
 		void Close();
 
-		void WaitWritable();
-
-		void Send(const char* msg, int len, lws_write_protocol type = LWS_WRITE_TEXT);
+		void Send(const char* msg, int len);
 
 		void OnSend();
-
-		lws* GetContext() {return m_ctx;}
-
-		IWSSESSION* GetSession() {return m_session;}
 	protected:
-		SOCKET GetSocket();
+		const websocketpp::connection_hdl GetSocket() const;
 
-		const char* GetIP();
+		std::string GetIP() const;
 
-		int GetPort();
+		int GetPort() const;
 
 		CWSSendBuffer m_sendBuf;
 	private:
 		YTSvrLib::CLock m_sendLock;
-		lws* m_ctx;
-		IWSSESSION* m_session;
+		IWSSERVER::connection_ptr m_con;
 		IWSSERVER* m_server;
 	};
 }

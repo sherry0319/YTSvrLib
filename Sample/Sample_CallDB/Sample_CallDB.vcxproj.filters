@@ -101,9 +101,4 @@
       <UniqueIdentifier>{59c42db4-f1c1-4506-a18b-294989c56724}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Sample.rc">
-      <Filter>Resources</Filter>
-    </ResourceCompile>
-  </ItemGroup>
 </Project>

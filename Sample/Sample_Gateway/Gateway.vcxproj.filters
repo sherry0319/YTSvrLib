@@ -90,11 +90,6 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Gateway.rc">
-      <Filter>resource</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="configure.ac">
       <Filter>resource</Filter>
     </None>

@@ -22,93 +22,10 @@ SOFTWARE.*/
 #pragma once
 #include "../stl/wqueue.h"
 
-#pragma warning( push )
-#pragma warning(disable:4273)
-#pragma warning(disable:4100)
-#include "libwebsockets.h"
-#pragma warning( pop )
-
 #define SNDBUFFER_BLOCK_SIZE	1024
 
 namespace YTSvrLib
 {
-	struct YTSVRLIB_EXPORT WSSndBuffBlock : public CRecycle
-	{
-		std::string m_msg;
-		lws_write_protocol m_type;
-
-		virtual void Init()
-		{
-			m_msg.clear();
-			m_msg.shrink_to_fit();
-			m_type = LWS_WRITE_TEXT;
-		}
-
-		std::string& GetMsg()
-		{
-			return m_msg;
-		}
-
-		const char* GetMsgData()
-		{// 用libwebsockets发送者要自己预留出填充帧头部信息的空间.见:https://libwebsockets.org/lws-api-doc-master/html/group__sending-data.html 中的 IMPORTANT NOTICE!
-			return (m_msg.c_str() + LWS_PRE);
-		}
-
-		int GetMsgLen()
-		{// 用libwebsockets发送者要自己预留出填充帧头部信息的空间.见:https://libwebsockets.org/lws-api-doc-master/html/group__sending-data.html 中的 IMPORTANT NOTICE!
-			return (int) (m_msg.size() - LWS_PRE);
-		}
-
-		void SetMsg(const char* msg, int len, lws_write_protocol type)
-		{
-			std::string prefix;
-			prefix.assign(LWS_PRE, '\0');
-			std::string real;
-			real.assign(msg, len);
-
-			m_msg = prefix + real;
-			m_type = type;
-		}
-	};
-
-	class YTSVRLIB_EXPORT CWSSendBuffer
-	{
-	public:
-		CWSSendBuffer();
-		virtual ~CWSSendBuffer();
-
-	public:
-		WSSndBuffBlock* AllocateBlock();
-		void ReleaseBlock(WSSndBuffBlock* pObj);
-
-		BOOL IsSending();
-
-		BOOL AddBlock(const char* buf, int len, lws_write_protocol type);
-
-		const char* GetDataToSend();
-
-		int GetDataLenToSend();
-
-		lws_write_protocol GetDataTypeToSend();
-
-		BOOL OnSend();
-
-		void Clear();
-
-		int GetQueueLen();
-
-		void SetQueueLenMax(int nMax);
-
-		BOOL IsQueueFulled();
-	private:
-		WSSndBuffBlock* m_pBlockSending;
-		CWQueue<WSSndBuffBlock*> m_queueSnd;
-		int m_nQueueLenMax;
-		CPool<WSSndBuffBlock, 64> m_poolBlock;
-	};
-
-	//////////////////////////////////////////////////////////////////////////
-
 	struct YTSVRLIB_EXPORT sSndBufferBlock : public CRecycle
 	{
 		char m_szBlock[SNDBUFFER_BLOCK_SIZE];

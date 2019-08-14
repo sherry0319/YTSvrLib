@@ -5,50 +5,42 @@ namespace YTSvrLib
 {
 	IWSCONNECTOR::IWSCONNECTOR()
 	{
-		m_ctx = NULL;
-		m_session = NULL;
 		m_sendBuf.Clear();
 	}
 
 	IWSCONNECTOR::~IWSCONNECTOR()
 	{
-		m_ctx = NULL;
-		m_session = NULL;
 		m_server = NULL;
 		m_sendBuf.Clear();
 	}
 
 	void IWSCONNECTOR::Clean()
 	{
-		m_ctx = NULL;
-		m_session = NULL;
 		m_server = NULL;
 		m_sendBuf.Clear();
 	}
 
-	void IWSCONNECTOR::Create(IWSSERVER* server, lws* ctx, IWSSESSION* session)
+	void IWSCONNECTOR::Create(IWSSERVER* server, IWSSERVER::connection_ptr& con)
 	{
-		m_ctx = ctx;
-		m_session = session;
+		m_con = con;
 		m_server = server;
 	}
 
 	void IWSCONNECTOR::Close()
 	{
 		LOG("IWSCONNECTOR : Close");
-		if (m_server && m_ctx)
-		{
-			m_server->SetContextEnable(m_ctx, this, false);
+		try {
+			if (m_server)
+			{
+				m_server->close(m_con->get_handle(), 0, "normal");
+			}
 		}
-		IWSSERVER::WaitWritable(m_ctx);
+		catch (websocketpp::exception& e) {
+			LOG("IWSCONNECTOR : Close Exception : code=%d what=%s",e.code().value(),e.what());
+		}
 	}
 
-	void IWSCONNECTOR::WaitWritable()
-	{
-		IWSSERVER::WaitWritable(m_ctx);
-	}
-
-	void IWSCONNECTOR::Send(const char* msg, int len, lws_write_protocol type /*= LWS_WRITE_TEXT*/)
+	void IWSCONNECTOR::Send(const char* msg, int len)
 	{
 		if (len <= 0 || !msg || !IsEnable())
 			return;
@@ -61,7 +53,7 @@ namespace YTSvrLib
 		{
 			if (m_sendBuf.IsSending() == FALSE)
 			{
-				if (m_sendBuf.AddBlock(msg, len,type))
+				if (m_sendBuf.AddBlock(msg, len))
 				{
 					bSend = TRUE;
 				}
@@ -72,7 +64,7 @@ namespace YTSvrLib
 			}
 			else
 			{
-				if (m_sendBuf.AddBlock(msg, len, type) == FALSE)
+				if (m_sendBuf.AddBlock(msg, len) == FALSE)
 				{
 					bError = TRUE;
 				}
@@ -88,7 +80,7 @@ namespace YTSvrLib
 
 		if (bSend)
 		{
-			WaitWritable();
+			OnSend();
 		}
 
 		if (bError)
@@ -98,45 +90,29 @@ namespace YTSvrLib
 		}
 	}
 
-	SOCKET IWSCONNECTOR::GetSocket()
+	const websocketpp::connection_hdl IWSCONNECTOR::GetSocket() const
 	{
-		if (m_session == NULL)
-		{
-			return (SOCKET)0;
-		}
-		return m_session->socket;
+		return m_con->get_handle();
 	}
 
-	const char* IWSCONNECTOR::GetIP()
+	std::string IWSCONNECTOR::GetIP() const
 	{
-		if (m_session == NULL)
-		{
-#ifdef DEBUG64
-			return NULL;
-#else
-			return "";
-#endif
-		}
-		return m_session->ip;
+		return m_con->get_remote_endpoint();
 	}
 
-	int IWSCONNECTOR::GetPort()
+	int IWSCONNECTOR::GetPort() const
 	{
-		if (m_session == NULL)
-		{
-			return 0;
-		}
-		return m_session->port;
+		return m_con->get_port();
 	}
 
 	bool IWSCONNECTOR::IsEnable()
 	{
-		if (m_ctx == NULL || m_server == NULL || m_session == NULL)
-			return false;
-		if (m_server->GetConnector(m_ctx) == NULL)
-			return false;
+		if (m_con)
+		{
+			return true;
+		}
 
-		return true;
+		return false;
 	}
 
 	void IWSCONNECTOR::OnSend()
@@ -148,40 +124,32 @@ namespace YTSvrLib
 
 		const char* buf = m_sendBuf.GetDataToSend();
 		int nLen = m_sendBuf.GetDataLenToSend();
-		lws_write_protocol type = m_sendBuf.GetDataTypeToSend();
 		int nSend = 0;
 
-		if (buf)
+		while (buf)
 		{
-			SetSysLastError(0);
-			if ((nSend = IWSSERVER::Send(m_ctx, buf, nLen, type)) >= 0)
+			try
 			{
-				// LOG("Data Send = %d/%d",nSend,nLen);
+				m_con->send((const void*)buf, (size_t)nLen);
+
 				m_sendLock.Lock();
 				BOOL bHasDataToSend = m_sendBuf.OnSend();
 				m_sendLock.UnLock();
 
-				if (!IsEnable())
-				{
-					return;
-				}
-
 				if (bHasDataToSend)
 				{
-					WaitWritable();
+					buf = m_sendBuf.GetDataToSend();
+					nLen = m_sendBuf.GetDataLenToSend();
 				}
-
-				return;
+				else
+				{
+					break;
+				}
 			}
-			else
+			catch (system_error const& e)
 			{
+				LOG("IWSCONNECTOR Send Exception : %d [%s]",e.code().value(),e.what());
 				DWORD dwCode = GetLastError();
-
-				if (nSend < 0 && dwCode == 0)
-				{// 处理特殊情况.websocket临时断开处理写请求
-					WaitWritable();
-					return;
-				}
 
 #ifdef LIB_WINDOWS
 				if (dwCode != WSAEWOULDBLOCK)
@@ -190,29 +158,8 @@ namespace YTSvrLib
 #endif // LIB_WINDOWS
 				{
 					LOG("Send Data Error : %d.Error : %d", nSend, dwCode);
-					Close();
-					return;
-				}
-#ifdef LIB_WINDOWS
-				if (dwCode == WSAEWOULDBLOCK)
-#else
-				if (dwCode == EAGAIN)
-#endif
-				{// 如果这里返回EAGAIN.这是一个特殊情况.说明在非阻塞socket中send太快了已经占满了系统写缓冲区.要等待系统处理完系统写缓冲区之后再进行处理.
-					// 所以强制调用一次select.监视写缓冲区.如果写缓冲区可写了.则继续写.如果超时或者错误了.则直接返回.
-					fd_set fds;
-					timeval timeout = { 1, 0 };// 设置1秒超时.如果1秒还没处理完也太慢了吧
-
-					FD_ZERO(&fds);
-					FD_SET(GetSocket(), &fds);
-
-					int ret = select((int) GetSocket() + 1, NULL, &fds, NULL, &timeout);
-					if (ret <= 0)
-					{
-						LOG("Send Data Error Select : %d.Error : %d", nSend, dwCode);
-						Close();
-						return;
-					}
+					m_server->postWSEvent(this, WSEType_ClientClose);
+					break;
 				}
 			}
 		}

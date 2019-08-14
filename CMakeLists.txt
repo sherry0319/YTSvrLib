@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.1)
 
 IF(WIN32)
 	MESSAGE(FATAL_ERROR "YTSVRLIB CMAKE VERSION IS NOT SUPPORT WIN32&MSVC. PLEASE USE \"YTSvrLib.sln\" INSTEAD!!")
@@ -9,6 +9,7 @@ PROJECT(ytsvrlib)
 INCLUDE_DIRECTORIES(
 src/
 src/mysql/include/
+src/asio/
 )
 
 OPTION(WITH_DEBUG "" OFF)
@@ -45,6 +46,8 @@ src/Socket/YTSocketMutiClient.cpp
 src/Socket/YTSocketMutiClientController.cpp
 src/Socket/WebSocket/YTWSServer.cpp
 src/Socket/WebSocket/YTWSConnector.cpp
+src/Socket/WebSocket/WSSendBuffer.cpp
+src/Socket/WebSocket/WSPkgParser.cpp
 src/sha/sha1.cpp
 src/tinyxml/tinyxml2.cpp 
 src/tinyxml/XMLParser.cpp 
@@ -55,11 +58,12 @@ src/redis/RedisConnector.cpp
 src/redis/RedisConnectorPool.cpp 
 src/redis/RedisConnectorCommand.cpp 
 src/Filter/Filter.cpp
+src/lz4/lz4feasy.cpp 
 )
 
 SET(BUILD_SHARED_LIBS ON)
 
-SET(CMAKE_CXX_FLAGS "-fstack-protector-all -fpermissive -std=c++11 -g")
+SET(CMAKE_CXX_FLAGS "-fstack-protector-all -fpermissive -DYTLIB_WITH_WEBSOCKET -DASIO_STANDALONE -D_WEBSOCKETPP_CPP11_TYPE_TRAITS_ -std=c++11 -g")
 SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -rdynamic")
 
 IF(WITH_DEBUG)
@@ -80,7 +84,9 @@ ADD_LIBRARY(${PROJECT_NAME} ${YTSVRLIB_SRC})
 
 IF(UNIX)
 	TARGET_LINK_LIBRARIES(
-	ytsvrlib 
+	ytsvrlib
+	z
+	lz4
 	event
 	event_pthreads
 	mysqlclient
@@ -88,7 +94,7 @@ IF(UNIX)
 	pthread
 	mysqlpp
 	hiredis
-	websockets
+	iconv
 	tcmalloc_minimal
 	)
 ENDIF()

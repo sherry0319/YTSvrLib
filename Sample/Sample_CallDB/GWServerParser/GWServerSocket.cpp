@@ -12,9 +12,20 @@ CGWSvrSocket::~CGWSvrSocket(void)
 {
 }
 
+void CGWSvrSocket::OnDisconnect() {
+	LOG("[%x] CGWSvrSocket", this);
+
+	if (!m_bClientClosed)
+	{
+		SafeClose();
+	}
+}
+
 void CGWSvrSocket::OnClosed()
 {
-	
+	m_bClientClosed = TRUE;
+
+	CGWSvrParser::GetInstance()->OnGWSvrDisconnect(this);
 }
 
 void CGWSvrSocket::ReclaimObj()
@@ -51,7 +62,6 @@ int CGWSvrSocket::OnRecved(const char* pBuf, int nLen)
 		{
 			break;
 		}
-		++m_nRecvSeqNo;
 		PostMsg(pHead, dwPkgLen);
 		pHead += dwPkgLen;
 		nLen = nLen - dwPkgLen;

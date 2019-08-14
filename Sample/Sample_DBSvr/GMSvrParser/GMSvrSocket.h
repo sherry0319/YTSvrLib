@@ -8,13 +8,10 @@ public:
 	CGMSvrSocket(void);
 	virtual ~CGMSvrSocket(void);
 
-	DWORD m_nRecvSeqNo;
-	DWORD m_nSendSeqNo;
 	virtual void Init()
 	{
 		YTSvrLib::ITCPCONNECTOR::Clean();
-		m_nRecvSeqNo = 0;
-		m_nSendSeqNo = 0;
+		m_bClientClosed = FALSE;
 	}    
 
 public:
@@ -24,6 +21,7 @@ public:
 
 	void    PostDisconnectMsg( EType eType );    
 
+	virtual void OnDisconnect();
 	virtual void OnClosed();
 
 	virtual void	Send( const char* buf, int nLen );
@@ -31,4 +29,6 @@ public:
 	virtual void    Send(  const std::string* pStrPkg );  
 
 	virtual void    ReclaimObj();
+private:
+	BOOL m_bClientClosed;
 };

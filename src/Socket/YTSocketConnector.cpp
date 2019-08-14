@@ -39,6 +39,8 @@ namespace YTSvrLib
 			return FALSE;
 		}
 
+		m_lock.Lock();
+
 		if (m_pbufferevent)
 		{
 			bufferevent_disable(m_pbufferevent, EV_READ | EV_SIGNAL | EV_PERSIST);
@@ -52,14 +54,16 @@ namespace YTSvrLib
 			m_fd = 0;
 		}
 
+		m_bIsClosed = TRUE;
 		m_fd = fd;
 		strncpy_s(m_szHost, pszHost, 31);
 		m_nPort = nPort;
 
-		m_pbufferevent = bufferevent_socket_new(eventbase, fd, BEV_OPT_CLOSE_ON_FREE | BEV_OPT_THREADSAFE);
+		m_pbufferevent = bufferevent_socket_new(eventbase, fd, BEV_OPT_THREADSAFE);
 		if (m_pbufferevent == NULL)
 		{
 			LOGERROR("bufferevent_socket_new failed : %d",GetLastError());
+			m_lock.UnLock();
 			return FALSE;
 		}
 
@@ -72,6 +76,8 @@ namespace YTSvrLib
 		LOG("Socket=%d Accepted Remote=%s:%d", GetSocket(), GetAddrIp(), GetAddrPort());
 
 		m_bIsClosed = FALSE;
+
+		m_lock.UnLock();
 
 		PostDisconnectMsg(eAccepted);// 给主线程投递Accept成功的消息
 
@@ -91,6 +97,8 @@ namespace YTSvrLib
 			return;
 		}
 
+		m_lock.Lock();
+
 		LOG("ITCPCONNECTOR::SafeClose[0x%x] = %s:%d @ Socket(%d)",this, GetAddrIp(), GetAddrPort(), GetSocket());
 
 		m_bIsClosed = TRUE;
@@ -108,6 +116,8 @@ namespace YTSvrLib
 			closesocket(m_fd);
 			m_fd = 0;
 		}
+
+		m_lock.UnLock();
 
 		OnClosed();
 

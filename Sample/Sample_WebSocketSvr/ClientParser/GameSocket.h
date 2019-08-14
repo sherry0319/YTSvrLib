@@ -1,8 +1,9 @@
 #pragma once
 #include  <algorithm>
 #include "Socket/WebSocket/YTWSConnector.h"
+#include "../Config/Config.h"
 
-class GameSocket : public YTSvrLib::IWSCONNECTOR,public YTSvrLib::CRecycle
+class GameSocket : public YTSvrLib::IWSCONNECTOR, public YTSvrLib::CRecycle
 {
 public:
 	GameSocket()
@@ -11,7 +12,6 @@ public:
 		m_nClientID = 0;
 		m_mapMessageRecved.clear();
 		m_sendBuf.SetQueueLenMax(1024);
-		m_Sock = 0;
 		ZeroMemory(m_szIP, sizeof(m_szIP));
 		m_nPort = 0;
 	}
@@ -27,14 +27,12 @@ public:
 		return m_nClientID;
 	}
 
-	virtual void Create(YTSvrLib::IWSSERVER* server, lws* ctx, YTSvrLib::IWSSESSION* session) override;
+	void InitData();
 
 	void OnRecvNewMsg(UINT nMsgSeqno, int nMsgType);
 	void OnSendMsg(UINT nMsgSeqno, int nMsgType);
 
 	void OnClosed();
-
-	void SendText(const char* info,int len);
 	void SendBinary(const char* info, int len);
 public:
 	__time32_t GetExpired() const
@@ -64,7 +62,6 @@ private:
 	int m_nClientID;
 	char m_szIP[32];
 	int m_nPort;
-	SOCKET m_Sock;
 	MessageRecord m_mapMessageRecved;
 	BOOL m_bClientClosed;
 	__time32_t m_tExpired;

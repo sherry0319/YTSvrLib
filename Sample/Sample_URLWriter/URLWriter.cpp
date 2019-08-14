@@ -2,13 +2,14 @@
 //
 
 #include "stdafx.h"
+#include <cstdlib>
 #include "URLWriter.h"
 
-struct
+static struct
 {
 	const char* url;
 	const char* post;
-}data[] = {
+}g_data[] = {
 	{"http://v.juhe.cn/postcode/query?postcode=215001&key=%E7%94%B3%E8%AF%B7%E7%9A%84KEY",NULL},
 	{"http://v.juhe.cn/postcode/query","postcode=215001&key=%E7%94%B3%E8%AF%B7%E7%9A%84KEY"},
 };
@@ -25,7 +26,7 @@ void OnURLRequestCallback(YTSvrLib::CURLRequest* pReq)
 void OnURLRequestSync()
 {
 	std::string outdata;
-	int nResponseCode = YTSvrLib::CGlobalCURLRequest::GetInstance()->SendHTTPGETMessage(data[0].url, &outdata);
+	int nResponseCode = YTSvrLib::CGlobalCURLRequest::GetInstance()->SendHTTPGETMessage(g_data[0].url, &outdata);
 
 	cout << "sync get request code = " << nResponseCode << endl;
 
@@ -33,7 +34,7 @@ void OnURLRequestSync()
 
 	outdata.clear();
 	outdata.shrink_to_fit();
-	nResponseCode = YTSvrLib::CGlobalCURLRequest::GetInstance()->SendHTTPPOSTMessage(data[1].url, data[1].post, &outdata);
+	nResponseCode = YTSvrLib::CGlobalCURLRequest::GetInstance()->SendHTTPPOSTMessage(g_data[1].url, g_data[1].post, &outdata);
 
 	cout << "sync post request code = " << nResponseCode << endl;
 
@@ -51,9 +52,9 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 	while (true)
 	{
 		index++;
-		for (int i = 0; i < _countof(data);++i)
+		for (int i = 0; i < _countof(g_data);++i)
 		{
-			CURLWriter::GetInstance()->AddURLRequest(data[i].url, data[i].post, (YTSvrLib::URLPARAM)index, 0, 0, 0, OnURLRequestCallback);
+			CURLWriter::GetInstance()->AddURLRequest(g_data[i].url, g_data[i].post, (YTSvrLib::URLPARAM)index, 0, 0, 0, OnURLRequestCallback);
 		}
 		CURLWriter::GetInstance()->WaitForAllRequestDone();
 	}

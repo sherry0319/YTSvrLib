@@ -34,11 +34,17 @@ typedef LONGLONG TIMER_PARAM;
 
 namespace YTSvrLib
 {
+	enum EM_TIMER_LEVEL
+	{
+		TLEVEL_NORMAL,
+		TLEVEL_HIGH,
+	};
+
 	struct YTSVRLIB_EXPORT STimerInfo : public CRecycle
 	{
 		int m_nType;
 		int m_nUserID;
-
+		EM_TIMER_LEVEL m_emLevel;
 		TIMER_PARAM m_ayParams[TIMER_PARAM_COUNT];
 
 		DOUBLE GetEnd() const
@@ -48,6 +54,11 @@ namespace YTSvrLib
 		DOUBLE GetBegin() const
 		{
 			return m_tBegin;
+		}
+
+		EM_TIMER_LEVEL GetLevel() const
+		{
+			return m_emLevel;
 		}
 
 		BOOL IsCalling() const
@@ -79,6 +90,7 @@ namespace YTSvrLib
 			m_tEnd = 0;
 			m_tBegin = 0;
 			m_bCalling = FALSE;
+			m_emLevel = TLEVEL_NORMAL;
 		}
 
 		STimerInfo()
@@ -123,12 +135,15 @@ namespace YTSvrLib
 		void	RemoveTimer(LPSTimerInfo pTimer);
 		void	UpdateTimer(LPSTimerInfo pTimer, DOUBLE tNewBegin, DOUBLE tNewEnd);
 		void	UpdateTimer(LPSTimerInfo pTimer, DOUBLE tNewEnd);
-		LPSTimerInfo SetNewTimer(int nType, int nUserID, DOUBLE tBegin, DOUBLE tEnd, TIMER_PARAM nParam1 = 0, TIMER_PARAM nParam2 = 0, TIMER_PARAM nParam3 = 0, TIMER_PARAM nParam4 = 0);
-		LPSTimerInfo SetNewTimer(int nType, int nUserID, __time32_t tBegin, __time32_t tEnd, TIMER_PARAM nParam1 = 0, TIMER_PARAM nParam2 = 0, TIMER_PARAM nParam3 = 0, TIMER_PARAM nParam4 = 0);
+		LPSTimerInfo SetNewTimer(EM_TIMER_LEVEL emLevel, int nType, int nUserID, DOUBLE tBegin, DOUBLE tEnd, 
+								 TIMER_PARAM nParam1 = 0, TIMER_PARAM nParam2 = 0, TIMER_PARAM nParam3 = 0, TIMER_PARAM nParam4 = 0);
+		LPSTimerInfo SetNewTimer(EM_TIMER_LEVEL emLevel, int nType, int nUserID, __time32_t tBegin, __time32_t tEnd, 
+								 TIMER_PARAM nParam1 = 0, TIMER_PARAM nParam2 = 0, TIMER_PARAM nParam3 = 0, TIMER_PARAM nParam4 = 0);
 	protected:
 		void	ArrangeTimer();
 
 		void	CheckTimer(DOUBLE tNow);
+		void	CheckHighTimer(DOUBLE tNow);
 	private:
 		LPSTimerInfo AllocateTimer(int nType);
 		void    ReleaseTimer(LPSTimerInfo pTimer);
@@ -140,7 +155,8 @@ namespace YTSvrLib
 		ListTimer m_listFarTimer;
 
 		typedef std::set<LPSTimerInfo, Timer_Less> SetTimer;
-		SetTimer    m_setTimers;
+		SetTimer m_setTimers;
+		SetTimer m_setHighTimers;// 高优先级TIMER
 	};
 }
 

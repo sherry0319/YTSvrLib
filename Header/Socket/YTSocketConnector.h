@@ -47,9 +47,11 @@ namespace YTSvrLib
 			m_bIsDisconnecting = FALSE;
 		}
 
-		virtual void OnError(int nErrCode);
+		virtual void OnError(int nErrCode) override;
 
 		virtual void SafeClose();
+
+		virtual void OnDisconnect() = 0;
 
 		virtual void OnClosed() = 0;
 
@@ -66,6 +68,7 @@ namespace YTSvrLib
 	public:
 		ITCPSERVER* m_pTCPServer;// π‹¿Ì’ﬂ
 		BOOL m_bIsDisconnecting;
+		CLock m_lock;
 	};
 }
 

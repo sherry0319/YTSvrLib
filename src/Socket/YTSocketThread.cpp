@@ -25,6 +25,36 @@ SOFTWARE.*/
 
 namespace YTSvrLib
 {
+	void ITHREAD::CreateThread()
+	{
+		m_bRun = TRUE;
+
+		std::thread t(&ITHREAD::Run, this);
+
+		t.detach();
+	}
+
+	void ITHREAD::StopThread()
+	{
+		m_bRun = FALSE;
+	}
+
+	void ITHREAD::CleanThread()
+	{
+		m_bRun = FALSE;
+	}
+
+	void ITHREAD::Run() {
+#ifndef LIB_WINDOWS
+		pthread_detach(pthread_self());
+
+		BlockSignal();
+#endif
+		EventLoop();
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+
 	BOOL ITCPEVENTTHREAD::CreateEvent()
 	{
 #ifdef LIB_WINDOWS
@@ -54,21 +84,6 @@ namespace YTSvrLib
 		}
 	}
 
-	void ITCPEVENTTHREAD::CreateThread()
-	{
-		m_bRun = TRUE;
-
-		std::thread t(&ITCPEVENTTHREAD::EventLoop,this);
-
-		t.detach();
-	}
-
-	void ITCPEVENTTHREAD::CleanThread()
-	{
-		StopEvent();
-		m_bRun = FALSE;
-	}
-
 	void ITCPEVENTTHREAD::StopThread()
 	{
 		m_bRun = FALSE;
@@ -78,13 +93,14 @@ namespace YTSvrLib
 		}
 	}
 
+	void ITCPEVENTTHREAD::CleanThread()
+	{
+		StopEvent();
+		m_bRun = FALSE;
+	}
+
 	void ITCPEVENTTHREAD::EventLoop()
 	{
-#ifndef LIB_WINDOWS
-		pthread_detach(pthread_self());
-
-		BlockSignal();
-#endif
 		if (m_eventbase == NULL)
 		{
 			CreateEvent();
@@ -113,5 +129,21 @@ namespace YTSvrLib
 		m_bRuning = FALSE;
 
 		OnThreadEnd();
+	}
+
+	void IASIOTHREAD::EventLoop() {
+		m_bRuning = TRUE;
+
+		while (m_bRun)
+		{
+			try
+			{
+				io.run();
+			}
+			catch (...)
+			{
+				m_bRun = FALSE;
+			}
+		}
 	}
 }

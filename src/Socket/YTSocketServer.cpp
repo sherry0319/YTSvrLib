@@ -73,6 +73,15 @@ namespace YTSvrLib
 		return TRUE;
 	}
 
+	BOOL ITCPSERVER::IsListening()
+	{
+		if (m_listener)
+		{
+			return TRUE;
+		}
+		return FALSE;
+	}
+
 	void ITCPSERVER::StopListen()
 	{
 		StopThread();

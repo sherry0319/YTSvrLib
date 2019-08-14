@@ -28,7 +28,7 @@ A simple game server library for linux/windows. Easy access to network(TCP and w
 4.Use the .lib in your project.
 
 # Install Linux
-1.Install dependent libraries : libiconv libevent2 libcurl libhiredis libmysqlpp libmysqlclient libpthread libtcmalloc libwebsockets(The lib mysqlpp must use the version in the third_party/)
+1.Install dependent libraries : libiconv libevent2 libcurl libhiredis libmysqlpp libmysqlclient libpthread libtcmalloc (The lib mysqlpp must use the version in the third_party/)
 
 2.cd src && ./configure && make install
 
@@ -40,7 +40,7 @@ See the project "Sample".
 
 
 # 在Windows下使用
-1.安装 Visual Studio 2013 
+1.安装 Visual Studio 2019 
 
 2.使用YTSvrLib.sln打开项目
 
@@ -49,7 +49,7 @@ See the project "Sample".
 4.在你的工程中链接lib
 
 # 在Linux下使用
-1.先安装以下依赖库 : libiconv libevent2 libcurl libhiredis libmysqlpp libmysqlclient libpthread libtcmalloc libwebsockets(mysqlpp 需要用项目中third_party里带的版本,对原本的库做了点小修改)
+1.先安装以下依赖库 : libiconv libevent2 libcurl libhiredis libmysqlpp libmysqlclient libpthread libtcmalloc (mysqlpp 需要用项目中third_party里带的版本,对原本的库做了点小修改)
 
 2.cd src && ./configure && make install (或者你可以直接用./makeall.sh来获得DEBUG版本或者./makeall_release.sh来获得release版本)
 

@@ -155,7 +155,7 @@ namespace YTSvrLib
 			wzKeys[32] = L'\0';
 
 			_wcsupr_s(wzKeys);
-			m_vctKeyword.push_back(std::wstring(wzKeys));
+			m_vctKeyword.push_back(std::move(std::wstring(wzKeys)));
 		}
 	}
 	bool WStrGreater(std::wstring& w1, std::wstring& w2)
@@ -347,7 +347,7 @@ namespace YTSvrLib
 			szKeys[32] = '\0';
 
 			_strupr_s(szKeys);
-			m_vctKeyword.push_back(std::string(szKeys));
+			m_vctKeyword.push_back(std::move(std::string(szKeys)));
 		}
 	}
 
