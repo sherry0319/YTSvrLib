@@ -21,4 +21,3 @@ tar -xzf lz4.v1.8.3.tar.gz
 cd lz4-1.8.3
 make install
 cd ../..
-lddconfig

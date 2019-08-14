@@ -14,5 +14,5 @@ install:
 - sudo ./configure_clang.sh
 - sudo updatedb
 - sudo locate libcurl.so.4
-- sudo lddconfig
+- sudo ldconfig
 script: sudo ./makeall_release.sh
