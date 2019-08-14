@@ -10,6 +10,7 @@ cd zlib-1.2.11
 cd ..
 unzip libiconv-1.14.zip
 cd libiconv-1.14
+chmod 755 configure
 ./configure && make install
 cd ..
 unzip mysqlpp.zip
