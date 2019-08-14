@@ -16,7 +16,7 @@ cd ..
 unzip mysqlpp.zip
 cd mysqlpp
 chmod 755 configure
-./configure --with_mysql_lib=/usr/lib/x86_64-linux-gnu && make install
+./configure --with-mysql-lib=/usr/lib/x86_64-linux-gnu && make install
 cd ..
 tar -xzf lz4.v1.8.3.tar.gz
 cd lz4-1.8.3
