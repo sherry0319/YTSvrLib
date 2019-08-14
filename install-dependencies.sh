@@ -1,9 +1,5 @@
 #!/bin/bash
 cd third_party
-tar -xzf curl-7.53.1.tar.gz
-cd curl-7.53.1
-./configure && make install
-cd ..
 tar -xzf libevent-2.0.22-stable.tar.gz
 cd libevent-2.0.22-stable
 ./configure && make install
@@ -20,4 +16,9 @@ unzip mysqlpp.zip
 cd mysqlpp
 chmod 755 configure
 ./configure && make install
+cd ..
+tar -xzf lz4.v1.8.3.tar.gz
+cd lz4-1.8.3
+make install
 cd ../..
+lddconfig
