@@ -19,7 +19,7 @@ A simple game server library for linux/windows. Easy access to network(TCP and w
 # 有任何问题欢迎提Issue或联系QQ:81045135
 
 # Install Windows
-1.Install Visual Studio 2013.
+1.Install Visual Studio 2019.
 
 2.Start with YTSvrLib.sln
 
