@@ -7,15 +7,7 @@ CGMSvrSocket::CGMSvrSocket(void)
 	m_recvBuf.ReSize(8 * 1024 * 1024);
 }
 
-CGMSvrSocket::~CGMSvrSocket(void)
-{
-
-}
-
-void CGMSvrSocket::ReclaimObj()
-{
-	CGMSvrParser::GetInstance()->ReleaseConnector(this);
-}
+CGMSvrSocket::~CGMSvrSocket(void){}
 
 int CGMSvrSocket::OnRecved(const char* pBuf, int nLen)
 {
@@ -55,15 +47,6 @@ int CGMSvrSocket::OnRecved(const char* pBuf, int nLen)
 	return nRead;
 }
 
-void CGMSvrSocket::OnDisconnect() {
-	LOG("[%x] CGMSvrSocket OnDisconnect", this);
-
-	if (!m_bClientClosed)
-	{
-		SafeClose();
-	}
-}
-
 void CGMSvrSocket::OnClosed()
 {
 	m_bClientClosed = TRUE;
@@ -73,12 +56,7 @@ void CGMSvrSocket::OnClosed()
 
 void CGMSvrSocket::PostMsg( const char* pBuf, int nLen )
 {
-	CGMSvrParser::GetInstance()->PostPkgMsg( this, pBuf, nLen );
-}
-
-void CGMSvrSocket::PostDisconnectMsg( EType eType )
-{
-	CGMSvrParser::GetInstance()->PostDisconnMsg( this, eType );
+	CGMSvrParser::GetInstance()->AddNewMessage(YTSvrLib::MSGTYPE_DATA, this, pBuf, nLen );
 }
 
 void CGMSvrSocket::Send( const char* buf, int nLen )
@@ -86,14 +64,4 @@ void CGMSvrSocket::Send( const char* buf, int nLen )
  	LPSDBMsgHead pMsgHead = (LPSDBMsgHead)buf;
 
 	YTSvrLib::ITCPBASE::Send(buf, nLen);
-}
-
-void CGMSvrSocket::Send( const std::string& strPkg )
-{ 
-	Send( strPkg.c_str(), (int)strPkg.size() );
-}
-
-void CGMSvrSocket::Send( const std::string* pStrPkg )
-{
-	Send( pStrPkg->c_str(), (int)pStrPkg->size() );
 }

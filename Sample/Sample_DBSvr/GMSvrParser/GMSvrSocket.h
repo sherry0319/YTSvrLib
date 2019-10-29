@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Socket/YTSocketConnector.h"
+#include "Socket/TCPSocket/TCPSocket.h"
 
 class CGMSvrSocket : public YTSvrLib::ITCPCONNECTOR,public YTSvrLib::CRecycle
 {
@@ -10,25 +10,18 @@ public:
 
 	virtual void Init()
 	{
-		YTSvrLib::ITCPCONNECTOR::Clean();
+		YTSvrLib::ITCPBASE::Clean();
 		m_bClientClosed = FALSE;
 	}    
 
 public:
-	virtual int     OnRecved(const char* pBuf, int nLen);
+	virtual int OnRecved(const char* pBuf, int nLen);
 
 	void    PostMsg( const char* pBuf, int nLen );
 
-	void    PostDisconnectMsg( EType eType );    
-
-	virtual void OnDisconnect();
-	virtual void OnClosed();
+	virtual void	OnClosed();
 
 	virtual void	Send( const char* buf, int nLen );
-	virtual void    Send(  const std::string& strPkg );  
-	virtual void    Send(  const std::string* pStrPkg );  
-
-	virtual void    ReclaimObj();
 private:
 	BOOL m_bClientClosed;
 };

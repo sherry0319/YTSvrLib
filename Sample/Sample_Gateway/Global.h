@@ -27,11 +27,7 @@ namespace EAppEvent
     enum 
     {
 		eAppServerSocketEvent,
-		eAppServerSocketDisconnectEvent,
-// 		eAppAdminSocketEvent,
-//         eAppAdminSocketDisconnectEvent,
         eAppClientSocketEvent,
-        eAppClientSocketDisconnectEvent,
         eAppTimerMgrOnTimer,     
         eAppEventCount,
     };

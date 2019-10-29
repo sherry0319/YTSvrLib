@@ -4,7 +4,7 @@
 
 //////////////////////////////////////////////////////////////////////////
 
-CGWSvrParser::CGWSvrParser(void) : YTSvrLib::CPkgParserBase(), m_poolGateway("CGMSvrSocket")
+CGWSvrParser::CGWSvrParser(void) :  m_poolGateway("CGMSvrSocket")
 {
 
 }
@@ -28,25 +28,23 @@ void CGWSvrParser::ProcessMessage(YTSvrLib::ITCPBASE* pSocket, const char *pBuf,
 	}
 }
 
-void CGWSvrParser::ProcessAcceptedMsg(YTSvrLib::ITCPBASE* pSocket)
-{
-	CGWSvrSocket* pGWSvrSocket = dynamic_cast<CGWSvrSocket*>(pSocket);
-	if (pGWSvrSocket)
+void CGWSvrParser::ProcessEvent(YTSvrLib::EM_MESSAGE_TYPE emType, YTSvrLib::ITCPBASE* pConn) {
+	LOG("ProcessEvent TYPE=[%d] CONN=[0x%x]", emType, pConn);
+	CGWSvrSocket* pGWSvrSocket = dynamic_cast<CGWSvrSocket*>(pConn);
+	switch (emType)
 	{
+	case YTSvrLib::MSGTYPE_DISCONNECT: {
+		pGWSvrSocket->OnClosed();
+	}break;
+	case YTSvrLib::MSGTYPE_ACCEPTED: {
 		OnGWSvrConnected(pGWSvrSocket);
+	}break;
+	default:
+		break;
 	}
 }
 
-void CGWSvrParser::ProcessDisconnectMsg(YTSvrLib::ITCPBASE* pSocket)
-{
-	CGWSvrSocket* pGWSvrSocket = dynamic_cast<CGWSvrSocket*>(pSocket);
-	if (pGWSvrSocket)
-	{
-		OnGWSvrDisconnect(pGWSvrSocket);
-	}
-}
-
-YTSvrLib::ITCPCONNECTOR* CGWSvrParser::AllocateConnector()
+YTSvrLib::ITCPCONNECTOR* CGWSvrParser::AllocateConnector(std::string)
 {
 	return m_poolGateway.ApplyObj();
 }
@@ -89,9 +87,4 @@ void CGWSvrParser::SendSvrMsg(CGWSvrSocket* pGWSocket, LPCSTR pszMsg, int nMsgLe
 void CGWSvrParser::SetEvent()
 {
 	YTSvrLib::CServerApplication::GetInstance()->SetEvent( EAppEvent::eAppGWSvrSocketEvent );
-}
-
-void CGWSvrParser::SetDisconnectEvent()
-{
-	YTSvrLib::CServerApplication::GetInstance()->SetEvent( EAppEvent::eAppGWSvrSocketDisconnectEvent );
 }

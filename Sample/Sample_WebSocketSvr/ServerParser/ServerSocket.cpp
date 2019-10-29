@@ -19,130 +19,63 @@ void CServerSocket::ReclaimObj()
 	CServerParser::GetInstance()->ReclaimObj(this);
 }
 
-int CServerSocket::OnSocketRecv()
-{// TCPFLAG_GWMSG sGWMsg_Head
-	char* buf = NULL;
-	int nMaxlen = 0;
-	if (m_recvBuf.GetLength() <= 0)
-	{
-		buf = m_recvBuf.GetBuffer();
-		nMaxlen = sizeof(sGWMsg_Head);
-	}
-	else
-	{
-		size_t nRecved = m_recvBuf.GetLength();
-		size_t nErrorData = 0;
-		while (nRecved >= sizeof(sGWMsg_Head))
-		{
-			sGWMsg_Head* pMsgHead = (sGWMsg_Head*) (m_recvBuf.GetBuffer() + nErrorData);
-			if (pMsgHead->m_nTcpFlag == TCPFLAG_GWMSG)
-				break;
-			nErrorData++;
-			nRecved--;
-		}
-		if (nErrorData > 0)
-		{
-			LOG("GWSocket=%d(0x%08x) Recv() ErrorData=%d!", GetSocket(), this, nErrorData);
-			m_recvBuf.ReleaseBuffer(nErrorData);
-		}
-		buf = m_recvBuf.GetBuffer() + m_recvBuf.GetLength();
-		if (m_recvBuf.GetLength() >= sizeof(sGWMsg_Head))
-		{
-			sGWMsg_Head* pMsgHead = (sGWMsg_Head*) m_recvBuf.GetBuffer();
-			if (pMsgHead->m_nTotalMsgLen > (UINT) m_recvBuf.GetLength())
-				nMaxlen = pMsgHead->m_nTotalMsgLen - (UINT) m_recvBuf.GetLength();
-			else
-				nMaxlen = sizeof(sGWMsg_Head);
-		}
-		else
-		{
-			nMaxlen = (ULONG) (sizeof(sGWMsg_Head) - m_recvBuf.GetLength());
-		}
-	}
-	if (nMaxlen > m_recvBuf.GetIdleLength())
-	{
-		LOG("GWSocket=%d(0x%08x) Recv() Need Data=%d > Buff=%d Error!", GetSocket(), this, nMaxlen, m_recvBuf.GetIdleLength());
-		SafeClose();
-		return -1;
-	}
-
-	size_t nRealRead = 0;
-	
-	if (nMaxlen > 0)
-	{
-		nRealRead = bufferevent_read(m_pbufferevent, buf, nMaxlen);
-
-		if (nRealRead == 0)
-		{
-			SafeClose();
-			return -1;
-		}
-
-		m_recvBuf.AddBuffer(nRealRead);
-	}
-
-	return (int) nRealRead;
-}
-
 int CServerSocket::OnRecved(const char* pBuf, int nLen)
 {
 	const int HEADER_SIZE = sizeof(sGWMsg_Head);
 	const char* pHead = pBuf;
 	int nPkgLen = 0;
 	int nRead = 0;
-	while( nLen >= HEADER_SIZE )
-	{   
+	while (nLen >= HEADER_SIZE)
+	{
 		sGWMsg_Head* pMsgHead = (sGWMsg_Head*)pHead;
-		UINT nDelData = 0;
-		while( pMsgHead->m_nTcpFlag != TCPFLAG_GWMSG && nLen > HEADER_SIZE )
-		{
-			pHead++;
-			nLen--;
-			nDelData++;
-			pMsgHead = (sGWMsg_Head*)pHead;
-		}
-		if( nDelData > 0 )
-		{
-			LOG("Svr=%d Socket=%d DelData=%d", GetSvrID(), GetSocket(), nDelData );
-			nRead += nDelData;
-		}
-		if( pMsgHead->m_nTcpFlag != TCPFLAG_GWMSG )
-			break;
 		nPkgLen = pMsgHead->m_nTotalMsgLen;
-		if( nPkgLen > nLen || nPkgLen <= 0 )//内容不全
+
+		if (pMsgHead->m_nTcpFlag != TCPFLAG_GWMSG || nPkgLen < HEADER_SIZE)
 		{
-			break;
+			LOG("GameSock=%x Msg=0x%x Data=%d/%d Head=%d error!", this, pMsgHead->m_nMsgType, nLen, nPkgLen, HEADER_SIZE);
+			int nOffset = 0;
+			while (nLen > 0)
+			{
+				nLen--;
+				nOffset++;
+				pMsgHead = (sGWMsg_Head*)(pHead + nOffset);
+				if (pMsgHead->m_nTcpFlag == TCPFLAG_GWMSG && pMsgHead->m_nTotalMsgLen >= HEADER_SIZE)
+				{
+					break;
+				}
+				nRead += nOffset;
+				pHead += nOffset;
+			}
+			if (nLen == 0)
+			{
+				break;
+			}
 		}
 
 		PostMsg(pHead, nPkgLen);
 		pHead += nPkgLen;
-		nLen = nLen - nPkgLen;
+		nLen -= nPkgLen;
 		nRead += nPkgLen;
 	}
 	return nRead;/*(pHead - pBuf);*/
 }
 
-void CServerSocket::OnDisconnect()
-{
-	m_bIsClosed = TRUE;
-	m_bIsConnecting = FALSE;
-	m_bConnectedSvr = FALSE;
-	m_sendBuf.Clear();
-	m_recvBuf.Clear();
-	LOG( "Svr=%d Socket=%d OnDisconnected", GetSvrID(), GetSocket() );
-	//TODO
-	CServerParser::GetInstance()->OnSvrDisconnect( this );
-	SafeClose();
-}
-
 void CServerSocket::OnClosed()
 {
-
+	m_bConnectedSvr = FALSE;
+	m_emSvrType = emAgent_Null;
+	m_nUserCnt = 0;
+	m_nConnectingTimes = 0;
+	m_sendBuf.Clear();
+	m_recvBuf.Clear();
+	LOG("Svr=%d Socket=%d OnDisconnected", GetSvrID(), GetSocket());
+	//TODO
+	CServerParser::GetInstance()->OnSvrDisconnect(this);
 }
 
 void CServerSocket::Init()
 {
-	YTSvrLib::ITCPCLIENT::Clean();
+	YTSvrLib::ITCPBASE::Clean();
 	m_bConnectedSvr = FALSE;
 	m_emSvrType = emAgent_Null;
 	m_nSvrID = 0;
@@ -155,11 +88,7 @@ void CServerSocket::Init()
 
 void CServerSocket::PostMsg( const char* pBuf, int nLen )
 {
-	CServerParser::GetInstance()->PostPkgMsg( this, pBuf, nLen );
-}
-void CServerSocket::PostDisconnectMsg( EType eType )
-{
-	CServerParser::GetInstance()->PostDisconnMsg( this, eType );
+	CServerParser::GetInstance()->AddNewMessage(YTSvrLib::MSGTYPE_DATA, this, pBuf, nLen );
 }
 
 void CServerSocket::SetSvrInfo( EM_AGENT emSvrType, int nSvrID, LPCSTR pszSvrIPAddr, int nSvrTcpPort )
@@ -174,20 +103,18 @@ void CServerSocket::SetSvrInfo( EM_AGENT emSvrType, int nSvrID, LPCSTR pszSvrIPA
 
 BOOL CServerSocket::ConnectToSvr()
 {
-	if( IsConnectedSvr() )
+	if (IsConnectedSvr())
 	{
-		LOG("Svr=%d Socket=%d IsConnected already.", GetSvrID(), GetSocket() );
+		LOG("Svr=%d Socket=0x%x IsConnected already.", GetSvrID(), this);
 		return FALSE;
 	}
-	if( m_bIsConnecting )
+	if (IsConnecting())
 	{
 		m_nConnectingTimes++;
-		LOG("Svr=%d Socket=%d Is Connecting.", GetSvrID(), GetSocket() );
+		LOG("Svr=%d Socket=0x%x Is Connecting.", GetSvrID(), this);
 
 		if (m_nConnectingTimes >= MAX_CONNECTING_RETRY)
 		{
-			m_bIsClosed = TRUE;
-			m_bIsConnecting = FALSE;
 			m_bConnectedSvr = FALSE;
 			m_sendBuf.Clear();
 			m_recvBuf.Clear();
@@ -199,21 +126,15 @@ BOOL CServerSocket::ConnectToSvr()
 		return TRUE;
 	}
 
-	if( false == CreateClient(	m_szSvrIPAddr, m_nSvrTcpPort ) )
-	{
-		LOG("Svr=%d Socket=%d Connect Svr=%s:%d Error!", GetSvrID(), GetSocket(), m_szSvrIPAddr, m_nSvrTcpPort );
-		return FALSE;
-	}
+	Connect(CServerParser::GetInstance(),m_szSvrIPAddr, m_nSvrTcpPort);
 
 	m_nConnectingTimes = 0;
-	LOG("Svr=%d Socket=%d Connecting Svr=%s:%d...", GetSvrID(), GetSocket(), m_szSvrIPAddr, m_nSvrTcpPort );
+	LOG("Svr=%d Socket=0x%x Connecting Svr=%s:%d...", GetSvrID(), this, m_szSvrIPAddr, m_nSvrTcpPort);
 	return TRUE;
 }
 
 void CServerSocket::OnConnected()
 {//连接成功的回调
-	YTSvrLib::ITCPCLIENT::OnConnected();
-
 	m_bConnectedSvr = TRUE;
 	m_sendBuf.Clear();
 	m_recvBuf.Clear();
@@ -229,6 +150,14 @@ void CServerSocket::OnConnected()
 	sMsgLogin.m_nPublicSvrID = CConfig::GetInstance()->m_nPublicSvrID;
 
 	Send((const char*)&sMsgLogin,sizeof(sMsgLogin));
+}
+
+void CServerSocket::OnConnectFailed() {
+	m_bConnectedSvr = FALSE;
+	m_nConnectingTimes = 0;
+	m_sendBuf.Clear();
+	m_recvBuf.Clear();
+	LOG("Svr=%d Socket=0x%x Connect Failed!! Svr=%s:%d", GetSvrID(), this, m_szSvrIPAddr, m_nSvrTcpPort);
 }
 
 void CServerSocket::SendKeepAlive()

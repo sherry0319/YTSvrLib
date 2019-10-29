@@ -23,6 +23,7 @@ SOFTWARE.*/
 #include "../stl/wqueue.h"
 
 #define SNDBUFFER_BLOCK_SIZE	1024
+#define BLOCK_RECV_BUFFER_SIZE	(1024 X16)
 
 namespace YTSvrLib
 {
@@ -107,6 +108,13 @@ namespace YTSvrLib
 			m_nBufSize = other.GetCapacity();
 			m_pbuf = new char[m_nBufSize];
 			memcpy(m_pbuf, other.GetBuffer(), other.GetLength());
+			m_nBufSizeMax = other.GetBufSizeMax();
+			m_nLength = other.GetLength();
+		}
+		CBuffer<size>(CBuffer<size>&& other) : m_nLength(other.GetLength())
+		{
+			m_nBufSize = other.GetCapacity();
+			m_pbuf = other.GetBuffer();
 			m_nBufSizeMax = other.GetBufSizeMax();
 			m_nLength = other.GetLength();
 		}

@@ -20,60 +20,61 @@ void GameSocket::ReclaimObj()
 
 	CPkgParser::GetInstance()->ReleaseConnector(this);
 }
-void GameSocket::OnDisconnect()
-{
-	if (!m_bClientClosed)
-    {
-		LOG("GameSocket=0x%08x Socket=%d DisConnected", this, GetSocket() );
-		m_bClientClosed = TRUE;
-		OnClientDisconnect( (GameSocket*)this );
-		if (!m_bIsClosed)
-		{
-			SafeClose();
-		}
-    }    
-}
 
 void GameSocket::OnClosed()
 {
 	if (!m_bClientClosed)
 	{
-		LOG("GameSocket=0x%08x Socket=%d DisConnected", this, GetSocket());
+		LOG("GameSocket=%x Closed", this);
 		m_bClientClosed = TRUE;
 		OnClientDisconnect((GameSocket*)this);
+		ReclaimObj();
 	}
 }
 
 int GameSocket::OnRecved( const char* pBuf, int nLen )
 {
-	const int HEADER_SIZE = sizeof(sClientMsg_Head);
+	const static int HEADER_SIZE = sizeof(sClientMsg_Head);
 	const char* pHead = pBuf;
 	int nPkgLen = 0;
 	int nRead = 0;
 	while( nLen >= HEADER_SIZE )
-	{   
+	{
 		sClientMsg_Head* pMsgHead = (sClientMsg_Head*)pHead;
 		nPkgLen = pMsgHead->m_nMsgLenTotal;
 		if( nPkgLen > nLen )//ÄÚÈÝ²»È«
 			break;
 		if ( pMsgHead->m_nTCPFlag != TCPFLAG_SIGN_CLIENTMSG || nPkgLen < HEADER_SIZE )				
 		{
-			LOG("GameSock=%d parse Msg=0x%x Data=%d/%d error!", GetSocket(), pMsgHead->m_nMsgType, nLen, nPkgLen );
-			break;
+			LOG("GameSock=%x Msg=0x%x Data=%d/%d Head=%d error!",this, pMsgHead->m_nMsgType, nLen, nPkgLen, HEADER_SIZE);
+			int nOffset = 0;
+			while (nLen > 0)
+			{
+				nLen--;
+				nOffset++;
+				pMsgHead = (sClientMsg_Head*)(pHead + nOffset);
+				if (pMsgHead->m_nTCPFlag == TCPFLAG_SIGN_CLIENTMSG && pMsgHead->m_nMsgLenTotal >= HEADER_SIZE)
+				{
+					break;
+				}
+				nRead += nOffset;
+				pHead += nOffset;
+			}
+			if (nLen == 0)
+			{
+				break;
+			}
 		}
 		PostMsg(pHead, nPkgLen);
 		pHead += nPkgLen;
-		nLen = nLen - nPkgLen;
-
+		nLen -= nPkgLen;
 		nRead += nPkgLen;
 	}
 
-	if( nRead > 0 )
-#ifdef LIB_WINDOWS
-		m_tIdleExpired = _time32(NULL) + 600;
-#else
-		m_tIdleExpired = time(NULL) + 600;
-#endif // LIB_WINDOWS
+	if (nRead > 0) {
+		m_tIdleExpired = time32() + 600;
+	}
+
 	return nRead;
 }
 
@@ -154,12 +155,7 @@ void GameSocket::OnSendMsg(UINT nMsgSeqno,UINT nMsgType)
 
 void GameSocket::PostMsg( const char* pBuf, int nLen )
 {
-    CPkgParser::GetInstance()->PostPkgMsg( this, pBuf, nLen );
-}
-
-void GameSocket::PostDisconnectMsg( EType eType )
-{
-    CPkgParser::GetInstance()->PostDisconnMsg( this, eType );
+	CPkgParser::GetInstance()->AddNewMessage(YTSvrLib::MSGTYPE_DATA, this, pBuf, nLen);
 }
 
 void GameSocket::Send( const char* buf, int nLen/*, BOOL bEncrypy, BOOL bIncSeqNo*/ )
@@ -167,7 +163,7 @@ void GameSocket::Send( const char* buf, int nLen/*, BOOL bEncrypy, BOOL bIncSeqN
 	sClientMsg_Head* pMsgCommHead = (sClientMsg_Head*)buf;
 	sClientMsg_RespHead* pRespHead = (sClientMsg_RespHead*)buf;
 
-	LOGTRACE("Socket=%d Send Msg=0x%x Ret=%d Len=%d", GetSocket(), pRespHead->m_nMsgType, pRespHead->m_nRespRet, nLen);
+	LOGTRACE("Send Msg=%d Ret=%d Len=%d", pRespHead->m_nMsgType, pRespHead->m_nRespRet, nLen);
 
 	pMsgCommHead->m_nZipSrcLen = nLen-sizeof(sClientMsg_Head);
 	if( CConfig::GetInstance()->m_nMinClientMsgToZip != 0 
@@ -189,7 +185,7 @@ void GameSocket::Send( const char* buf, int nLen/*, BOOL bEncrypy, BOOL bIncSeqN
 		{
 			pMsgCommHead->m_nZipEncrypFlag |= _CLIENTMSG_FLAG_ZIPPED;
 			pMsgCommHead->m_nMsgLenTotal = sizeof(sClientMsg_Head) + nZippedLen;
-			LOG("Socket=%d Send Msg=0x%04x SrcLen=%d Zipped=%d", GetSocket(), pMsgCommHead->m_nMsgType, nLen, pMsgCommHead->m_nMsgLenTotal );
+			LOG("Socket=%x Send Msg=%x SrcLen=%d Zipped=%d", this, pMsgCommHead->m_nMsgType, nLen, pMsgCommHead->m_nMsgLenTotal );
 
 			YTSvrLib::ITCPBASE::Send( (LPCSTR)szZipped, pMsgCommHead->m_nMsgLenTotal );
 			return;
@@ -199,87 +195,12 @@ void GameSocket::Send( const char* buf, int nLen/*, BOOL bEncrypy, BOOL bIncSeqN
 	YTSvrLib::ITCPBASE::Send(buf, nLen);
 }
 
-void GameSocket::Send( const std::string& strPkg )
-{ 
-	Send( strPkg.c_str(), (int)strPkg.size() );
-}
-
-void GameSocket::Send( const std::string* pStrPkg )
-{ 
-	Send( pStrPkg->c_str(), (int)pStrPkg->size() );
-}
-
 void GameSocket::Init()
 {
-	YTSvrLib::ITCPCONNECTOR::Clean();
+	YTSvrLib::ITCPBASE::Clean();
 	m_tIdleExpired = 0;
 	m_nClientID = 0;
 
 	m_mapMessageRecved.clear();
 	m_bClientClosed = FALSE;
-}
-
-int GameSocket::OnSocketRecv()
-{
-	char* buf = NULL;
-	int nMaxlen = 0;
-	if (m_recvBuf.GetLength() <= 0)
-	{
-		buf = m_recvBuf.GetBuffer();
-		nMaxlen = sizeof(sClientMsg_Head);
-	}
-	else
-	{
-		size_t nRecved = m_recvBuf.GetLength();
-		size_t nErrorData = 0;
-		while (nRecved >= sizeof(sClientMsg_Head))
-		{
-			sClientMsg_Head* pMsgHead = (sClientMsg_Head*) (m_recvBuf.GetBuffer() + nErrorData);
-			if (pMsgHead->m_nTCPFlag == TCPFLAG_SIGN_CLIENTMSG)
-				break;
-			nErrorData++;
-			nRecved--;
-		}
-		if (nErrorData > 0)
-		{
-			LOG("GameSocket=%d(0x%08x) Recv() ErrorData=%d!", GetSocket(), this, nErrorData);
-			m_recvBuf.ReleaseBuffer(nErrorData);
-		}
-		buf = m_recvBuf.GetBuffer() + m_recvBuf.GetLength();
-		if (m_recvBuf.GetLength() >= sizeof(sClientMsg_Head))
-		{
-			sClientMsg_Head* pMsgHead = (sClientMsg_Head*) m_recvBuf.GetBuffer();
-			if (pMsgHead->m_nMsgLenTotal > (UINT) m_recvBuf.GetLength())
-				nMaxlen = pMsgHead->m_nMsgLenTotal - (UINT) m_recvBuf.GetLength();
-			else
-				nMaxlen = sizeof(sClientMsg_Head);
-		}
-		else
-		{
-			nMaxlen = (ULONG) (sizeof(sClientMsg_Head) - m_recvBuf.GetLength());
-		}
-	}
-	if (nMaxlen > m_recvBuf.GetIdleLength())
-	{
-		LOG("GameSocket=%d(0x%08x) Recv() Need Data=%d > Buff=%d Error!", GetSocket(), this, nMaxlen, m_recvBuf.GetIdleLength());
-		SafeClose();
-		return -1;
-	}
-
-	size_t nRealRead = 0;
-	
-	if (nMaxlen > 0)
-	{
-		nRealRead = bufferevent_read(m_pbufferevent, buf, nMaxlen);
-
-		if (nRealRead == 0)
-		{
-			SafeClose();
-			return -1;
-		}
-
-		m_recvBuf.AddBuffer(nRealRead);
-	}
-
-	return (int) nRealRead;
 }

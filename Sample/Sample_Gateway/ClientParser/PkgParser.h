@@ -1,78 +1,31 @@
 #pragma once
 
 #include "GameSocket.h"
-#include "Socket/YTSocketServer.h"
+#include "Socket/TCPSocket/TCPSocket.h"
 
 void WINAPI SendRespWithError( WORD wMsgType, UINT nError, UINT nMsgSeqNo, GameSocket* pSocket, BOOL bCloseSocket=FALSE );
 
-class CPkgParser :public YTSvrLib::ITCPSERVER, public YTSvrLib::CPkgParserBase, public YTSvrLib::CSingle<CPkgParser>
+class CPkgParser :public YTSvrLib::ITCPSERVER, public YTSvrLib::CSingle<CPkgParser>
 {
  public:   
-	 CPkgParser();
-	 virtual ~CPkgParser();
+	CPkgParser();
+	virtual ~CPkgParser();
 
-    virtual void ProcessMessage(YTSvrLib::ITCPBASE* pSocket, const char *pBuf, int nLen);
-    virtual void SetEvent();
-    virtual void SetDisconnectEvent();
+	virtual void ProcessMessage(YTSvrLib::ITCPBASE* pConn, const char* data, int len) override;
+
+	virtual void ProcessEvent(YTSvrLib::EM_MESSAGE_TYPE emType, YTSvrLib::ITCPBASE* pConn) override;
+
+	virtual YTSvrLib::ITCPCONNECTOR* AllocateConnector(std::string dstIP) override;
+
+	void ReleaseConnector(YTSvrLib::ITCPCONNECTOR* pSocket);
+
+	virtual void SetEvent() override;
 
 	void OnUserServerDisconnect();
 
 	static void OnMsgRecv()
 	{
-		GetInstance()->OnMessageRecv();
-	}
-
-	static void OnDisconnectMsgRecv()
-	{
-		GetInstance()->OnDisconnectMessage();
-	}
-	virtual void ProcessDisconnectMsg(YTSvrLib::ITCPBASE* pSocket)
-	{
-		GameSocket* pGameSocket = dynamic_cast<GameSocket*>(pSocket);
-		if (pGameSocket)
-		{
-			pGameSocket->OnDisconnect();
-		}
-		LOG("ProcessDisconnectMsg 0x%x", pSocket);
-		m_mapAccepted.erase((GameSocket*) pSocket);
-	}
-	BOOL IsValidIP( const char* pszRemoteIP );
-
-	virtual void OnServerClose()
-	{
-
-	}
-
-	virtual void OnClosed()
-	{
-
-	}
-
-	virtual YTSvrLib::ITCPCONNECTOR* AllocateConnector()
-	{
-		return m_PoolPlayer.ApplyObj();
-	}
-
-	virtual void ReleaseConnector(YTSvrLib::ITCPCONNECTOR* pSocket)
-	{
-		GameSocket* pGameSocket = dynamic_cast<GameSocket*>(pSocket);
-		if (pGameSocket)
-		{
-			if (pGameSocket->GetClientID())
-			{
-				m_mapClientSock.erase(pGameSocket->GetClientID());
-			}
-
-			m_mapAccepted.erase(pGameSocket);
-
-			m_PoolPlayer.ReclaimObj(pGameSocket);
-		}
-	}
-
-	virtual void ProcessAcceptedMsg(YTSvrLib::ITCPBASE* pSocket)
-	{
-		m_mapAccepted[(GameSocket*)pSocket] = (GET_TIME_NOW+DEFAULT_KEEP_ALIVE_EXPIRED);
-		LOG("SocketBase=0x%08x Accepted.", pSocket );
+		GetInstance()->MessageConsumer();
 	}
 
 	void	CheckIdleSocket( __time32_t tNow );

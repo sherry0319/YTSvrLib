@@ -69,12 +69,6 @@
     <Filter Include="redis">
       <UniqueIdentifier>{64dc2c95-f810-4c40-911f-3ad683d36ee5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="redis\hiredis">
-      <UniqueIdentifier>{5c9689c7-94d1-47f3-91b7-fe6a8dd0e200}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="redis\hiredis\adapters">
-      <UniqueIdentifier>{d3b80485-4c6e-4ead-ab47-ae70d2eecf16}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Filter">
       <UniqueIdentifier>{d78dbd08-ce6c-4d4f-a552-de464a5213d1}</UniqueIdentifier>
     </Filter>
@@ -92,12 +86,6 @@
     </Filter>
     <Filter Include="Perfermance">
       <UniqueIdentifier>{d672d4b1-0fab-45e3-8464-108c64f9b18c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Socket\libevent">
-      <UniqueIdentifier>{5e10d9dd-1be7-4f8d-af90-7816c550179b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Socket\libevent\event2">
-      <UniqueIdentifier>{2a729929-4c48-479f-b198-85cc022cf2f8}</UniqueIdentifier>
     </Filter>
     <Filter Include="URLRequest">
       <UniqueIdentifier>{bc919df3-2219-432e-a9d6-3a83b394b9f9}</UniqueIdentifier>
@@ -123,8 +111,14 @@
     <Filter Include="lz4">
       <UniqueIdentifier>{9cfd5ab1-9df5-43c5-99ba-384d6c5c3d8c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Socket\libevSocket">
-      <UniqueIdentifier>{ea79055c-03f3-4008-8975-c83c134e0b20}</UniqueIdentifier>
+    <Filter Include="Socket\TCPSocket">
+      <UniqueIdentifier>{f562f96f-dfbd-40d6-b736-45b2bfe631d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Socket\HTTPSocket">
+      <UniqueIdentifier>{080cf478-261d-4549-9554-177bd5e939b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Socket\HTTPSocket\Lib">
+      <UniqueIdentifier>{cbac0544-4d82-493b-aedd-a5656fba9be6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -136,9 +130,6 @@
     </ClCompile>
     <ClCompile Include="Socket\SendBuffer.cpp">
       <Filter>Socket</Filter>
-    </ClCompile>
-    <ClCompile Include="Service\PkgParserBase.cpp">
-      <Filter>Service</Filter>
     </ClCompile>
     <ClCompile Include="Service\Utility.cpp">
       <Filter>Service</Filter>
@@ -180,9 +171,6 @@
       <Filter>redis</Filter>
     </ClCompile>
     <ClCompile Include="redis\RedisConnectorPool.cpp">
-      <Filter>redis</Filter>
-    </ClCompile>
-    <ClCompile Include="redis\RedisConnectorCommand.cpp">
       <Filter>redis</Filter>
     </ClCompile>
     <ClCompile Include="Filter\Filter.cpp">
@@ -236,29 +224,11 @@
     <ClCompile Include="lz4\lz4feasy.cpp">
       <Filter>lz4</Filter>
     </ClCompile>
-    <ClCompile Include="Socket\WebSocket\WSPkgParser.cpp">
-      <Filter>Socket\WebSocket</Filter>
-    </ClCompile>
     <ClCompile Include="Socket\WebSocket\WSSendBuffer.cpp">
       <Filter>Socket\WebSocket</Filter>
     </ClCompile>
-    <ClCompile Include="Socket\YTSocketBase.cpp">
-      <Filter>Socket\libevSocket</Filter>
-    </ClCompile>
-    <ClCompile Include="Socket\YTSocketClient.cpp">
-      <Filter>Socket\libevSocket</Filter>
-    </ClCompile>
-    <ClCompile Include="Socket\YTSocketConnector.cpp">
-      <Filter>Socket\libevSocket</Filter>
-    </ClCompile>
-    <ClCompile Include="Socket\YTSocketMutiClient.cpp">
-      <Filter>Socket\libevSocket</Filter>
-    </ClCompile>
-    <ClCompile Include="Socket\YTSocketMutiClientController.cpp">
-      <Filter>Socket\libevSocket</Filter>
-    </ClCompile>
-    <ClCompile Include="Socket\YTSocketServer.cpp">
-      <Filter>Socket\libevSocket</Filter>
+    <ClCompile Include="Socket\TCPSocket\TCPSocket.cpp">
+      <Filter>Socket\TCPSocket</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -278,9 +248,6 @@
       <Filter>Socket</Filter>
     </ClInclude>
     <ClInclude Include="Service\AutoCloseFile.h">
-      <Filter>Service</Filter>
-    </ClInclude>
-    <ClInclude Include="Service\PkgParserBase.h">
       <Filter>Service</Filter>
     </ClInclude>
     <ClInclude Include="Service\SyncObj.h">
@@ -448,153 +415,6 @@
     <ClInclude Include="urlwriter\urlwriter.h">
       <Filter>urlwriter</Filter>
     </ClInclude>
-    <ClInclude Include="libevent\bufferevent-internal.h">
-      <Filter>Socket\libevent</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\changelist-internal.h">
-      <Filter>Socket\libevent</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\defer-internal.h">
-      <Filter>Socket\libevent</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\evbuffer-internal.h">
-      <Filter>Socket\libevent</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\evdns.h">
-      <Filter>Socket\libevent</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\event.h">
-      <Filter>Socket\libevent</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\event-internal.h">
-      <Filter>Socket\libevent</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\evmap-internal.h">
-      <Filter>Socket\libevent</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\evrpc.h">
-      <Filter>Socket\libevent</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\evrpc-internal.h">
-      <Filter>Socket\libevent</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\evsignal-internal.h">
-      <Filter>Socket\libevent</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\evthread-internal.h">
-      <Filter>Socket\libevent</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\evutil.h">
-      <Filter>Socket\libevent</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\ht-internal.h">
-      <Filter>Socket\libevent</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\http-internal.h">
-      <Filter>Socket\libevent</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\iocp-internal.h">
-      <Filter>Socket\libevent</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\ipv6-internal.h">
-      <Filter>Socket\libevent</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\log-internal.h">
-      <Filter>Socket\libevent</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\minheap-internal.h">
-      <Filter>Socket\libevent</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\mm-internal.h">
-      <Filter>Socket\libevent</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\ratelim-internal.h">
-      <Filter>Socket\libevent</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\strlcpy-internal.h">
-      <Filter>Socket\libevent</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\util-internal.h">
-      <Filter>Socket\libevent</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\event2\buffer.h">
-      <Filter>Socket\libevent\event2</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\event2\buffer_compat.h">
-      <Filter>Socket\libevent\event2</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\event2\bufferevent.h">
-      <Filter>Socket\libevent\event2</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\event2\bufferevent_compat.h">
-      <Filter>Socket\libevent\event2</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\event2\bufferevent_ssl.h">
-      <Filter>Socket\libevent\event2</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\event2\bufferevent_struct.h">
-      <Filter>Socket\libevent\event2</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\event2\dns.h">
-      <Filter>Socket\libevent\event2</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\event2\dns_compat.h">
-      <Filter>Socket\libevent\event2</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\event2\dns_struct.h">
-      <Filter>Socket\libevent\event2</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\event2\event.h">
-      <Filter>Socket\libevent\event2</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\event2\event_compat.h">
-      <Filter>Socket\libevent\event2</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\event2\event_struct.h">
-      <Filter>Socket\libevent\event2</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\event2\event-config.h">
-      <Filter>Socket\libevent\event2</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\event2\http.h">
-      <Filter>Socket\libevent\event2</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\event2\http_compat.h">
-      <Filter>Socket\libevent\event2</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\event2\http_struct.h">
-      <Filter>Socket\libevent\event2</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\event2\keyvalq_struct.h">
-      <Filter>Socket\libevent\event2</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\event2\listener.h">
-      <Filter>Socket\libevent\event2</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\event2\rpc.h">
-      <Filter>Socket\libevent\event2</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\event2\rpc_compat.h">
-      <Filter>Socket\libevent\event2</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\event2\rpc_struct.h">
-      <Filter>Socket\libevent\event2</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\event2\tag.h">
-      <Filter>Socket\libevent\event2</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\event2\tag_compat.h">
-      <Filter>Socket\libevent\event2</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\event2\thread.h">
-      <Filter>Socket\libevent\event2</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\event2\tree.h">
-      <Filter>Socket\libevent\event2</Filter>
-    </ClInclude>
-    <ClInclude Include="libevent\event2\util.h">
-      <Filter>Socket\libevent\event2</Filter>
-    </ClInclude>
     <ClInclude Include="iconv\iconv.h">
       <Filter>iconv</Filter>
     </ClInclude>
@@ -633,57 +453,6 @@
     </ClInclude>
     <ClInclude Include="jsoncpp\json\writer.h">
       <Filter>jsoncpp</Filter>
-    </ClInclude>
-    <ClInclude Include="redis\hiredis\win32\async.h">
-      <Filter>redis\hiredis</Filter>
-    </ClInclude>
-    <ClInclude Include="redis\hiredis\win32\dict.h">
-      <Filter>redis\hiredis</Filter>
-    </ClInclude>
-    <ClInclude Include="redis\hiredis\win32\fmacros.h">
-      <Filter>redis\hiredis</Filter>
-    </ClInclude>
-    <ClInclude Include="redis\hiredis\win32\hiredis.h">
-      <Filter>redis\hiredis</Filter>
-    </ClInclude>
-    <ClInclude Include="redis\hiredis\win32\net.h">
-      <Filter>redis\hiredis</Filter>
-    </ClInclude>
-    <ClInclude Include="redis\hiredis\win32\sds.h">
-      <Filter>redis\hiredis</Filter>
-    </ClInclude>
-    <ClInclude Include="redis\hiredis\win32\adapters\ae.h">
-      <Filter>redis\hiredis\adapters</Filter>
-    </ClInclude>
-    <ClInclude Include="redis\hiredis\win32\adapters\libev.h">
-      <Filter>redis\hiredis\adapters</Filter>
-    </ClInclude>
-    <ClInclude Include="redis\hiredis\win32\adapters\libevent.h">
-      <Filter>redis\hiredis\adapters</Filter>
-    </ClInclude>
-    <ClInclude Include="redis\hiredis\win32\adapters\libuv.h">
-      <Filter>redis\hiredis\adapters</Filter>
-    </ClInclude>
-    <ClInclude Include="redis\hiredis\win32\config.h">
-      <Filter>redis\hiredis</Filter>
-    </ClInclude>
-    <ClInclude Include="redis\hiredis\win32\read.h">
-      <Filter>redis\hiredis</Filter>
-    </ClInclude>
-    <ClInclude Include="redis\hiredis\win32\win32.h">
-      <Filter>redis\hiredis</Filter>
-    </ClInclude>
-    <ClInclude Include="redis\hiredis\win32\adapters\glib.h">
-      <Filter>redis\hiredis\adapters</Filter>
-    </ClInclude>
-    <ClInclude Include="redis\hiredis\win32\adapters\ivykis.h">
-      <Filter>redis\hiredis\adapters</Filter>
-    </ClInclude>
-    <ClInclude Include="redis\hiredis\win32\adapters\macosx.h">
-      <Filter>redis\hiredis\adapters</Filter>
-    </ClInclude>
-    <ClInclude Include="redis\hiredis\win32\adapters\qt.h">
-      <Filter>redis\hiredis\adapters</Filter>
     </ClInclude>
     <ClInclude Include="redis\RedisConnector.h">
       <Filter>redis</Filter>
@@ -1192,43 +961,43 @@
     <ClInclude Include="lz4\lz4feasy.h">
       <Filter>lz4</Filter>
     </ClInclude>
-    <ClInclude Include="Socket\WebSocket\WSPkgParser.h">
-      <Filter>Socket\WebSocket</Filter>
-    </ClInclude>
     <ClInclude Include="Socket\WebSocket\WSSendBuffer.h">
       <Filter>Socket\WebSocket</Filter>
     </ClInclude>
-    <ClInclude Include="Socket\YTSocketBase.h">
-      <Filter>Socket\libevSocket</Filter>
+    <ClInclude Include="Socket\TCPSocket\TCPSocket.h">
+      <Filter>Socket\TCPSocket</Filter>
     </ClInclude>
-    <ClInclude Include="Socket\YTSocketClient.h">
-      <Filter>Socket\libevSocket</Filter>
+    <ClInclude Include="Socket\HTTPSocket\Lib\server_http.hpp">
+      <Filter>Socket\HTTPSocket\Lib</Filter>
     </ClInclude>
-    <ClInclude Include="Socket\YTSocketConnector.h">
-      <Filter>Socket\libevSocket</Filter>
+    <ClInclude Include="Socket\HTTPSocket\Lib\server_https.hpp">
+      <Filter>Socket\HTTPSocket\Lib</Filter>
     </ClInclude>
-    <ClInclude Include="Socket\YTSocketMutiClient.h">
-      <Filter>Socket\libevSocket</Filter>
+    <ClInclude Include="Socket\HTTPSocket\Lib\asio_compatibility.hpp">
+      <Filter>Socket\HTTPSocket\Lib</Filter>
     </ClInclude>
-    <ClInclude Include="Socket\YTSocketMutiClientController.h">
-      <Filter>Socket\libevSocket</Filter>
+    <ClInclude Include="Socket\HTTPSocket\Lib\mutex.hpp">
+      <Filter>Socket\HTTPSocket\Lib</Filter>
     </ClInclude>
-    <ClInclude Include="Socket\YTSocketServer.h">
-      <Filter>Socket\libevSocket</Filter>
+    <ClInclude Include="Socket\HTTPSocket\Lib\status_code.hpp">
+      <Filter>Socket\HTTPSocket\Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\HTTPSocket\Lib\utility.hpp">
+      <Filter>Socket\HTTPSocket\Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\MessageMapping.h">
+      <Filter>Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\MessageQueue.hpp">
+      <Filter>Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\HTTPSocket\HTTPSocket.hpp">
+      <Filter>Socket\HTTPSocket</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="BugReport\BugslayerUtil.lib">
       <Filter>BugReport</Filter>
-    </Library>
-    <Library Include="libevent\libevent.lib">
-      <Filter>Socket\libevent</Filter>
-    </Library>
-    <Library Include="libevent\libevent_core.lib">
-      <Filter>Socket\libevent</Filter>
-    </Library>
-    <Library Include="libevent\libevent_extras.lib">
-      <Filter>Socket\libevent</Filter>
     </Library>
   </ItemGroup>
   <ItemGroup>

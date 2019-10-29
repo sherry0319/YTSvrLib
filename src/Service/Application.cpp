@@ -24,7 +24,7 @@ SOFTWARE.*/
 #include "Application.h"
 
 extern "C" {
-	double get_version_code()
+	const char* get_version_code()
 	{
 		return YTSVRLIB_VERSION_CODE;
 	}

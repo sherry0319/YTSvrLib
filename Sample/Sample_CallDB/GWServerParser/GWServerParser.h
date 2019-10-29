@@ -1,8 +1,8 @@
 #pragma once
 #include "GWServerSocket.h"
-#include "Socket/YTSocketServer.h"
+#include "Socket/TCPSocket/TCPSocket.h"
 
-class CGWSvrParser : public YTSvrLib::ITCPSERVER, public YTSvrLib::CPkgParserBase, public YTSvrLib::CSingle<CGWSvrParser>
+class CGWSvrParser : public YTSvrLib::ITCPSERVER, public YTSvrLib::CSingle<CGWSvrParser>
 {
 public:
 	CGWSvrParser(void);
@@ -10,25 +10,17 @@ public:
 
 public:
 	virtual void SetEvent();
-	virtual void SetDisconnectEvent();
 
 	static void OnMsgRecv()// 消息接收完成.触发处理
 	{
-		GetInstance()->OnMessageRecv();
+		GetInstance()->MessageConsumer();
 	}
 
-	static void OnDisconnectMsgRecv()// 收到断开连接的消息.触发处理.
-	{
-		GetInstance()->OnDisconnectMessage();
-	}
+	virtual void ProcessMessage(YTSvrLib::ITCPBASE* pSocket, const char *pBuf, int nLen) override;// 处理网络消息
 
-	virtual void ProcessMessage(YTSvrLib::ITCPBASE* pSocket, const char *pBuf, int nLen);// 处理普通的网络消息
+	virtual void ProcessEvent(YTSvrLib::EM_MESSAGE_TYPE emType, YTSvrLib::ITCPBASE* pConn) override;// 处理网络事件
 
-	virtual void ProcessAcceptedMsg(YTSvrLib::ITCPBASE* pSocket);// 处理Accept连接消息
-
-	virtual void ProcessDisconnectMsg(YTSvrLib::ITCPBASE* pSocket);// 处理断开连接消息
-
-	virtual YTSvrLib::ITCPCONNECTOR* AllocateConnector();// 分配一个连接者
+	virtual YTSvrLib::ITCPCONNECTOR* AllocateConnector(std::string);// 分配一个连接者
 
 	virtual void ReleaseConnector(YTSvrLib::ITCPCONNECTOR* pConnect);// 销毁一个连接者
 

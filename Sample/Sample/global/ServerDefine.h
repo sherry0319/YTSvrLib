@@ -9,7 +9,6 @@ namespace EAppEvent
 		eAppTimerMgrOnTimer,
 		eAppGameDB,
 		eAppGWSvrSocketEvent,
-		eAppGWSvrSocketDisconnectEvent,
 		eAppEventCount,
     };
 }

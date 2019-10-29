@@ -29,6 +29,12 @@ SOFTWARE.*/
 
 namespace YTSvrLib
 {
+#ifdef LIB_WINDOWS
+	using SOCKET_HANDLE = HANDLE;
+#else
+	using SOCKET_HANDLE = LONGLONG;
+#endif // LIB_WINDOWS
+
 	class YTSVRLIB_EXPORT IWSCONNECTOR
 	{
 	public:
@@ -41,22 +47,24 @@ namespace YTSvrLib
 
 		void Clean();
 
-		void Close();
+		void SafeClose();
 
 		void Send(const char* msg, int len);
 
 		void OnSend();
+
+		SOCKET_HANDLE GetSocket() const;
+
+		std::string& GetAddrIp();
+
+		int GetAddrPort() const;
 	protected:
-		const websocketpp::connection_hdl GetSocket() const;
-
-		std::string GetIP() const;
-
-		int GetPort() const;
-
 		CWSSendBuffer m_sendBuf;
 	private:
 		YTSvrLib::CLock m_sendLock;
 		IWSSERVER::connection_ptr m_con;
 		IWSSERVER* m_server;
+		std::string m_strIP;
+		int m_nPort;
 	};
 }

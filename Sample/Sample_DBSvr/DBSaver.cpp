@@ -14,7 +14,6 @@
 // 唯一的应用程序对象
 void DestroyAllObj()
 {
-	CGMSvrParser::GetInstance()->StopListen();
 	CDBCache::GetInstance()->RefreshSQLCache();
 	CDBManager::GetInstance()->WaitForAllRequestDone();
 }
@@ -63,7 +62,6 @@ int main(int argc, char* argv[])
 	auto app = YTSvrLib::CServerApplication::GetInstance();
 	//注册事件
 	app->RegisterEvent(EAppEvent::eAppGMSvrSocketEvent, CGMSvrParser::OnMsgRecv);
-	app->RegisterEvent(EAppEvent::eAppGMSvrSocketDisconnectEvent, CGMSvrParser::OnDisconnectMsgRecv);
 	app->RegisterEvent(EAppEvent::eAppGameDB, CDBManager::OnDataRecv);
 	app->RegisterEvent(EAppEvent::eAppTimerMgrOnTimer, CTimerMgr::OnTimer);
 
@@ -84,11 +82,11 @@ int main(int argc, char* argv[])
 			CConfig::GetInstance()->m_nDBRetryCount);
 		CDBManager::GetInstance()->Init();
 		CConfig::GetInstance()->LoadIniSQL();
-		CGMSvrParser::GetInstance()->StartListen(CConfig::GetInstance()->m_nGMSvrListenPort, CConfig::GetInstance()->m_strGMSvrListenIPAddr.c_str());
+		CGMSvrParser::GetInstance()->StartListen(CConfig::GetInstance()->m_nGMSvrListenPort);
 	}
 	else
 	{// 否则可以先开启监听以加快启动速度
-		CGMSvrParser::GetInstance()->StartListen(CConfig::GetInstance()->m_nGMSvrListenPort, CConfig::GetInstance()->m_strGMSvrListenIPAddr.c_str());
+		CGMSvrParser::GetInstance()->StartListen(CConfig::GetInstance()->m_nGMSvrListenPort);
 		CDBManager::GetInstance()->SetConnection(
 			CConfig::GetInstance()->m_sDBConnectInfo.m_strMySQLDB.c_str(),
 			CConfig::GetInstance()->m_sDBConnectInfo.m_strMySQLHost.c_str(),

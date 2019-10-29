@@ -38,7 +38,7 @@ typedef int BOOL;
 #define TRUE		1
 #define FALSE		0
 
-typedef int HANDLE;
+typedef pthread_t HANDLE;
 #define INVALID_HANDLE_VALUE ((HANDLE)-1)
 
 typedef int INT,*PINT;

@@ -20,12 +20,12 @@ namespace YTSvrLib {
 		}
 
 		const char* GetMsgData()
-		{// 用libwebsockets发送者要自己预留出填充帧头部信息的空间.见:https://libwebsockets.org/lws-api-doc-master/html/group__sending-data.html 中的 IMPORTANT NOTICE!
+		{
 			return (m_msg.c_str());
 		}
 
 		int GetMsgLen()
-		{// 用libwebsockets发送者要自己预留出填充帧头部信息的空间.见:https://libwebsockets.org/lws-api-doc-master/html/group__sending-data.html 中的 IMPORTANT NOTICE!
+		{
 			return (int)(m_msg.size());
 		}
 

@@ -26,7 +26,7 @@ SOFTWARE.*/
 
 #pragma once
 
-#define YTSVRLIB_VERSION_CODE	1.01
+#define YTSVRLIB_VERSION_CODE	"2.0.0"
 
 #define APPLICATION_EVENT_MAX_COUNT 16	//main thread event max count.主线程事件最大数量
 #define APPLICATION_EVENT_MIN_COUNT 1	//main thread event min count.主线程事件最小数量

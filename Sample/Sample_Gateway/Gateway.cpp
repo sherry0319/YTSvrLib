@@ -61,9 +61,7 @@ int main(int argc, char* argv[])
 	auto app = YTSvrLib::CServerApplication::GetInstance();
 	//注册事件
 	app->RegisterEvent( EAppEvent::eAppClientSocketEvent, CPkgParser::OnMsgRecv );
-	app->RegisterEvent( EAppEvent::eAppClientSocketDisconnectEvent, CPkgParser::OnDisconnectMsgRecv );
 	app->RegisterEvent( EAppEvent::eAppServerSocketEvent, CServerParser::OnMsgRecv );
-	app->RegisterEvent( EAppEvent::eAppServerSocketDisconnectEvent, CServerParser::OnDisconnectMsgRecv );
 	app->RegisterEvent(EAppEvent::eAppTimerMgrOnTimer, CTimerMgr::OnTimer );
 
 	//读取配置
@@ -81,7 +79,7 @@ int main(int argc, char* argv[])
 	}
 
 	//对外端口
-	CPkgParser::GetInstance()->StartListen( CConfig::GetInstance()->m_nClientListenPort, CConfig::GetInstance()->m_strClientListenIPAddr.c_str() );
+	CPkgParser::GetInstance()->StartListen( CConfig::GetInstance()->m_nClientListenPort );
 	CServerParser::GetInstance()->InitSvrSocket();
 
 	CTimerMgr::GetInstance()->CreateTimer(500);

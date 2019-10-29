@@ -26,43 +26,28 @@ namespace YTSvrLib
 {
 	ITIMERTHREAD::~ITIMERTHREAD()
 	{
-		ITCPEVENTTHREAD::CleanThread();
-		if (GetEvent())
-		{
-			event_base_loopexit(GetEvent(), NULL);
-		}
+		StopThread();
 	}
 
-	void ITIMERTHREAD::OnTimer(evutil_socket_t, short, void* arg)
+	void ITIMERTHREAD::OnTimer(bool set /*= false*/)
 	{
-		ITIMERTHREAD* pTimer = static_cast<ITIMERTHREAD*>(arg);
-		if (pTimer)
+		if (set)
 		{
-			pTimer->SetEvent();
+			SetEvent();
 		}
+
+		m_Timer.expires_after(std::chrono::milliseconds(m_tExpireInMilsec - THREAD_DELAY_MSEC));// 定时器减去线程延迟才是准确的定时时间
+
+		m_Timer.async_wait(std::bind(&ITIMERTHREAD::OnTimer, this, true));
 	}
 
-	BOOL ITIMERTHREAD::CreateTimer(DWORD dwPeriod)
+	BOOL ITIMERTHREAD::CreateTimer(__time32_t tMilsecExpired)
 	{
-		if (CreateEvent() == FALSE)
-		{
-			return FALSE;
-		}
+		m_tExpireInMilsec = tMilsecExpired;
 
-		event* timer_event = event_new(GetEvent(),(-1),EV_PERSIST,OnTimer,this);
+		OnTimer(false);
 
-		if (timer_event == NULL)
-		{
-			return FALSE;
-		}
-
-		long nPeriodSec = (long)(dwPeriod / 1000);
-		long nPeriodNSec = (long)((dwPeriod % 1000) * 1000);
-		timeval tPeriod = { nPeriodSec, nPeriodNSec };
-
-		event_add(timer_event, &tPeriod);
-
-		CreateThread();
+		CreateThread("ITIMERTHREAD");
 	
 		return TRUE;
 	}

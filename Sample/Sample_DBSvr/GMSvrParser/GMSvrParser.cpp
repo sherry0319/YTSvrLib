@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "GMSvrParser.h"
 
-CGMSvrParser::CGMSvrParser(void) : YTSvrLib::CPkgParserBase(), m_PoolPlayer("CGMSvrSocket")
+CGMSvrParser::CGMSvrParser(void) :  m_PoolPlayer("CGMSvrSocket")
 {
 #undef GMSVRPARSER_PROC_TABLE_CLIENT
 #define GMSVRPARSER_PROC_TABLE_CLIENT(proto, proc) Register(proto, proc);
@@ -22,11 +22,6 @@ void CGMSvrParser::SetEvent()
 	YTSvrLib::CServerApplication::GetInstance()->SetEvent( EAppEvent::eAppGMSvrSocketEvent );
 }
 
-void CGMSvrParser::SetDisconnectEvent()
-{
-	YTSvrLib::CServerApplication::GetInstance()->SetEvent( EAppEvent::eAppGMSvrSocketDisconnectEvent );
-}
-
 BOOL CGMSvrParser::IsValidIP( const char* pszRemoteIP )
 {
 	int nRemoteAddr = inet_addr( pszRemoteIP );
@@ -41,23 +36,19 @@ BOOL CGMSvrParser::IsValidIP( const char* pszRemoteIP )
 	return FALSE;
 }
 
-void CGMSvrParser::ProcessAcceptedMsg(YTSvrLib::ITCPBASE* pSocket)
-{
-	CGMSvrSocket* pGMSvrSocket = dynamic_cast<CGMSvrSocket*>(pSocket);
-	if (pGMSvrSocket)
+void CGMSvrParser::ProcessEvent(YTSvrLib::EM_MESSAGE_TYPE emType, YTSvrLib::ITCPBASE* pConn) {
+	LOG("ProcessEvent TYPE=[%d] CONN=[0x%x]", emType, pConn);
+	CGMSvrSocket* pGWSvrSocket = dynamic_cast<CGMSvrSocket*>(pConn);
+	switch (emType)
 	{
-		m_listClients.insert(pGMSvrSocket);
-	}
-}
-
-void CGMSvrParser::ProcessDisconnectMsg(YTSvrLib::ITCPBASE* pSocket)
-{
-	CDBCache::GetInstance()->RefreshSQLCache();
-	CGMSvrSocket* pGMSvrSocket = dynamic_cast<CGMSvrSocket*>(pSocket);
-	if (pGMSvrSocket)
-	{
-		pGMSvrSocket->SafeClose();
-		m_listClients.erase(pGMSvrSocket);
+	case YTSvrLib::MSGTYPE_DISCONNECT: {
+		m_listClients.erase(pGWSvrSocket);
+	}break;
+	case YTSvrLib::MSGTYPE_ACCEPTED: {
+		m_listClients.insert(pGWSvrSocket);
+	}break;
+	default:
+		break;
 	}
 }
 

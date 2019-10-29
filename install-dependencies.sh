@@ -1,7 +1,7 @@
 #!/bin/bash
 cd third_party
-tar -xzf libevent-2.0.22-stable.tar.gz
-cd libevent-2.0.22-stable
+tar -xzf curl-7.53.1.tar.gz
+cd curl-7.53.1
 ./configure && make install
 cd ..
 tar -xzf zlib-1.2.11.tar.gz
@@ -10,13 +10,18 @@ cd zlib-1.2.11
 cd ..
 unzip libiconv-1.14.zip
 cd libiconv-1.14
-chmod 755 configure
 ./configure && make install
 cd ..
 unzip mysqlpp.zip
 cd mysqlpp
 chmod 755 configure
-./configure --with-mysql-lib=/usr/lib/x86_64-linux-gnu && make install
+./configure && make install
+cd ..
+unzip cpp_redis.zip
+mkdir -p build
+cd build
+cmake ..
+make install
 cd ..
 tar -xzf lz4.v1.8.3.tar.gz
 cd lz4-1.8.3

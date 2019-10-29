@@ -61,9 +61,7 @@ int main(int argc, char* argv[])
 	auto app = YTSvrLib::CServerApplication::GetInstance();
 	//◊¢≤· ¬º˛
 	app->RegisterEvent(EAppEvent::eAppClientSocketEvent, CPkgParser::OnMsgRecv);
-	app->RegisterEvent(EAppEvent::eAppClientSocketDisconnectEvent, CPkgParser::OnDisconnectMsgRecv);
 	app->RegisterEvent(EAppEvent::eAppServerSocketEvent, CServerParser::OnMsgRecv);
-	app->RegisterEvent(EAppEvent::eAppServerSocketDisconnectEvent, CServerParser::OnDisconnectMsgRecv);
 	app->RegisterEvent(EAppEvent::eAppTimerMgrOnTimer, CTimerMgr::OnTimer);
 
 	//∂¡»°≈‰÷√

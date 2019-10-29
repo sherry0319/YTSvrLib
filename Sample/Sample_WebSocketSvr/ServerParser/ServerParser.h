@@ -1,26 +1,26 @@
 #pragma once
 #include "ServerSocket.h"
-#include "Socket/YTSocketBase.h"
-//#include "..\Common\CfgServerList.h"
+#include "Socket/TCPSocket/TCPSocket.h"
 
-class CServerParser : public YTSvrLib::CPkgParserBase, public YTSvrLib::CSingle<CServerParser>
+class CServerParser : public YTSvrLib::ITCPCLIENTMGR, public YTSvrLib::CSingle<CServerParser>
 {
 public:
 	CServerParser(void);
 	virtual ~CServerParser(void);
 
-	virtual void ProcessMessage(YTSvrLib::ITCPBASE* pSocket, const char *pBuf, int nLen);
+	virtual void ProcessMessage(YTSvrLib::ITCPBASE* pSocket, const char *pBuf, int nLen) override;
+
+	virtual void ProcessEvent(YTSvrLib::EM_MESSAGE_TYPE emType, YTSvrLib::ITCPBASE* pConn) override;
 
 	virtual void SetEvent();
-	virtual void SetDisconnectEvent();
 
 	static void OnMsgRecv()
 	{
-		GetInstance()->OnMessageRecv();
+		GetInstance()->MessageConsumer();
 	}
-	static void OnDisconnectMsgRecv()
-	{
-		GetInstance()->OnDisconnectMessage();
+
+	virtual YTSvrLib::ITCPCLIENT* CServerParser::AllocateConnector() {
+		return m_PoolSvrSocket.ApplyObj();
 	}
 
 	virtual void ReclaimObj(YTSvrLib::ITCPBASE* pSocket)
@@ -29,15 +29,6 @@ public:
 		if (pSvrSocket)
 		{
 			m_PoolSvrSocket.ReclaimObj(pSvrSocket);
-		}
-	}
-
-	virtual void ProcessDisconnectMsg(YTSvrLib::ITCPBASE* pSocket)
-	{
-		CServerSocket* pSvrSocket = dynamic_cast<CServerSocket*>(pSocket);
-		if (pSvrSocket)
-		{
-			pSvrSocket->OnDisconnect();
 		}
 	}
 

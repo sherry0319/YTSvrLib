@@ -33,11 +33,6 @@ void CPkgParser::SetEvent()
 	YTSvrLib::CServerApplication::GetInstance()->SetEvent(EAppEvent::eAppClientSocketEvent);
 }
 
-void CPkgParser::SetDisconnectEvent()
-{
-	YTSvrLib::CServerApplication::GetInstance()->SetEvent(EAppEvent::eAppClientSocketDisconnectEvent);
-}
-
 void CPkgParser::CheckIdleSocket(__time32_t tNow)
 {
 	LOG("PkgParser::CheckIdleSocket");
@@ -59,7 +54,7 @@ void CPkgParser::CheckIdleSocket(__time32_t tNow)
 
 	for (auto& ctx : needRemove)
 	{
-		ctx->Close();
+		ctx->SafeClose();
 	}
 }
 
@@ -79,7 +74,7 @@ void CPkgParser::SendRespWithError(WORD wMsgType, int nError, int nMsgSeqNo, Gam
 	if (bCloseSocket)
 	{
 		LOG("WEBSOCKET ====>>> Socket=%x Msg=%d Ret=%d Safe Close", pSocket, wMsgType, nError);
-		pSocket->Close();
+		pSocket->SafeClose();
 	}
 }
 
@@ -92,6 +87,21 @@ void CPkgParser::SetClientSocket(GameSocket* pNewClientSock)
 		m_mapAccepted.erase(pNewClientSock);
 
 		LOG("Socket=%x CID=%d", pNewClientSock, pNewClientSock->GetClientID());
+	}
+}
+
+void CPkgParser::ProcessEvent(YTSvrLib::EM_MESSAGE_TYPE emType, YTSvrLib::IWSCONNECTOR* pConn) {
+	LOG("ProcessEvent : TYPE=[%d] CONN=[0x%x]",emType,pConn);
+	switch (emType)
+	{
+	case YTSvrLib::MSGTYPE_DISCONNECT: {
+		ProcessDisconnectMsg(pConn);
+	}break;
+	case YTSvrLib::MSGTYPE_ACCEPTED: {
+		ProcessAcceptedMsg(pConn);
+	}break;
+	default:
+		break;
 	}
 }
 
@@ -172,7 +182,7 @@ void CPkgParser::ProcessMessage(YTSvrLib::IWSCONNECTOR* pConn, const char* msg, 
 			LOG("WEBSOCKET ====>>> Socket=%x CID=%d User=%d Recv Msg=%d Len=%d From=%s:%d",
 				pClientSock, pClientSock->GetClientID(),
 				pReqHead->m_nUserID, pReqHead->m_nMsgType, nBodyLen,
-				pClientSock->GetAddrIp(), pClientSock->GetAddrPort());
+				pClientSock->GetAddrIp().c_str(), pClientSock->GetAddrPort());
 		}
 
 		LOG("Handle Normal Client Req : Seqno=%d Type=%d Len=%d",pReqHead->m_nMsgSeqNo,pReqHead->m_nMsgType,pReqHead->m_nMsgLenTotal);
@@ -192,13 +202,11 @@ void CPkgParser::ProcessDisconnectMsg(YTSvrLib::IWSCONNECTOR* pConn)
 		pSocket->OnClosed();
 	}
 	m_mapAccepted.erase(pSocket);
-	ReleaseConnector(pSocket);
 }
 
 void CPkgParser::ProcessAcceptedMsg(YTSvrLib::IWSCONNECTOR* pConn)
 {
 	GameSocket* pSocket = (GameSocket*)pConn;
-	pSocket->InitData();
 	m_mapAccepted.insert(pSocket);
 	pSocket->SetClientID(GetNextClientID());
 	m_mapClientSock[pSocket->GetClientID()] = pSocket;
@@ -256,7 +264,7 @@ void CPkgParser::OnClientDisconnect(GameSocket* pSocket)
 	sGWMsg.m_From.m_nAgentID = pSocket->GetClientID();
 	sGWMsg.m_To.m_emType = emAgent_UserSvr;
 	sGWMsg.m_To.m_nAgentID = pSvrSock->GetSvrID();
-	strncpy_s(sGWMsg.m_szClientIP, pSocket->GetAddrIp(), 31);
+	strncpy_s(sGWMsg.m_szClientIP, pSocket->GetAddrIp().c_str(), 31);
 	sGWMsg.m_nSvrID = CConfig::GetInstance()->m_nPublicSvrID;
 	sGWMsg.m_nGWID = CConfig::GetInstance()->m_nLocalSvrID;
 	sGWMsg.m_nClientID = pSocket->GetClientID();
@@ -300,7 +308,7 @@ void CPkgParser::OnUserServerDisconnect()
 
 	for (auto& gs : needClose)
 	{
-		gs->Close();
+		gs->SafeClose();
 	}
 
 	needClose.clear();

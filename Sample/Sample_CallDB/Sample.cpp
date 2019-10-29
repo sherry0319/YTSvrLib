@@ -68,7 +68,6 @@ int main(int argc, char* argv[])
 	//×¢²áÊÂ¼þ
 	auto app = YTSvrLib::CServerApplication::GetInstance();
 	app->RegisterEvent(EAppEvent::eAppGWSvrSocketEvent, CGWSvrParser::OnMsgRecv);
-	app->RegisterEvent(EAppEvent::eAppGWSvrSocketDisconnectEvent, CGWSvrParser::OnDisconnectMsgRecv);
 	app->RegisterEvent(EAppEvent::eAppGameDB, CDBManager::OnDataRecv);
 	app->RegisterEvent(EAppEvent::eAppTimerMgrOnTimer, CTimerMgr::OnTimer);
 
@@ -85,8 +84,7 @@ int main(int argc, char* argv[])
 	CDBLogMgr::GetInstance();
 	CTimerMgr::GetInstance()->CreateTimer(100);
 
-	CGWSvrParser::GetInstance()->StartListen(CConfig::GetInstance()->m_nGWListenPort,
-											 CConfig::GetInstance()->m_strGWListenIPAddr.c_str());
+	CGWSvrParser::GetInstance()->StartListen(CConfig::GetInstance()->m_nGWListenPort);
 
 	CDBManager::GetInstance()->OnServerStart();
 

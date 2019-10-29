@@ -10,6 +10,7 @@ public:
 	BOOL	ReadConfig();// ╤ах║еДжцнд╪Ч
 public:
 	CHAR m_szReadConfigFile[MAX_PATH];
+	std::vector<int> m_vctClientIPWhiteList;
 
 	sDBConnectInfo m_sDBConnectInfo;
 

@@ -21,13 +21,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
 #include "stdafx.h"
 #include "YTSocketThread.h"
-#include <event2/thread.h>
 
 namespace YTSvrLib
 {
-	void ITHREAD::CreateThread()
+	void ITHREAD::CreateThread(LPCSTR threadName)
 	{
+		if (m_bRun)
+		{
+			return;
+		}
 		m_bRun = TRUE;
+		strncpy_s(m_szThreadName, threadName, 63);
 
 		std::thread t(&ITHREAD::Run, this);
 
@@ -53,87 +57,16 @@ namespace YTSvrLib
 		EventLoop();
 	}
 
-	//////////////////////////////////////////////////////////////////////////
-
-	BOOL ITCPEVENTTHREAD::CreateEvent()
-	{
-#ifdef LIB_WINDOWS
-		evthread_use_windows_threads();
-#else
-		evthread_use_pthreads();
-#endif // LIB_WINDOWS
-
-		m_eventbase = event_base_new();
-		if (m_eventbase == NULL)
-		{
-			LOGERROR("event_base_new failed : %d",GetLastError());
-			return FALSE;
-		}
-
-		evthread_make_base_notifiable(m_eventbase);
-
-		return TRUE;
-	}
-
-	void ITCPEVENTTHREAD::StopEvent()
-	{
-		if (m_eventbase)
-		{
-			event_base_free(m_eventbase);
-			m_eventbase = NULL;
-		}
-	}
-
-	void ITCPEVENTTHREAD::StopThread()
-	{
+	void IASIOTHREAD::StopThread() {
 		m_bRun = FALSE;
-		if (GetEvent())
+
+		if (!io.stopped())
 		{
-			event_base_loopexit(GetEvent(), NULL);
+			io.stop();
 		}
-	}
-
-	void ITCPEVENTTHREAD::CleanThread()
-	{
-		StopEvent();
-		m_bRun = FALSE;
-	}
-
-	void ITCPEVENTTHREAD::EventLoop()
-	{
-		if (m_eventbase == NULL)
-		{
-			CreateEvent();
-		}
-
-		m_bRuning = TRUE;
-
-		while (m_bRun)
-		{
-			try
-			{
-				if (m_eventbase)
-				{
-					event_base_dispatch(m_eventbase);
-					Sleep(1000);
-				}
-				else
-					m_bRun = FALSE;
-			}
-			catch (...)
-			{
-				m_bRun = FALSE;
-			}
-		}
-
-		m_bRuning = FALSE;
-
-		OnThreadEnd();
 	}
 
 	void IASIOTHREAD::EventLoop() {
-		m_bRuning = TRUE;
-
 		while (m_bRun)
 		{
 			try
@@ -144,6 +77,8 @@ namespace YTSvrLib
 			{
 				m_bRun = FALSE;
 			}
+			// LOG("Thread Stoped : Name=[%s]", m_szThreadName);
+			Sleep(THREAD_DELAY_MSEC);
 		}
 	}
 }

@@ -1,8 +1,9 @@
 #pragma once
 #include "GMSvrSocket.h"
-#include "Socket/YTSocketServer.h"
+#include "Socket/TCPSocket/TCPSocket.h"
+#include "Socket/MessageMapping.h"
 
-class CGMSvrParser : public YTSvrLib::ITCPSERVER, public YTSvrLib::CPkgParserBase, public YTSvrLib::CSingle<CGMSvrParser>
+class CGMSvrParser : public YTSvrLib::ITCPSERVER,public YTSvrLib::ITCPMSGHANDLER, public YTSvrLib::CSingle<CGMSvrParser>
 {
 #undef GMSVRPARSER_PROC_TABLE_CLIENT
 #define GMSVRPARSER_PROC_TABLE_CLIENT(proto, proc) static int proc( YTSvrLib::ITCPBASE* pSocket, const char* pBuf, int nLen );
@@ -13,7 +14,7 @@ public:
 	virtual ~CGMSvrParser(void);
 
 public:
-	virtual void ProcessMessage(YTSvrLib::ITCPBASE* pSocket, const char *pBuf, int nLen)
+	virtual void ProcessMessage(YTSvrLib::ITCPBASE* pSocket, const char *pBuf, int nLen) override
 	{
 		if (nLen > 1)//Normal Package
 		{
@@ -27,24 +28,24 @@ public:
 		}
 	}
 
+	virtual void ProcessEvent(YTSvrLib::EM_MESSAGE_TYPE emType, YTSvrLib::ITCPBASE* pConn) override;// 处理网络事件
+
 	void CloseAllClients();
 
 	virtual void SetEvent();
-	virtual void SetDisconnectEvent();
 
 	static void OnMsgRecv()
 	{
-		GetInstance()->OnMessageRecv();
+		GetInstance()->MessageConsumer();
 	}
 
-	static void OnDisconnectMsgRecv()
+	virtual YTSvrLib::ITCPCONNECTOR* AllocateConnector(std::string strDstIP)
 	{
-		GetInstance()->OnDisconnectMessage();
-	}
-
-	virtual YTSvrLib::ITCPCONNECTOR* AllocateConnector()
-	{
-		return m_PoolPlayer.ApplyObj();
+		if (IsValidIP(strDstIP.c_str()))
+		{
+			return m_PoolPlayer.ApplyObj();
+		}
+		return NULL;
 	}
 
 	virtual void ReleaseConnector(YTSvrLib::ITCPCONNECTOR* pConnect)
@@ -55,10 +56,6 @@ public:
 			m_PoolPlayer.ReclaimObj(pGMSvrSocket);
 		}
 	}
-
-	virtual void ProcessAcceptedMsg(YTSvrLib::ITCPBASE* pSocket);
-
-	virtual void ProcessDisconnectMsg(YTSvrLib::ITCPBASE* pSocket);
 
 	void OnDisconnected(CGMSvrSocket* pGMSock);
 

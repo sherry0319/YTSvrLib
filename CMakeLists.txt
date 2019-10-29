@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.1)
 
 IF(WIN32)
 	MESSAGE(FATAL_ERROR "YTSVRLIB CMAKE VERSION IS NOT SUPPORT WIN32&MSVC. PLEASE USE \"YTSvrLib.sln\" INSTEAD!!")
@@ -12,7 +12,13 @@ src/mysql/include/
 src/asio/
 )
 
-OPTION(WITH_DEBUG "" OFF)
+OPTION(WITH_DEBUG "Turn on debug for output symbol and more detailed log" OFF)
+
+OPTION(WITH_WEBSOCKET "Turn on to enable websocket server" ON)
+
+OPTION(WITH_REDIS "Turn on to enable redis connection and command" ON)
+
+OPTION(WITH_HTTP "Turn on to enable http/https server" ON)
 
 SET(
 YTSVRLIB_SRC 
@@ -29,25 +35,18 @@ src/mysql/MYSQLManagerBase.cpp
 src/mysql/MYSQLRecordSet.cpp 
 src/Service/Application.cpp 
 src/Service/AutoCloseFile.cpp 
-src/Service/Log.cpp 
-src/Service/PkgParserBase.cpp 
+src/Service/Log.cpp
 src/Service/YTThread.cpp 
 src/Service/Utility.cpp 
 src/Service/SyncObj.cpp 
 src/Service/TimerThread.cpp 
 src/Service/TimerHandler.cpp 
 src/Socket/SendBuffer.cpp 
-src/Socket/YTSocketBase.cpp 
 src/Socket/YTSocketThread.cpp 
-src/Socket/YTSocketConnector.cpp 
-src/Socket/YTSocketClient.cpp 
-src/Socket/YTSocketServer.cpp 
-src/Socket/YTSocketMutiClient.cpp 
-src/Socket/YTSocketMutiClientController.cpp
+src/Socket/TCPSocket/TCPSocket.cpp
 src/Socket/WebSocket/YTWSServer.cpp
 src/Socket/WebSocket/YTWSConnector.cpp
 src/Socket/WebSocket/WSSendBuffer.cpp
-src/Socket/WebSocket/WSPkgParser.cpp
 src/sha/sha1.cpp
 src/tinyxml/tinyxml2.cpp 
 src/tinyxml/XMLParser.cpp 
@@ -55,16 +54,27 @@ src/tinyxml/XMLDocument.cpp
 src/tinyxml/XMLNode.cpp 
 src/urlwriter/urlwriter.cpp 
 src/redis/RedisConnector.cpp 
-src/redis/RedisConnectorPool.cpp 
-src/redis/RedisConnectorCommand.cpp 
+src/redis/RedisConnectorPool.cpp
 src/Filter/Filter.cpp
 src/lz4/lz4feasy.cpp 
 )
 
 SET(BUILD_SHARED_LIBS ON)
 
-SET(CMAKE_CXX_FLAGS "-fstack-protector-all -fpermissive -DYTLIB_WITH_WEBSOCKET -DASIO_STANDALONE -D_WEBSOCKETPP_CPP11_TYPE_TRAITS_ -std=c++11 -g")
+SET(CMAKE_CXX_FLAGS "-fstack-protector-all -fpermissive -DASIO_STANDALONE -DUSE_STANDALONE_ASIO -D_WEBSOCKETPP_CPP11_TYPE_TRAITS_ -std=c++11 -g")
 SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -rdynamic")
+
+IF(WITH_WEBSOCKET)
+  ADD_DEFINITIONS(-DYTLIB_WITH_WEBSOCKET)
+ENDIF()
+
+IF(WITH_REDIS)
+  ADD_DEFINITIONS(-DYTSVRLIB_WITH_REDIS)
+ENDIF()
+
+IF(WITH_HTTP)
+  ADD_DEFINITIONS(-DYTSVRLIB_WITH_HTTP)
+ENDIF()
 
 IF(WITH_DEBUG)
   MESSAGE(STATUS "DEBUG MODE ON")
@@ -87,16 +97,20 @@ IF(UNIX)
 	ytsvrlib
 	z
 	lz4
-	event
-	event_pthreads
 	mysqlclient
 	curl
 	pthread
 	mysqlpp
-	hiredis
 	iconv
-	tcmalloc_minimal
 	)
+	
+	IF(WITH_REDIS)
+		TARGET_LINK_LIBRARIES(
+		ytsvrlib
+		cpp_redis
+		tacopie
+		)
+	ENDIF()
 ENDIF()
 
 INSTALL(CODE "execute_process\(COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/install_cmake.sh\)")

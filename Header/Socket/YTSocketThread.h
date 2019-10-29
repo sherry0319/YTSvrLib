@@ -23,28 +23,25 @@ SOFTWARE.*/
 #define __YTSOCKET_THREAD_H_
 
 #include <thread>
-#include <event.h>
-
-#ifdef YTLIB_WITH_WEBSOCKET
 #include <asio.hpp>
 #include <asio/io_service.hpp>
-#endif // YTLIB_WITH_WEBSOCKET
 
 namespace YTSvrLib
 {
+	constexpr __time32_t THREAD_DELAY_MSEC = 1; // 工作线程退出循环延迟毫秒数.不加延迟会导致线程循环CPU高占用
+
 	class YTSVRLIB_EXPORT ITHREAD {
 	public:
 		ITHREAD() {
 			m_bRun = FALSE;
-			m_bRuning = FALSE;
 		}
 
 		BOOL IsRuning() const
 		{
-			return m_bRuning;
+			return m_bRun;
 		}
 
-		void CreateThread();
+		void CreateThread(LPCSTR threadName);
 
 		void Run();
 
@@ -57,55 +54,23 @@ namespace YTSvrLib
 		virtual void CleanThread();
 	protected:
 		BOOL m_bRun;
-		BOOL m_bRuning;
+		char m_szThreadName[64];
 	};
 
-	class YTSVRLIB_EXPORT ITCPEVENTTHREAD : public ITHREAD
-	{
-	public:
-		ITCPEVENTTHREAD() : ITHREAD()
-		{
-			m_eventbase = NULL;
-		}
-
-		virtual ~ITCPEVENTTHREAD()
-		{
-
-		}
-
-		BOOL CreateEvent();
-
-		event_base* GetEvent()
-		{
-			return m_eventbase;
-		}
-
-		virtual void EventLoop(); // 线程函数
-	protected:
-		virtual void CleanThread() override;
-
-		virtual void StopThread() override;
-
-		void StopEvent();
-	private:
-		event_base* m_eventbase;
-	};
-
-#ifdef YTLIB_WITH_WEBSOCKET
 	class YTSVRLIB_EXPORT IASIOTHREAD : public ITHREAD {
 	public:
-		IASIOTHREAD() : ITHREAD()
-		{}
+		IASIOTHREAD() : ITHREAD(){}
 
-		asio::io_service* GetCore() {
-			return &io;
+		asio::io_service& GetCore() {
+			return io;
 		}
 
 		virtual void EventLoop(); // 线程函数
+
+		virtual void StopThread() override;
 	private:
 		asio::io_service io;
 	};
-#endif // YTLIB_WITH_WEBSOCKET
 }
 
 #endif // !__YTSOCKET_THREAD_H_

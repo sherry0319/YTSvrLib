@@ -12,8 +12,6 @@ public:
 		m_nClientID = 0;
 		m_mapMessageRecved.clear();
 		m_sendBuf.SetQueueLenMax(1024);
-		ZeroMemory(m_szIP, sizeof(m_szIP));
-		m_nPort = 0;
 	}
 
 	virtual void Init();
@@ -26,8 +24,6 @@ public:
 	{
 		return m_nClientID;
 	}
-
-	void InitData();
 
 	void OnRecvNewMsg(UINT nMsgSeqno, int nMsgType);
 	void OnSendMsg(UINT nMsgSeqno, int nMsgType);
@@ -44,24 +40,9 @@ public:
 	{
 		m_tExpired = t;
 	}
-public:
-	void SetAddrIP(const char* pszIP)
-	{
-		strncpy_s(m_szIP, pszIP, 31);
-	}
-	const char* GetAddrIp()
-	{
-		return m_szIP;
-	}
 
-	int GetAddrPort()
-	{
-		return m_nPort;
-	}
 private:
 	int m_nClientID;
-	char m_szIP[32];
-	int m_nPort;
 	MessageRecord m_mapMessageRecved;
 	BOOL m_bClientClosed;
 	__time32_t m_tExpired;

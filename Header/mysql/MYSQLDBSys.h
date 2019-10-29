@@ -27,6 +27,7 @@ SOFTWARE.*/
 #include "mysqlpp/mysql++.h"
 #include "MYSQLCommand.h"
 #include "MYSQLRecordSet.h"
+#include "stl/wqueue.h"
 #include <vector>
 
 #define INVALID_DBQUERY_KEY -1

@@ -21,27 +21,29 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
 #ifndef __TIMER_THREAD_H_
 #define __TIMER_THREAD_H_
-#include <event.h>
 #include <thread>
 #include "../Socket/YTSocketThread.h"
 
 namespace YTSvrLib
 {
-	class YTSVRLIB_EXPORT ITIMERTHREAD : public ITCPEVENTTHREAD
+	class YTSVRLIB_EXPORT ITIMERTHREAD : public IASIOTHREAD
 	{
 	public:
-		ITIMERTHREAD()
+		ITIMERTHREAD():IASIOTHREAD(),m_Timer(GetCore())
 		{
-			
+			m_tExpireInMilsec = 0;
 		}
 
 		virtual ~ITIMERTHREAD();
 		
 		virtual void SetEvent() = 0;
 
-		static void OnTimer(evutil_socket_t, short, void* arg);
+		void OnTimer(bool set = false);
 
-		BOOL CreateTimer(DWORD dwPeriod);
+		BOOL CreateTimer(__time32_t tMilsecExpired);
+	protected:
+		asio::steady_timer m_Timer;
+		__time32_t m_tExpireInMilsec;
 	};
 }
 

@@ -74,7 +74,7 @@ namespace YTSvrLib
 			return FALSE;
 
 		m_hThread = hThread;
-		m_dwThreadID = (DWORD) nThreadID;
+		m_dwThreadID = (DWORD)nThreadID;
 #else
 		int ret = pthread_create(&m_dwThreadID, NULL, ThreadProc, (void*)this);
 		if (ret != 0)

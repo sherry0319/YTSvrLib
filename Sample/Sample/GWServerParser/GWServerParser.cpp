@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "GWServerParser.h"
 
-CGWSvrParser::CGWSvrParser(void) : YTSvrLib::CPkgParserBase(), m_poolGateway("CGMSvrSocket")
+CGWSvrParser::CGWSvrParser(void) : m_poolGateway("CGMSvrSocket")
 {
 
 }
@@ -18,32 +18,38 @@ void CGWSvrParser::ProcessMessage(YTSvrLib::ITCPBASE* pSocket, const char *pBuf,
 	}
 }
 
-void CGWSvrParser::ProcessAcceptedMsg(YTSvrLib::ITCPBASE* pSocket)
-{
-	CGWSvrSocket* pGWSvrSocket = dynamic_cast<CGWSvrSocket*>(pSocket);
-	if (pGWSvrSocket)
+void CGWSvrParser::ProcessEvent(YTSvrLib::EM_MESSAGE_TYPE emType, YTSvrLib::ITCPBASE* pConn) {
+	LOG("ProcessEvent TYPE=[%d] CONN=[0x%x]",emType,pConn);
+	CGWSvrSocket* pGWSvrSocket = dynamic_cast<CGWSvrSocket*>(pConn);
+	switch (emType)
 	{
-		OnGWSvrConnected(pGWSvrSocket);
-	}
-}
-
-void CGWSvrParser::ProcessDisconnectMsg(YTSvrLib::ITCPBASE* pSocket)
-{
-	CGWSvrSocket* pGWSvrSocket = dynamic_cast<CGWSvrSocket*>(pSocket);
-	if (pGWSvrSocket)
-	{
+	case YTSvrLib::MSGTYPE_DISCONNECT: {
 		OnGWSvrDisconnect(pGWSvrSocket);
+	}break;
+	case YTSvrLib::MSGTYPE_ACCEPTED: {
+		OnGWSvrConnected(pGWSvrSocket);
+	}break;
+	default:
+		break;
 	}
 }
 
-YTSvrLib::ITCPCONNECTOR* CGWSvrParser::AllocateConnector()
+YTSvrLib::ITCPCONNECTOR* CGWSvrParser::AllocateConnector(std::string dstIP)
 {
+	int nRemoteAddr = inet_addr(dstIP.c_str());
+	for (UINT i = 0; i < CConfig::GetInstance()->m_vctClientIPWhiteList.size(); i++)
+	{
+		if (CConfig::GetInstance()->m_vctClientIPWhiteList[i] == 0)
+			return NULL;
+		if (CConfig::GetInstance()->m_vctClientIPWhiteList[i] == nRemoteAddr)
+			return NULL;
+	}
 	return m_poolGateway.ApplyObj();
 }
 
-void CGWSvrParser::ReleaseConnector(YTSvrLib::ITCPCONNECTOR* pConnect)
+void CGWSvrParser::ReleaseConnector(YTSvrLib::ITCPCONNECTOR* pConn)
 {
-	CGWSvrSocket* pGWSvrSocket = dynamic_cast<CGWSvrSocket*>(pConnect);
+	CGWSvrSocket* pGWSvrSocket = dynamic_cast<CGWSvrSocket*>(pConn);
 	if (pGWSvrSocket)
 	{
 		m_poolGateway.ReclaimObj(pGWSvrSocket);
@@ -52,12 +58,14 @@ void CGWSvrParser::ReleaseConnector(YTSvrLib::ITCPCONNECTOR* pConnect)
 
 void CGWSvrParser::OnGWSvrConnected(CGWSvrSocket* pGWSvrSocket)
 {
-	LOG("CGWSvrSocket Connected : %s:%d On Socket(%d)", pGWSvrSocket->GetAddrIp(), pGWSvrSocket->GetAddrPort(), pGWSvrSocket->GetSocket());
+	LOG("CGWSvrSocket Connected : %s:%d On Socket(0x%x)", pGWSvrSocket->GetAddrIp().c_str(), pGWSvrSocket->GetAddrPort(), pGWSvrSocket);
 }
 
 void CGWSvrParser::OnGWSvrDisconnect(CGWSvrSocket* pSocket)
 {
-	LOG("CGWSvrSocket Disconnected : %s:%d On Socket(%d)", pSocket->GetAddrIp(), pSocket->GetAddrPort(), pSocket->GetSocket());
+	LOG("CGWSvrSocket Disconnected : %s:%d On Socket(0x%x)", pSocket->GetAddrIp().c_str(), pSocket->GetAddrPort(), pSocket);
+
+	pSocket->OnClosed();
 }
 
 void CGWSvrParser::SendClientMsg(CGWSvrSocket* pGWSocket, LPCSTR pszMsg, int nLen)
@@ -79,9 +87,4 @@ void CGWSvrParser::SendSvrMsg(CGWSvrSocket* pGWSocket, LPCSTR pszMsg, int nMsgLe
 void CGWSvrParser::SetEvent()
 {
 	YTSvrLib::CServerApplication::GetInstance()->SetEvent(EAppEvent::eAppGWSvrSocketEvent);
-}
-
-void CGWSvrParser::SetDisconnectEvent()
-{
-	YTSvrLib::CServerApplication::GetInstance()->SetEvent(EAppEvent::eAppGWSvrSocketDisconnectEvent);
 }

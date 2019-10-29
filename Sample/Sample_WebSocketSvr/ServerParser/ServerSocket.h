@@ -1,6 +1,6 @@
 #pragma once
 #include "GWMsgDef.h"
-#include "Socket/YTSocketClient.h"
+#include "Socket/TCPSocket/TCPSocket.h"
 
 #define MAX_CONNECTING_RETRY	10
 
@@ -12,13 +12,10 @@ public:
 
 	virtual void Init();
 
-	virtual int		OnSocketRecv();
 	virtual int     OnRecved(const char* pBuf, int nLen);
-	virtual void    OnDisconnect();
 	virtual void	OnClosed();
 
 	virtual void    PostMsg( const char* pBuf, int nLen );
-	virtual void    PostDisconnectMsg( EType eType );
 
 	virtual void ReclaimObj();
 	
@@ -28,6 +25,7 @@ public:
 
 	BOOL ConnectToSvr();
 	virtual void OnConnected();
+	void OnConnectFailed();
 	BOOL	IsConnectedSvr() { return m_bConnectedSvr; }
 
 	void SendKeepAlive();

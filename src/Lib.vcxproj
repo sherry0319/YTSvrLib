@@ -27,33 +27,33 @@
     <SccLocalPath>Svn</SccLocalPath>
     <SccProvider>SubversionScc</SccProvider>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug64DLL|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release64|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release64DLL|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -107,8 +107,8 @@
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>./mysql/include/;./libevent/;./asio/;./libwebsockets/include/;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>YTLIB_WITH_WEBSOCKET;_WEBSOCKETPP_CPP11_TYPE_TRAITS_;ASIO_STANDALONE;_WIN64;NDEBUG;YTSVRLIB_NO_DLL;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>./mysql/include/;./asio/;./libwebsockets/include/;./redis/;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>YTLIB_WITH_WEBSOCKET;_WEBSOCKETPP_CPP11_TYPE_TRAITS_;ASIO_STANDALONE;USE_STANDALONE_ASIO;YTSVRLIB_WITH_REDIS;YTSVRLIB_WITH_HTTP;_WIN64;NDEBUG;YTSVRLIB_NO_DLL;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -124,11 +124,16 @@
 xcopy /d /i /f /y $(OutputPath)$(TargetName).dll $(SolutionDir)Lib\
 xcopy $(ProjectDir)*.h $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
 xcopy $(ProjectDir)*.hpp $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
+xcopy $(ProjectDir)*.inc $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
 xcopy $(ProjectDir)*.ipp $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
 xcopy $(ProjectDir)*.dll $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
-xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
+xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k
+svn ci $(SolutionDir)Header\ -m ""
+svn ci $(SolutionDir)Lib\ -m ""</Command>
     </PostBuildEvent>
-    <PreBuildEvent />
+    <PreBuildEvent>
+      <Command>svn up $(SolutionDir)</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release64DLL|x64'">
     <Midl>
@@ -140,8 +145,8 @@ xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>./mysql/include/;./libevent/;./asio/;./libwebsockets/include/;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>YTLIB_WITH_WEBSOCKET;_WEBSOCKETPP_CPP11_TYPE_TRAITS_;ASIO_STANDALONE;_WIN64;NDEBUG;YTSVRLIB_MAKE_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>./mysql/include/;./asio/;./libwebsockets/include/;./redis/;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>YTLIB_WITH_WEBSOCKET;_WEBSOCKETPP_CPP11_TYPE_TRAITS_;ASIO_STANDALONE;USE_STANDALONE_ASIO;YTSVRLIB_WITH_REDIS;YTSVRLIB_WITH_HTTP;_WIN64;NDEBUG;YTSVRLIB_MAKE_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -157,14 +162,19 @@ xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
 xcopy /d /i /f /y $(OutputPath)$(TargetName).dll $(SolutionDir)Lib\
 xcopy $(ProjectDir)*.h $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
 xcopy $(ProjectDir)*.hpp $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
+xcopy $(ProjectDir)*.inc $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
 xcopy $(ProjectDir)*.ipp $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
 xcopy $(ProjectDir)*.dll $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
-xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
+xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k
+svn ci $(SolutionDir)Header\ -m ""
+svn ci $(SolutionDir)Lib\ -m ""</Command>
     </PostBuildEvent>
     <Link>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
-    <PreBuildEvent />
+    <PreBuildEvent>
+      <Command>svn up $(SolutionDir)</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'">
     <Midl>
@@ -176,8 +186,8 @@ xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>./mysql/include/;./libevent/;./asio/;./libwebsockets/include/;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>YTLIB_WITH_WEBSOCKET;_WEBSOCKETPP_CPP11_TYPE_TRAITS_;ASIO_STANDALONE;_WIN64;DEBUG64;YTSVRLIB_NO_DLL;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>./mysql/include/;./asio/;./libwebsockets/include/;./redis/;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>YTLIB_WITH_WEBSOCKET;_WEBSOCKETPP_CPP11_TYPE_TRAITS_;ASIO_STANDALONE;USE_STANDALONE_ASIO;YTSVRLIB_WITH_REDIS;YTSVRLIB_WITH_HTTP;_WIN64;DEBUG64;YTSVRLIB_NO_DLL;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -187,6 +197,7 @@ xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <OmitFramePointers>false</OmitFramePointers>
       <ExceptionHandling>Async</ExceptionHandling>
+      <ProgramDataBaseFileName>$(IntDir)$(TargetName).pdb</ProgramDataBaseFileName>
     </ClCompile>
     <Lib />
     <PostBuildEvent>
@@ -194,11 +205,16 @@ xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
 xcopy /d /i /f /y $(OutputPath)$(TargetName).dll $(SolutionDir)Lib\
 xcopy $(ProjectDir)*.h $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
 xcopy $(ProjectDir)*.hpp $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
+xcopy $(ProjectDir)*.inc $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
 xcopy $(ProjectDir)*.ipp $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
 xcopy $(ProjectDir)*.dll $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
-xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
+xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k
+svn ci $(SolutionDir)Header\ -m ""
+svn ci $(SolutionDir)Lib\ -m ""</Command>
     </PostBuildEvent>
-    <PreBuildEvent />
+    <PreBuildEvent>
+      <Command>svn up $(SolutionDir)</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug64DLL|x64'">
     <Midl>
@@ -210,8 +226,8 @@ xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>./mysql/include/;./libevent/;./asio/;./libwebsockets/include/;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>YTLIB_WITH_WEBSOCKET;_WEBSOCKETPP_CPP11_TYPE_TRAITS_;ASIO_STANDALONE;_WIN64;DEBUG64;_LIB;YTSVRLIB_MAKE_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>./mysql/include/;./asio/;./libwebsockets/include/;./redis/;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>YTLIB_WITH_WEBSOCKET;_WEBSOCKETPP_CPP11_TYPE_TRAITS_;ASIO_STANDALONE;USE_STANDALONE_ASIO;YTSVRLIB_WITH_REDIS;YTSVRLIB_WITH_HTTP;_WIN64;DEBUG64;_LIB;YTSVRLIB_MAKE_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -230,14 +246,19 @@ xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
 xcopy /d /i /f /y $(OutputPath)$(TargetName).dll $(SolutionDir)Lib\
 xcopy $(ProjectDir)*.h $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
 xcopy $(ProjectDir)*.hpp $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
+xcopy $(ProjectDir)*.inc $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
 xcopy $(ProjectDir)*.ipp $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
 xcopy $(ProjectDir)*.dll $(SolutionDir)Header\ /e /h /d /y /r /v /f /k
-xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
+xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k
+svn ci $(SolutionDir)Header\ -m ""
+svn ci $(SolutionDir)Lib\ -m ""</Command>
     </PostBuildEvent>
     <Link>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
-    <PreBuildEvent />
+    <PreBuildEvent>
+      <Command>svn up $(SolutionDir)</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Base64\Base64.cpp" />
@@ -253,12 +274,10 @@ xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
     <ClCompile Include="mysql\MYSQLManagerBase.cpp" />
     <ClCompile Include="mysql\MYSQLRecordSet.cpp" />
     <ClCompile Include="redis\RedisConnector.cpp" />
-    <ClCompile Include="redis\RedisConnectorCommand.cpp" />
     <ClCompile Include="redis\RedisConnectorPool.cpp" />
     <ClCompile Include="Service\Application.cpp" />
     <ClCompile Include="Service\AutoCloseFile.cpp" />
     <ClCompile Include="Service\Log.cpp" />
-    <ClCompile Include="Service\PkgParserBase.cpp" />
     <ClCompile Include="Service\SyncObj.cpp" />
     <ClCompile Include="Service\TimerHandler.cpp" />
     <ClCompile Include="Service\TimerThread.cpp" />
@@ -266,16 +285,10 @@ xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
     <ClCompile Include="Service\Utility.cpp" />
     <ClCompile Include="sha\sha1.cpp" />
     <ClCompile Include="Socket\SendBuffer.cpp" />
-    <ClCompile Include="Socket\WebSocket\WSPkgParser.cpp" />
+    <ClCompile Include="Socket\TCPSocket\TCPSocket.cpp" />
     <ClCompile Include="Socket\WebSocket\WSSendBuffer.cpp" />
     <ClCompile Include="Socket\WebSocket\YTWSConnector.cpp" />
     <ClCompile Include="Socket\WebSocket\YTWSServer.cpp" />
-    <ClCompile Include="Socket\YTSocketBase.cpp" />
-    <ClCompile Include="Socket\YTSocketClient.cpp" />
-    <ClCompile Include="Socket\YTSocketConnector.cpp" />
-    <ClCompile Include="Socket\YTSocketMutiClient.cpp" />
-    <ClCompile Include="Socket\YTSocketMutiClientController.cpp" />
-    <ClCompile Include="Socket\YTSocketServer.cpp" />
     <ClCompile Include="Socket\YTSocketThread.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'">Create</PrecompiledHeader>
@@ -478,7 +491,16 @@ xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
     <ClInclude Include="mysql\MYSQLRecordSet.h" />
     <ClInclude Include="Service\TimerHandler.h" />
     <ClInclude Include="sha\sha1.h" />
-    <ClInclude Include="Socket\WebSocket\WSPkgParser.h" />
+    <ClInclude Include="Socket\HTTPSocket\HTTPSocket.hpp" />
+    <ClInclude Include="Socket\HTTPSocket\Lib\asio_compatibility.hpp" />
+    <ClInclude Include="Socket\HTTPSocket\Lib\mutex.hpp" />
+    <ClInclude Include="Socket\HTTPSocket\Lib\server_http.hpp" />
+    <ClInclude Include="Socket\HTTPSocket\Lib\server_https.hpp" />
+    <ClInclude Include="Socket\HTTPSocket\Lib\status_code.hpp" />
+    <ClInclude Include="Socket\HTTPSocket\Lib\utility.hpp" />
+    <ClInclude Include="Socket\MessageMapping.h" />
+    <ClInclude Include="Socket\MessageQueue.hpp" />
+    <ClInclude Include="Socket\TCPSocket\TCPSocket.h" />
     <ClInclude Include="Socket\WebSocket\WSSendBuffer.h" />
     <ClInclude Include="Socket\WebSocket\YTWSConnector.h" />
     <ClInclude Include="Socket\WebSocket\YTWSServer.h" />
@@ -511,81 +533,14 @@ xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
     <ClInclude Include="libcurl\multi.h" />
     <ClInclude Include="libcurl\stdcheaders.h" />
     <ClInclude Include="libcurl\typecheck-gcc.h" />
-    <ClInclude Include="libevent\bufferevent-internal.h" />
-    <ClInclude Include="libevent\changelist-internal.h" />
-    <ClInclude Include="libevent\defer-internal.h" />
-    <ClInclude Include="libevent\evbuffer-internal.h" />
-    <ClInclude Include="libevent\evdns.h" />
-    <ClInclude Include="libevent\event-internal.h" />
-    <ClInclude Include="libevent\event.h" />
-    <ClInclude Include="libevent\event2\buffer.h" />
-    <ClInclude Include="libevent\event2\bufferevent.h" />
-    <ClInclude Include="libevent\event2\bufferevent_compat.h" />
-    <ClInclude Include="libevent\event2\bufferevent_ssl.h" />
-    <ClInclude Include="libevent\event2\bufferevent_struct.h" />
-    <ClInclude Include="libevent\event2\buffer_compat.h" />
-    <ClInclude Include="libevent\event2\dns.h" />
-    <ClInclude Include="libevent\event2\dns_compat.h" />
-    <ClInclude Include="libevent\event2\dns_struct.h" />
-    <ClInclude Include="libevent\event2\event-config.h" />
-    <ClInclude Include="libevent\event2\event.h" />
-    <ClInclude Include="libevent\event2\event_compat.h" />
-    <ClInclude Include="libevent\event2\event_struct.h" />
-    <ClInclude Include="libevent\event2\http.h" />
-    <ClInclude Include="libevent\event2\http_compat.h" />
-    <ClInclude Include="libevent\event2\http_struct.h" />
-    <ClInclude Include="libevent\event2\keyvalq_struct.h" />
-    <ClInclude Include="libevent\event2\listener.h" />
-    <ClInclude Include="libevent\event2\rpc.h" />
-    <ClInclude Include="libevent\event2\rpc_compat.h" />
-    <ClInclude Include="libevent\event2\rpc_struct.h" />
-    <ClInclude Include="libevent\event2\tag.h" />
-    <ClInclude Include="libevent\event2\tag_compat.h" />
-    <ClInclude Include="libevent\event2\thread.h" />
-    <ClInclude Include="libevent\event2\tree.h" />
-    <ClInclude Include="libevent\event2\util.h" />
-    <ClInclude Include="libevent\evmap-internal.h" />
-    <ClInclude Include="libevent\evrpc-internal.h" />
-    <ClInclude Include="libevent\evrpc.h" />
-    <ClInclude Include="libevent\evsignal-internal.h" />
-    <ClInclude Include="libevent\evthread-internal.h" />
-    <ClInclude Include="libevent\evutil.h" />
-    <ClInclude Include="libevent\ht-internal.h" />
-    <ClInclude Include="libevent\http-internal.h" />
-    <ClInclude Include="libevent\iocp-internal.h" />
-    <ClInclude Include="libevent\ipv6-internal.h" />
-    <ClInclude Include="libevent\log-internal.h" />
-    <ClInclude Include="libevent\minheap-internal.h" />
-    <ClInclude Include="libevent\mm-internal.h" />
-    <ClInclude Include="libevent\ratelim-internal.h" />
-    <ClInclude Include="libevent\strlcpy-internal.h" />
-    <ClInclude Include="libevent\util-internal.h" />
     <ClInclude Include="md5\md5.h" />
     <ClInclude Include="mysql\MYSQLCommand.h" />
     <ClInclude Include="mysql\MYSQLDBSys.h" />
     <ClInclude Include="mysql\MYSQLManagerBase.h" />
-    <ClInclude Include="redis\hiredis\win32\adapters\ae.h" />
-    <ClInclude Include="redis\hiredis\win32\adapters\glib.h" />
-    <ClInclude Include="redis\hiredis\win32\adapters\ivykis.h" />
-    <ClInclude Include="redis\hiredis\win32\adapters\libev.h" />
-    <ClInclude Include="redis\hiredis\win32\adapters\libevent.h" />
-    <ClInclude Include="redis\hiredis\win32\adapters\libuv.h" />
-    <ClInclude Include="redis\hiredis\win32\adapters\macosx.h" />
-    <ClInclude Include="redis\hiredis\win32\adapters\qt.h" />
-    <ClInclude Include="redis\hiredis\win32\async.h" />
-    <ClInclude Include="redis\hiredis\win32\config.h" />
-    <ClInclude Include="redis\hiredis\win32\dict.h" />
-    <ClInclude Include="redis\hiredis\win32\fmacros.h" />
-    <ClInclude Include="redis\hiredis\win32\hiredis.h" />
-    <ClInclude Include="redis\hiredis\win32\net.h" />
-    <ClInclude Include="redis\hiredis\win32\read.h" />
-    <ClInclude Include="redis\hiredis\win32\sds.h" />
-    <ClInclude Include="redis\hiredis\win32\win32.h" />
     <ClInclude Include="redis\RedisConnector.h" />
     <ClInclude Include="Service\Application.h" />
     <ClInclude Include="Service\AutoCloseFile.h" />
     <ClInclude Include="Service\Log.h" />
-    <ClInclude Include="Service\PkgParserBase.h" />
     <ClInclude Include="Service\Pool.h" />
     <ClInclude Include="Service\SyncObj.h" />
     <ClInclude Include="Service\TimerThread.h" />
@@ -593,12 +548,6 @@ xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
     <ClInclude Include="Service\Utility.h" />
     <ClInclude Include="Single\Single.h" />
     <ClInclude Include="Socket\SendBuffer.h" />
-    <ClInclude Include="Socket\YTSocketBase.h" />
-    <ClInclude Include="Socket\YTSocketClient.h" />
-    <ClInclude Include="Socket\YTSocketConnector.h" />
-    <ClInclude Include="Socket\YTSocketMutiClient.h" />
-    <ClInclude Include="Socket\YTSocketMutiClientController.h" />
-    <ClInclude Include="Socket\YTSocketServer.h" />
     <ClInclude Include="Socket\YTSocketThread.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="stl\wqueue.h" />
@@ -616,24 +565,6 @@ xcopy $(ProjectDir)*.lib $(SolutionDir)Lib\ /e /h /d /y /r /v /f /k</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug64DLL|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release64|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release64DLL|x64'">true</ExcludedFromBuild>
-    </Library>
-    <Library Include="libevent\libevent.lib">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release64|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release64DLL|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug64DLL|x64'">true</ExcludedFromBuild>
-    </Library>
-    <Library Include="libevent\libevent_core.lib">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release64|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release64DLL|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug64DLL|x64'">true</ExcludedFromBuild>
-    </Library>
-    <Library Include="libevent\libevent_extras.lib">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release64|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release64DLL|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug64|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug64DLL|x64'">true</ExcludedFromBuild>
     </Library>
   </ItemGroup>
   <ItemGroup>

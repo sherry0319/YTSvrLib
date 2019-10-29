@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "ServerParser.h"
 
-CServerParser::CServerParser(void) :YTSvrLib::CPkgParserBase(), m_PoolSvrSocket("CServerSocket")
+CServerParser::CServerParser(void) : m_PoolSvrSocket("CServerSocket")
 {
 	//m_pAccSvrSocket = NULL;
 	m_pUserSocket = NULL;
@@ -18,11 +18,6 @@ CServerParser::~CServerParser(void)
 void CServerParser::SetEvent()
 {
 	YTSvrLib::CServerApplication::GetInstance()->SetEvent( EAppEvent::eAppServerSocketEvent );
-}
-
-void CServerParser::SetDisconnectEvent()
-{
-	YTSvrLib::CServerApplication::GetInstance()->SetEvent( EAppEvent::eAppServerSocketDisconnectEvent );
 }
 
 void CServerParser::OnSvrDisconnect( CServerSocket* pSocket )
@@ -58,15 +53,14 @@ CServerSocket* CServerParser::InitUserSvrSocket()
 	if( m_pUserSocket == NULL )
 	{
 		m_pUserSocket = m_PoolSvrSocket.ApplyObj();
-		if( m_pUserSocket == NULL )
-		{
-			LOG("UserSvr InitUserSvrSocket ApplyObj Error!");
-			return NULL;
-		}
 	}
-	m_pUserSocket->SetSvrInfo( emAgent_UserSvr, 1, CConfig::GetInstance()->m_strUserSvrConnectIP.c_str(), CConfig::GetInstance()->m_nUserSvrListenPort );
 
-	m_pUserSocket->ConnectToSvr();
+	if (m_pUserSocket)
+	{
+		m_pUserSocket->SetSvrInfo(emAgent_UserSvr, 1, CConfig::GetInstance()->m_strUserSvrConnectIP.c_str(), CConfig::GetInstance()->m_nUserSvrListenPort);
+
+		m_pUserSocket->ConnectToSvr();
+	}
 
 	return m_pUserSocket;
 }
@@ -76,17 +70,34 @@ CServerSocket* CServerParser::InitUserSvrSocket2()
 	if (m_pUserSocket2 == NULL)
 	{
 		m_pUserSocket2 = m_PoolSvrSocket.ApplyObj();
-		if (m_pUserSocket2 == NULL)
-		{
-			LOG("UserSvr 2 InitUserSvrSocket ApplyObj Error!");
-			return NULL;
-		}
 	}
-	m_pUserSocket2->SetSvrInfo(emAgent_UserSvr2, 1, CConfig::GetInstance()->m_strUserSvrConnectIP2.c_str(), CConfig::GetInstance()->m_nUserSvrListenPort2);
+	if (m_pUserSocket2)
+	{
+		m_pUserSocket2->SetSvrInfo(emAgent_UserSvr2, 1, CConfig::GetInstance()->m_strUserSvrConnectIP2.c_str(), CConfig::GetInstance()->m_nUserSvrListenPort2);
 
-	m_pUserSocket2->ConnectToSvr();
+		m_pUserSocket2->ConnectToSvr();
+	}
 
 	return m_pUserSocket2;
+}
+
+void CServerParser::ProcessEvent(YTSvrLib::EM_MESSAGE_TYPE emType, YTSvrLib::ITCPBASE* pConn) {
+	LOG("ProcessEvent : type=[%d] pConn=[%x]", emType, pConn);
+	CServerSocket* pSvrSocket = dynamic_cast<CServerSocket*>(pConn);
+	switch (emType)
+	{
+	case YTSvrLib::MSGTYPE_DISCONNECT: {
+		pSvrSocket->OnClosed();
+	}break;
+	case YTSvrLib::MSGTYPE_CONNECTED: {
+		pSvrSocket->OnConnected();
+	}break;
+	case YTSvrLib::MSGTYPE_CONNECTFAILED: {
+		pSvrSocket->OnConnectFailed();
+	}break;
+	default:
+		break;
+	}
 }
 
 void CServerParser::ProcessMessage(YTSvrLib::ITCPBASE* pSocket, const char *pBuf, int nLen)
@@ -99,7 +110,7 @@ void CServerParser::ProcessMessage(YTSvrLib::ITCPBASE* pSocket, const char *pBuf
 	}
 	if( nLen < sizeof( sGWMsg_Head) )
 	{
-		LOG("Svr=%d Socket=%d Recv Invalid DataLen=%d Error!", pSvrSock->GetSvrID(), pSvrSock->GetSocket(), nLen );
+		LOG("Svr=%d Socket=[0x%x] Recv Invalid DataLen=%d Error!", pSvrSock->GetSvrID(), pSvrSock, nLen );
 		return;
 	}
 	sGWMsg_Head* pSvrMsgHead = (sGWMsg_Head*)pBuf;
@@ -163,14 +174,14 @@ void CServerParser::ProcessMessage(YTSvrLib::ITCPBASE* pSocket, const char *pBuf
 			CServerSocket* pSendSvrSock = GetSvrSocket( pSvrMsgHead->m_To.m_emType);
 			if( pSendSvrSock == NULL )
 			{
-				LOG("Svr=%d Socket=%d Recv Invalid DstSvr=%d Type=%d Error!", pSvrSock->GetSvrID(), pSvrSock->GetSocket(), pSvrMsgHead->m_To.m_nAgentID, pSvrMsgHead->m_To.m_emType );
+				LOG("Svr=%d Socket=0x%x Recv Invalid DstSvr=%d Type=%d Error!", pSvrSock->GetSvrID(), pSvrSock,pSvrMsgHead->m_To.m_nAgentID, pSvrMsgHead->m_To.m_emType );
 				pSvrMsgHead->m_nMsgType = T_GWMSG_S2S_ERR;
 				pSvrSock->Send( pBuf, nLen );
 				break;
 			}
 			if( pSendSvrSock->IsConnectedSvr() == FALSE )
 			{
-				LOG("Svr=%d Socket=%d DstSvr=%d Type=%d Disconnected Error!", pSvrSock->GetSvrID(), pSvrSock->GetSocket(), pSvrMsgHead->m_To.m_nAgentID, pSvrMsgHead->m_To.m_emType );
+				LOG("Svr=%d Socket=0x%x DstSvr=%d Type=%d Disconnected Error!", pSvrSock->GetSvrID(), pSvrSock,pSvrMsgHead->m_To.m_nAgentID, pSvrMsgHead->m_To.m_emType );
 				pSvrMsgHead->m_nMsgType = T_GWMSG_S2S_ERR;
 				pSvrSock->Send( pBuf, nLen );
 				break;
@@ -179,8 +190,8 @@ void CServerParser::ProcessMessage(YTSvrLib::ITCPBASE* pSocket, const char *pBuf
 			pSvrMsgHead->m_RouteBy.m_nAgentID = CConfig::GetInstance()->m_nLocalSvrID;
 			pSendSvrSock->Send( pBuf, nLen );
 
-			LOG("Svr=%d Socket=%d recv Msg=0x%04x Len=%d From=%d_%d To=%d_%d",
-				pSvrSock->GetSvrID(), pSvrSock->GetSocket(), 
+			LOG("Svr=%d Socket=0x%x recv Msg=0x%04x Len=%d From=%d_%d To=%d_%d",
+				pSvrSock->GetSvrID(), pSvrSock, 
 				pSvrMsgHead->m_nMsgType, pSvrMsgHead->m_nTotalMsgLen,
 				pSvrMsgHead->m_From.m_emType, pSvrMsgHead->m_From.m_nAgentID,
 				pSvrMsgHead->m_To.m_emType, pSvrMsgHead->m_To.m_nAgentID );
@@ -188,7 +199,7 @@ void CServerParser::ProcessMessage(YTSvrLib::ITCPBASE* pSocket, const char *pBuf
 		}
 		break;
 	default:
-		LOG("Svr=%d Socket=%d Recv Invalid MsgType=%d Error!", pSvrSock->GetSvrID(), pSvrSock->GetSocket(), pSvrMsgHead->m_nMsgType );
+		LOG("Svr=%d Socket=0x%x Recv Invalid MsgType=%d Error!", pSvrSock->GetSvrID(), pSvrSock, pSvrMsgHead->m_nMsgType );
 		return;
 	}
 }
@@ -231,12 +242,12 @@ void CServerParser::InitSvrSocket()
 
 void CServerParser::CloseServer()
 {
-	if (m_pUserSocket && m_pUserSocket->GetEvent())
+	if (m_pUserSocket)
 	{
-		m_pUserSocket->ReleaseClient();
+		m_pUserSocket->SafeClose();
 	}
-	if (m_pUserSocket2 && m_pUserSocket2->GetEvent())
+	if (m_pUserSocket2)
 	{
-		m_pUserSocket2->ReleaseClient();
+		m_pUserSocket2->SafeClose();
 	}
 }

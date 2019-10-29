@@ -23,12 +23,6 @@ void GameSocket::OnClosed()
 	}
 }
 
-void GameSocket::InitData()
-{
-	strncpy_s(m_szIP, GetIP().c_str(), 31);
-	m_nPort = GetPort();
-}
-
 void GameSocket::OnRecvNewMsg(UINT nMsgSeqno, int nMsgType)
 {
 	sMessageTime* pNewMessage = CPkgParser::GetInstance()->AllocateMessageTime();
@@ -112,8 +106,6 @@ void GameSocket::Init()
 	m_tExpired = 0;
 	m_mapMessageRecved.clear();
 	m_bClientClosed = FALSE;
-	m_nPort = 0;
-	ZeroMemory(m_szIP, sizeof(m_szIP));
 }
 
 void GameSocket::SendBinary(const char* info, int len)

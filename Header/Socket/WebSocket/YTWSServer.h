@@ -27,14 +27,14 @@ SOFTWARE.*/
 #include <websocketpp/server.hpp>
 #include <asio/ssl.hpp>
 #include "WSSendBuffer.h"
-#include "WSPkgParser.h"
+#include "../MessageQueue.hpp"
 
 typedef websocketpp::lib::shared_ptr<websocketpp::lib::asio::ssl::context> context_ptr;
 
 namespace YTSvrLib
 {
 	class IWSCONNECTOR;
-	class YTSVRLIB_EXPORT IWSSERVER : public websocketpp::server<websocketpp::config::asio_tls>,public IASIOTHREAD, public CWSParserBase
+	class YTSVRLIB_EXPORT IWSSERVER : public websocketpp::server<websocketpp::config::asio_tls>,public IASIOTHREAD, public CMessageQueue<IWSCONNECTOR>
 	{
 	public:
 		IWSSERVER();
@@ -63,6 +63,8 @@ namespace YTSvrLib
 		context_ptr onWSTLSInit(websocketpp::connection_hdl hdl);
 
 		bool onWSValidate(websocketpp::connection_hdl hdl);
+	private:
+		virtual void ProcessDisconnectEvent(IWSCONNECTOR* pConn) override;
 	private:
 		std::string _ssl_cert;
 		std::string _ssl_key;

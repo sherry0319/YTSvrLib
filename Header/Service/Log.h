@@ -304,7 +304,7 @@ namespace YTSvrLib
 		YTSvrLib::CSemaphore		m_semAsynLog;
 
 		FILE*						m_hAsynFileHandle;
-		pthread_t					m_hThread;
+		HANDLE						m_hThread;
 		FILE*						m_hSynFileHandle;
 		YTSvrLib::CLock				m_lockSynFile;
 		BOOL						m_bInited;

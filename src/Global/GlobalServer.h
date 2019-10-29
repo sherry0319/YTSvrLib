@@ -23,6 +23,7 @@ SOFTWARE.*/
 #pragma once
 #include <math.h>
 
+
 //时间相关定义
 #define SEC_MINUTE	(60) // 一分钟
 #define SEC_HOUR	(60*SEC_MINUTE) //一小时
@@ -47,14 +48,14 @@ SOFTWARE.*/
 
 // 取最小值
 template<typename _Ty>
-inline _Ty _min(_Ty nLeft, _Ty nRight)
+constexpr inline _Ty _min(_Ty nLeft, _Ty nRight)
 {
 	return (nLeft < nRight) ? nLeft : nRight;
 }
 
 // 取最大值
 template<typename _Ty>
-inline _Ty _max(_Ty nLeft, _Ty nRight)
+constexpr inline _Ty _max(_Ty nLeft, _Ty nRight)
 {
 	return (nLeft > nRight) ? nLeft : nRight;
 }
@@ -74,23 +75,6 @@ inline void _swap(_Ty& nLeft, _Ty& nRight)
 	nLeft = nRight;
 	nRight = tmp;
 }
-
-typedef enum
-{
-	eInvalid, 
-	eDisconnect, 
-	eConnect, 
-	eConnectFail, 
-	eAccepted, 
-	eCount
-} EType;
-
-enum WSEType
-{
-	WSEType_Invalid,// 
-	WSEType_ClientAccept,// 客户端连接
-	WSEType_ClientClose,// 客户端断线
-};
 
 typedef	std::vector<std::string> CStringVct;
 

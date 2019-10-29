@@ -6,7 +6,6 @@ namespace EAppEvent
     {
 		eAppTimerMgrOnTimer,
 		eAppGameDB,
-		eAppGMSvrSocketDisconnectEvent,
         eAppGMSvrSocketEvent,     
         eAppEventCount,
     };

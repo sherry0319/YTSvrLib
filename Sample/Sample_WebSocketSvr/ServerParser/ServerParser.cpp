@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "ServerParser.h"
 
-CServerParser::CServerParser(void) :YTSvrLib::CPkgParserBase(), m_PoolSvrSocket("CServerSocket")
+CServerParser::CServerParser(void) : m_PoolSvrSocket("CServerSocket")
 {
 	//m_pAccSvrSocket = NULL;
 	m_pUserSocket = NULL;
@@ -18,11 +18,6 @@ CServerParser::~CServerParser(void)
 void CServerParser::SetEvent()
 {
 	YTSvrLib::CServerApplication::GetInstance()->SetEvent( EAppEvent::eAppServerSocketEvent );
-}
-
-void CServerParser::SetDisconnectEvent()
-{
-	YTSvrLib::CServerApplication::GetInstance()->SetEvent( EAppEvent::eAppServerSocketDisconnectEvent );
 }
 
 void CServerParser::OnSvrDisconnect( CServerSocket* pSocket )
@@ -83,6 +78,25 @@ CServerSocket* CServerParser::InitUserSvrSocket2()
 	m_pUserSocket2->ConnectToSvr();
 
 	return m_pUserSocket2;
+}
+
+void CServerParser::ProcessEvent(YTSvrLib::EM_MESSAGE_TYPE emType, YTSvrLib::ITCPBASE* pConn) {
+	LOG("ProcessEvent : type=[%d] pConn=[%x]", emType, pConn);
+	CServerSocket* pSvrSocket = dynamic_cast<CServerSocket*>(pConn);
+	switch (emType)
+	{
+	case YTSvrLib::MSGTYPE_DISCONNECT: {
+		pSvrSocket->OnClosed();
+	}break;
+	case YTSvrLib::MSGTYPE_CONNECTED: {
+		pSvrSocket->OnConnected();
+	}break;
+	case YTSvrLib::MSGTYPE_CONNECTFAILED: {
+		pSvrSocket->OnConnectFailed();
+	}break;
+	default:
+		break;
+	}
 }
 
 void CServerParser::ProcessMessage(YTSvrLib::ITCPBASE* pSocket, const char *pBuf, int nLen)
@@ -227,12 +241,12 @@ void CServerParser::InitSvrSocket()
 
 void CServerParser::CloseServer()
 {
-	if (m_pUserSocket && m_pUserSocket->GetEvent())
+	if (m_pUserSocket)
 	{
-		m_pUserSocket->ReleaseClient();
+		m_pUserSocket->ReclaimObj();
 	}
-	if (m_pUserSocket2 && m_pUserSocket2->GetEvent())
+	if (m_pUserSocket2)
 	{
-		m_pUserSocket2->ReleaseClient();
+		m_pUserSocket2->ReclaimObj();
 	}
 }

@@ -12,7 +12,7 @@ struct sGWMsgBuf : public YTSvrLib::CRecycle
 	}
 };
 
-#include "Socket/YTSocketConnector.h"
+#include "Socket/TCPSocket/TCPSocket.h"
 
 class CGWSvrSocket : public YTSvrLib::ITCPCONNECTOR,public YTSvrLib::CRecycle
 {
@@ -22,23 +22,17 @@ public:
 
 	virtual void Init()
 	{
-		YTSvrLib::ITCPCONNECTOR::Clean();
+		YTSvrLib::ITCPBASE::Clean();
 		m_nGWID = 0;
 		m_bClientClosed = FALSE;
-
 	}    
 
 public:
-	virtual int		OnSocketRecv();
 	virtual int     OnRecved( const char* pBuf, int nLen );
 
-	virtual void	OnDisconnect();
 	virtual void	OnClosed();
 
 	virtual void    PostMsg( const char* pBuf, int nLen );
-	virtual void    PostDisconnectMsg( EType eType ); 
-
-	virtual void    ReclaimObj();
 
 	void SetGWID( UINT nID ) { m_nGWID = nID; }
 	UINT GetGWID() { return m_nGWID; }

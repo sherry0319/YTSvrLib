@@ -5,38 +5,63 @@ namespace YTSvrLib
 {
 	IWSCONNECTOR::IWSCONNECTOR()
 	{
-		m_sendBuf.Clear();
+		Clean();
 	}
 
 	IWSCONNECTOR::~IWSCONNECTOR()
 	{
-		m_server = NULL;
-		m_sendBuf.Clear();
+		Clean();
 	}
 
 	void IWSCONNECTOR::Clean()
 	{
 		m_server = NULL;
 		m_sendBuf.Clear();
+		m_strIP.clear();
+		m_strIP.shrink_to_fit();
+		m_nPort = 0;
 	}
 
 	void IWSCONNECTOR::Create(IWSSERVER* server, IWSSERVER::connection_ptr& con)
 	{
 		m_con = con;
 		m_server = server;
+
+		if (m_con)
+		{
+			std::string remote = con->get_remote_endpoint(); // [::ffff:127.0.0.1]:50331
+			remote = remote.substr(1, remote.length() - 1); // 去掉开头的[
+			std::vector<std::string> vctList;
+			StrDelimiter(remote, "]", vctList);// 0=IP 1=:端口
+
+			if (vctList[0].length() > 0)
+			{// 处理IP
+				std::vector<std::string> vctIP;
+				StrDelimiter(vctList[0], ":", vctIP);
+
+				m_strIP = vctIP[(vctIP.size() - 1)];
+			}
+			if (vctList[1].length() > 0)
+			{// 处理端口
+				std::string port = vctList[1].substr(1, vctList[1].length() - 1);// 去掉开头的:即可
+				m_nPort = atoi(port.c_str());
+			}
+		}
 	}
 
-	void IWSCONNECTOR::Close()
+	void IWSCONNECTOR::SafeClose()
 	{
-		LOG("IWSCONNECTOR : Close");
+		LOG("IWSCONNECTOR : SafeClose");
 		try {
 			if (m_server)
 			{
-				m_server->close(m_con->get_handle(), 0, "normal");
+				m_server->close(m_con->get_handle(), 0, "normal closed");
+
+				m_server = NULL;
 			}
 		}
 		catch (websocketpp::exception& e) {
-			LOG("IWSCONNECTOR : Close Exception : code=%d what=%s",e.code().value(),e.what());
+			LOG("IWSCONNECTOR : SafeClose Exception : code=%d what=%s",e.code().value(),e.what());
 		}
 	}
 
@@ -86,23 +111,24 @@ namespace YTSvrLib
 		if (bError)
 		{
 			LOG("Send AddBlock Error");
-			Close();
+			SafeClose();
 		}
 	}
 
-	const websocketpp::connection_hdl IWSCONNECTOR::GetSocket() const
+	SOCKET_HANDLE IWSCONNECTOR::GetSocket() const
 	{
-		return m_con->get_handle();
+		auto info = m_con->get_handle().lock();
+		return (SOCKET_HANDLE)info.get();
 	}
 
-	std::string IWSCONNECTOR::GetIP() const
+	std::string& IWSCONNECTOR::GetAddrIp()
 	{
-		return m_con->get_remote_endpoint();
+		return m_strIP;
 	}
 
-	int IWSCONNECTOR::GetPort() const
+	int IWSCONNECTOR::GetAddrPort() const
 	{
-		return m_con->get_port();
+		return m_nPort;
 	}
 
 	bool IWSCONNECTOR::IsEnable()
@@ -158,7 +184,7 @@ namespace YTSvrLib
 #endif // LIB_WINDOWS
 				{
 					LOG("Send Data Error : %d.Error : %d", nSend, dwCode);
-					m_server->postWSEvent(this, WSEType_ClientClose);
+					m_server->AddNewMessage(MSGTYPE_DISCONNECT, this);
 					break;
 				}
 			}

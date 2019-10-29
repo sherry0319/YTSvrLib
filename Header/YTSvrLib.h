@@ -34,7 +34,7 @@ SOFTWARE.*/
 #define ATTENTION(x)    message(__FILE__ "(" TOSTR2(__LINE__) "): ATTENTION " x)
 
 extern "C" {
-	double get_version_code();
+	const char* get_version_code();
 }
 
 #if defined(_WIN32) || defined(_WIN64)
@@ -42,6 +42,8 @@ extern "C" {
 #else
 #define LIB_LINUX
 #endif
+
+#define ASIO_STANDALONE 1
 
 #ifdef LIB_WINDOWS
 
@@ -54,17 +56,22 @@ extern "C" {
 #pragma comment(lib, "Wldap32.lib")
 #pragma comment(lib, "shlwapi.lib")
 #pragma comment(lib, "Winmm.lib" )
+#pragma comment(lib, "crypt32.lib" )
 
 #pragma comment(lib, "mysql/lib/static/mysqlpp.lib")
 #pragma comment(lib, "mysql/lib/libmysql.lib")
-#pragma comment(lib, "libevent/lib/libevent_core.lib")
 #pragma comment(lib, "BugReport/BugslayerUtil.lib")
-#pragma comment(lib, "iconv/lib/iconv.lib")
+#pragma comment(lib, "iconv/lib/static/iconv.lib")
 #pragma comment(lib, "jsoncpp/lib/static/jsoncpp.lib")
 #pragma comment(lib, "libcurl/lib/static/libcurl.lib")
 #pragma comment(lib, "zlib/lib/static/zlib.lib")
 #pragma comment(lib, "lz4/lib/static/liblz4_static.lib")
-#pragma comment(lib, "redis/lib/hiredis.lib")
+
+#ifdef YTSVRLIB_WITH_REDIS
+#pragma comment(lib, "redis/lib/s/cpp_redis.lib")
+#pragma comment(lib, "redis/lib/s/tacopie.lib")
+#endif // YTSVRLIB_WITH_REDIS
+
 #pragma comment(lib, "protobuf/lib/static/libprotobuf.lib")
 #ifdef DEBUG64
 #pragma comment(lib, "YTSvrLibSD.lib" )
@@ -89,17 +96,22 @@ extern "C" {
 #pragma comment(lib, "Wldap32.lib")
 #pragma comment(lib, "shlwapi.lib")
 #pragma comment(lib, "Winmm.lib" )
+#pragma comment(lib, "crypt32.lib" )
 
 #pragma comment(lib, "mysql/lib/dll/mysqlpp.lib")
 #pragma comment(lib, "mysql/lib/libmysql.lib")
-#pragma comment(lib, "libevent/lib/libevent_core.lib")
 #pragma comment(lib, "BugReport/BugslayerUtil.lib")
-#pragma comment(lib, "iconv/lib/iconv.lib")
+#pragma comment(lib, "iconv/lib/dll/iconv.lib")
 #pragma comment(lib, "jsoncpp/lib/dll/jsoncpp.lib")
 #pragma comment(lib, "libcurl/lib/dll/libcurl.lib")
 #pragma comment(lib, "zlib/lib/dll/zlib.lib")
 #pragma comment(lib, "lz4/lib/dll/liblz4.lib")
-#pragma comment(lib, "redis/lib/hiredis.lib")
+
+#ifdef YTSVRLIB_WITH_REDIS
+#pragma comment(lib, "redis/lib/dll/cpp_redis.lib")
+#pragma comment(lib, "redis/lib/dll/tacopie.lib")
+#endif // YTSVRLIB_WITH_REDIS
+
 #pragma comment(lib, "protobuf/lib/dll/libprotobuf.lib")
 #elif !defined(YTSVRLIB_NO_DLL)
 #define YTSVRLIB_EXPORT __declspec(dllimport)
@@ -119,13 +131,6 @@ extern "C" {
 #include <process.h>
 #include "typedef.h"
 #include "iconv/iconv.h"
-#include "event.h"
-EXTERN_C
-{
-#include "redis/hiredis/win32/hiredis.h"
-#include "redis/hiredis/win32/async.h"
-#include "redis/hiredis/win32/adapters/libevent.h"
-}
 #define DIRECTORY_SEPARATOR "\\"
 #else
 #include <sys/stat.h>
@@ -150,13 +155,6 @@ EXTERN_C
 #include <iconv.h>
 #include <netdb.h>
 #include "typedef.h"
-#include "event.h"
-extern "C"
-{
-#include "redis/hiredis/linux/hiredis.h"
-#include "redis/hiredis/linux/async.h"
-#include "redis/hiredis/linux/adapters/libevent.h"
-}
 #define DIRECTORY_SEPARATOR "/"
 #endif // LIB_WINDOWS
 
@@ -209,7 +207,6 @@ using namespace std;
 #include "./Service/Log.h"
 #include "./Service/Application.h"
 #include "./Service/AutoCloseFile.h"
-#include "./Service/PkgParserBase.h"
 #include "./Service/YTThread.h"
 #include "./urlwriter/urlwriter.h"
 #include "./mysql/MYSQLManagerBase.h"
@@ -219,16 +216,20 @@ using namespace std;
 #include "./md5/md5.h"
 #include "./Filter/Filter.h"
 #include "./tinyxml/XMLDocument.h"
-#include "./redis/RedisConnector.h"
-#include "./Socket/YTSocketBase.h"
 #include "./Socket/YTSocketThread.h"
 #include "./Service/TimerThread.h"
 #include "./Service/TimerHandler.h"
-#include "./Socket/YTSocketConnector.h"
-#include "./Socket/YTSocketClient.h"
-#include "./Socket/YTSocketServer.h"
-#include "./Socket/YTSocketMutiClient.h"
-#include "./Socket/YTSocketMutiClientController.h"
+#include "./Socket/TCPSocket/TCPSocket.h"
+#include "./Socket/MessageMapping.h"
+
+#ifdef YTSVRLIB_WITH_REDIS
+#include "./redis/RedisConnector.h"
+#endif // YTSVRLIB_WITH_REDIS
+
+#ifdef YTSVRLIB_WITH_HTTP
+#include "./Socket/HTTPSocket/HTTPSocket.hpp"
+#endif // YTSVRLIB_WITH_HTTP
+
 #ifdef YTLIB_WITH_WEBSOCKET
 #include "./Socket/WebSocket/YTWSServer.h"
 #include "./Socket/WebSocket/YTWSConnector.h"

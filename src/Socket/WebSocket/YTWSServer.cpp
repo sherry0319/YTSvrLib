@@ -63,7 +63,7 @@ namespace YTSvrLib
 			}
 		}
 
-		init_asio(GetCore());
+		init_asio(&GetCore());
 
 		if (bDebug) {
 			set_access_channels(websocketpp::log::alevel::all);
@@ -88,7 +88,7 @@ namespace YTSvrLib
 		start_accept();
 
 		// Start the ASIO io_service run loop
-		CreateThread();
+		CreateThread("IWSSERVER");
 
 		return TRUE;
 	}
@@ -112,7 +112,8 @@ namespace YTSvrLib
 		pConn->Create(this, con);
 
 		SetContextEnable(hdl, pConn);
-		postWSEvent(pConn,WSEType::WSEType_ClientAccept);
+		
+		AddNewMessage(MSGTYPE_ACCEPTED, pConn);
 	}
 
 	void IWSSERVER::onWSClosed(websocketpp::connection_hdl hdl) {
@@ -120,7 +121,7 @@ namespace YTSvrLib
 
 		if (pConn)
 		{
-			postWSEvent(pConn,WSEType::WSEType_ClientClose);
+			AddNewMessage(MSGTYPE_DISCONNECT, pConn);
 
 			SetContextDisable(hdl);
 		}
@@ -132,7 +133,7 @@ namespace YTSvrLib
 		{
 			auto& info = msg->get_payload();
 			
-			postWSMsg(pConn, info.c_str(),(int)info.length());
+			AddNewMessage(MSGTYPE_DATA, pConn, info.c_str(), (int)info.length());
 		}
 	}
 
@@ -153,5 +154,11 @@ namespace YTSvrLib
 			LOG("onWSTLSInit Exception : what=%s",e.what());
 		}
 		return ctx;
+	}
+
+	void IWSSERVER::ProcessDisconnectEvent(IWSCONNECTOR* pConn) {
+		ProcessEvent(MSGTYPE_DISCONNECT, pConn);
+
+		ReleaseConnector(pConn);
 	}
 }

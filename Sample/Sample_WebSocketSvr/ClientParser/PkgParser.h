@@ -11,29 +11,24 @@ public:
 
 	virtual void SetEvent();
 
-	virtual void SetDisconnectEvent();
-
 	void OnUserServerDisconnect();
 
 	static void OnMsgRecv()
 	{
-		GetInstance()->onWSMsgRecv();
+		GetInstance()->MessageConsumer();
 	}
-
-	static void OnDisconnectMsgRecv()
-	{
-		GetInstance()->onWSEventRecv();
-	}
-
+	
 	bool IsValidIP(const char* ip);
 
 	static void SendRespWithError(WORD wMsgType, int nError, int nMsgSeqNo, GameSocket* pSocket, BOOL bCloseSocket = FALSE);
 
 	virtual void ProcessMessage(YTSvrLib::IWSCONNECTOR* pConn, const char* msg, int len) override;
 
-	virtual void ProcessDisconnectMsg(YTSvrLib::IWSCONNECTOR* pConn) override;
+	virtual void ProcessEvent(YTSvrLib::EM_MESSAGE_TYPE emType, YTSvrLib::IWSCONNECTOR* pConn) override;
 
-	virtual void ProcessAcceptedMsg(YTSvrLib::IWSCONNECTOR* pConn) override;
+	void ProcessDisconnectMsg(YTSvrLib::IWSCONNECTOR* pConn);
+
+	void ProcessAcceptedMsg(YTSvrLib::IWSCONNECTOR* pConn);
 
 	virtual bool validateClient(std::string& dstIP) override;
 
