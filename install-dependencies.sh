@@ -11,8 +11,11 @@ cd zlib-1.2.11
 cd $base_dir
 unzip libiconv-1.14.zip
 cd libiconv-1.14
-./configure && make install
+sudo chmod 755 configure
+./configure && sudo make install
 cd $base_dir
+sudo ll /usr/lib64/ | grep mysql
+sudo ll /usr/lib/ | grep mysql
 unzip mysqlpp.zip
 cd mysqlpp
 chmod 755 configure
