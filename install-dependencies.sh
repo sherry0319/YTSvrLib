@@ -22,9 +22,9 @@ unzip cpp_redis.zip
 mkdir -p build
 cd build
 cmake ..
-make install
+sudo make install
 cd $base_dir
 tar -xzf lz4.v1.8.3.tar.gz
 cd lz4-1.8.3
-make install
-cd ../..
+sudo make install
+cd $base_dir
