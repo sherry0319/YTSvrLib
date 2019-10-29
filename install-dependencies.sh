@@ -18,7 +18,7 @@ sudo ls -l /usr/lib/mysql
 unzip mysqlpp.zip
 cd mysqlpp
 chmod 755 configure
-./configure --with_mysql=/usr/lib/x86_64-linux-gnu && make install
+./configure --with-mysql-lib=/usr/lib/x86_64-linux-gnu && make install
 cd $base_dir
 unzip cpp_redis.zip
 mkdir -p build
