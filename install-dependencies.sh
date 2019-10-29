@@ -1,6 +1,6 @@
 #!/bin/bash
-base_dir=`pwd`
-cd third_party
+base_dir=`pwd`"/third_party"
+cd $base_dir
 tar -xzf curl-7.53.1.tar.gz
 cd curl-7.53.1
 ./configure && make install
