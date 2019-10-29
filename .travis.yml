@@ -8,6 +8,8 @@ os:
 before_install:
 - sudo apt-get update -qq
 - sudo apt-get install -qq wget autoconf automake cmake clang
+- sudo apt-get clean
+- sudo apt-get install dpkg
 - wget https://dev.mysql.com/get/mysql-apt-config_0.8.14-1_all.deb
 - sudo dpkg -i mysql-apt-config_0.8.14-1_all.deb
 - sudo apt-get update -qq
