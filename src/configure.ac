@@ -34,10 +34,6 @@ AC_TYPE_UINT32_T
 AC_TYPE_UINT64_T
 AC_TYPE_UINT8_T
 AC_CHECK_TYPES([ptrdiff_t])
-AC_CHECK_LIB(event,event_init,[],[
-	echo "need libevent version >= 2.0.1"
-	exit -1
-])
 AC_CHECK_LIB(pthread,pthread_create,[],[
 	echo "need pthread install first"
 	exit -1
@@ -54,11 +50,6 @@ AC_CHECK_LIB(curl,curl_global_init,[],[
 AC_CHECK_LIB(mysqlpp,_init,[],[
 	echo "need mysqlpp install first"
 	exit -1
-])
-
-AC_CHECK_LIB(hiredis,redisConnect,[],[
-        echo "need hiredis install first"
-        exit -1
 ])
 
 # Checks for library functions.
