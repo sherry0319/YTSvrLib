@@ -72,6 +72,9 @@ namespace YTSvrLib {
 	}
 
 	void ITCPBASE::DoSend() {
+		if (!m_Socket || !m_Socket->is_open()) {
+			return;
+		}
 		char* buf = m_sendBuf.GetDataToSend();
 		int nLen = m_sendBuf.GetDataLenToSend();
 		m_bIsSending = TRUE;
@@ -96,8 +99,11 @@ namespace YTSvrLib {
 	}
 
 	void ITCPBASE::Send(const char* buf,int len) {
-		if (len <= 0 || !buf || !m_Socket->is_open())
+		if (len <= 0 || !buf)
 			return;
+		if (!m_Socket || !m_Socket->is_open()) {
+			return;
+		}
 
 		BOOL bSend = TRUE;
 		BOOL bSucc = FALSE;
@@ -183,33 +189,26 @@ namespace YTSvrLib {
 	}
 
 	void ITCPCLIENT::SafeClose() {
+		m_lockStatus.Lock();
 		m_bConnected = FALSE;
 		m_bIsConnecting = FALSE;
-		if (m_Socket)
-		{
-			if (m_Socket->is_open())
-			{
-				try {
-					m_Socket->shutdown(asio::socket_base::shutdown_both);
-				}
-				catch (std::exception& ec) {
-					LOG("Close Socket Exception : [%s]", ec.what());
-				}
-
-				m_Socket->close();
-			}
-			m_Socket = NULL;
-		}
+		m_lockStatus.UnLock();
+		Close();
 	}
 
 	void ITCPCLIENT::OnError(int nErrCode) {
+		m_lockStatus.Lock();
 		m_bConnected = FALSE;
 		m_bIsConnecting = FALSE;
+		m_lockStatus.UnLock();
 		ITCPBASE::OnError(nErrCode);
-		GetMgr()->RemoveClient(this);
 	}
 
 	void ITCPCLIENT::Connect(ITCPCLIENTMGR* pMgr, const char* ip, int port) {
+		if (IsConnecting())
+		{// 连接中,禁止重复连接
+			return;
+		}
 		m_pSvrMgr = pMgr;
 		m_strDstIP = ip;
 		m_nPort = port;
@@ -225,20 +224,20 @@ namespace YTSvrLib {
 			m_Socket->set_option(asio::ip::tcp::no_delay(true));
 		}
 
+		m_lockStatus.Lock();
 		m_bIsConnecting = TRUE;
-		
-		m_Socket->async_connect(_ep, [this, pMgr](std::error_code ec) {
-			OnConnecting(ec);
+		m_lockStatus.UnLock();
 
+		m_Socket->async_connect(_ep, [this, pMgr](std::error_code ec) {
+			m_lockStatus.Lock();
+			OnConnecting(ec);
 			m_bIsConnecting = FALSE;
+			m_lockStatus.UnLock();
 
 			if (!ec) {
 				DoRead();
-			} else {
-				pMgr->RemoveClient(this);
 			}
 		});
-		pMgr->AddClient(this);// 要先调用async_connect再启动线程循环,否则io_context会一直死循环导致cpu高占用
 	}
 
 	void ITCPCLIENT::OnConnecting(std::error_code ec) {
@@ -302,6 +301,15 @@ namespace YTSvrLib {
 		});
 	}
 
+	void ITCPSERVER::StopListen() {
+		if (m_Acceptor.is_open())
+		{
+			m_Acceptor.close();
+		}
+
+		StopThread();
+	}
+
 	BOOL ITCPSERVER::StartListen(int nPort) {
 		m_nPort = nPort;
 		auto ep = asio::ip::tcp::endpoint(asio::ip::tcp::v4(), (unsigned short)nPort);
@@ -343,34 +351,16 @@ namespace YTSvrLib {
 	//////////////////////////////////////////////////////////////////////////
 
 	ITCPCLIENTMGR::ITCPCLIENTMGR() {
-		m_setClients.clear();
+		CreateThread();
 	}
 
 	void ITCPCLIENTMGR::CreateThread() {
 		IASIOTHREAD::CreateThread("ITCPCLIENTMGR");
 	}
 
-	int ITCPCLIENTMGR::GetClientCount() const {
-		return (int)m_setClients.size();
-	}
+	void ITCPCLIENTMGR::ProcessDisconnectEvent(ITCPBASE* pConn) {
+		ProcessEvent(MSGTYPE_DISCONNECT, pConn);
 
-	void ITCPCLIENTMGR::AddClient(ITCPCLIENT* pConn) {
-		m_lockClientCount.Lock();
-		m_setClients.insert(pConn);
-		if (GetClientCount() > 0 && !IsRuning())
-		{
-			CreateThread();
-		}
-		m_lockClientCount.UnLock();
-	}
-
-	void ITCPCLIENTMGR::RemoveClient(ITCPCLIENT* pConn) {
-		m_lockClientCount.Lock();
-		m_setClients.erase(pConn);
-		if (GetClientCount() <= 0 && IsRuning())
-		{
-			StopThread();
-		}
-		m_lockClientCount.UnLock();
+		pConn->SafeClose();
 	}
 }

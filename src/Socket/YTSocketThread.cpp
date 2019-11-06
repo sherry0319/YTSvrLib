@@ -71,6 +71,7 @@ namespace YTSvrLib
 		{
 			try
 			{
+				asio::io_service::work w(io);
 				io.run();
 			}
 			catch (...)
@@ -78,7 +79,7 @@ namespace YTSvrLib
 				m_bRun = FALSE;
 			}
 			// LOG("Thread Stoped : Name=[%s]", m_szThreadName);
-			Sleep(THREAD_DELAY_MSEC);
+			// Sleep(THREAD_DELAY_MSEC);
 		}
 	}
 }

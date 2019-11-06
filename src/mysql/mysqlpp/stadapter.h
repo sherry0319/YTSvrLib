@@ -2,8 +2,8 @@
 /// \brief Declares the SQLTypeAdapter class
 
 /***********************************************************************
- Copyright (c) 1998 by Kevin Atkinson, (c) 1999-2001 by MySQL AB, and
- (c) 2004-2009 by Educational Technology Resources, Inc.  Others may
+ Copyright © 1998 by Kevin Atkinson, © 1999-2001 by MySQL AB, and
+ © 2004-2009, 2018 by Educational Technology Resources, Inc.  Others may
  also hold copyrights on code in this file.  See the CREDITS.txt file
  in the top directory of the distribution for details.
 
@@ -218,10 +218,16 @@ public:
 	/// initialized (default ctor called, and no subsequent assignment)
 	/// or if there are not at least i + 1 characters in the buffer.
 	///
-	/// WARNING: The throw-spec is incorrect, but it can't be changed
-	/// until v4, where we can break the ABI.  Throw-specs shouldn't be
-	/// relied on anyway.
+	/// WARNING: The throw-spec is incorrect, but it's irrelevant since
+    /// they're obsolete in modern C++ now anyway, since they were
+    /// always unreliable.  If we ever get to MySQL++ 4 and can break
+    /// the ABI, this throw-spec will just go away.
+#if !defined(DOXYGEN_IGNORE) && __cplusplus >= 201103L
+    // Can't use MAY_THROW() here: it confuses Doxygen 1.8.14.
+	char at(size_type i) const noexcept(false);
+#else
 	char at(size_type i) const throw(std::out_of_range);
+#endif
 
 	/// \brief Compare the internal buffer to the given string
 	///

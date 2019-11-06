@@ -107,7 +107,7 @@ namespace YTSvrLib
 		return TRUE;
 	}
 
-	UINT CMYSQLDBSystem::EscapeString(char* out, const char* src, size_t len)
+	UINT CMYSQLDBSystem::EscapeString(std::string* out, const char* src, size_t len)
 	{
 		CMYSQLClient* pClient = GetClientHash((long) len);
 

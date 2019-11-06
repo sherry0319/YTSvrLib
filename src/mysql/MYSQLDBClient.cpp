@@ -343,7 +343,7 @@ namespace YTSvrLib
 		m_DBSys.ping();
 	}
 
-	UINT CMYSQLClient::EscapeString(char* out, const char* src, size_t len)
+	UINT CMYSQLClient::EscapeString(std::string* out, const char* src, size_t len)
 	{
 		if (m_DBSys.connected() == false)
 		{

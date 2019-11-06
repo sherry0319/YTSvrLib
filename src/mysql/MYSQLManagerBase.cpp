@@ -139,9 +139,9 @@ namespace YTSvrLib
 		return m_DBSys.GetAllCmdInQueue();
 	}
 
-	UINT CMYSQLManagerBase::EscapeString(char* out, const char* src, size_t len)
+	UINT CMYSQLManagerBase::EscapeString(std::string& out, const char* src, size_t len)
 	{
-		return m_DBSys.EscapeString(out, src, len);
+		return m_DBSys.EscapeString(&out, src, len);
 	}
 
 	MYSQLLIB::CMYSQLRecordSet* CMYSQLManagerBase::ApplyRecSet()

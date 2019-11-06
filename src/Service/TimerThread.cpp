@@ -36,7 +36,7 @@ namespace YTSvrLib
 			SetEvent();
 		}
 
-		m_Timer.expires_after(std::chrono::milliseconds(m_tExpireInMilsec - THREAD_DELAY_MSEC));// 定时器减去线程延迟才是准确的定时时间
+		m_Timer.expires_after(std::chrono::milliseconds(m_tExpireInMilsec /*- THREAD_DELAY_MSEC*/));// 定时器减去线程延迟才是准确的定时时间
 
 		m_Timer.async_wait(std::bind(&ITIMERTHREAD::OnTimer, this, true));
 	}

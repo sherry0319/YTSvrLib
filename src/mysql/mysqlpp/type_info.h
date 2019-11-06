@@ -240,8 +240,6 @@ public:
 		return num_;
 	}
 	
-	bool is_null() const { return deref().is_null(); }
-
 	/// \brief Returns true if the SQL type is of a type that needs to
 	/// be quoted.
 	///
