@@ -14,9 +14,8 @@ cd libiconv-1.14
 sudo chmod 755 configure
 ./configure && sudo make install
 cd $base_dir
-sudo ls -l /usr/lib/mysql
-unzip mysqlpp.zip
-cd mysqlpp
+tar -xzf mysql++-3.2.5.tar.gz
+cd mysql++-3.2.5
 chmod 755 configure
 ./configure --with-mysql-lib=/usr/lib/x86_64-linux-gnu && sudo make install
 cd $base_dir
