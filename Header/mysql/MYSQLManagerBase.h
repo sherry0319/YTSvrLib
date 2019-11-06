@@ -120,7 +120,7 @@ namespace YTSvrLib
 		void ReclaimRecSet(MYSQLLIB::CMYSQLRecordSet* pRecSet);
 		void Ping(UINT nHash);
 
-		UINT EscapeString(char* out, const char* src, size_t len);
+		UINT EscapeString(std::string& out, const char* src, size_t len);
 	protected:
 		std::vector<MYSQLCONNECT_INFO>		m_DBSeverList;//数据库连接参数列表
 		CMYSQLDBSystem						m_DBSys;

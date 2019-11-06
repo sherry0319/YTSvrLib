@@ -36,7 +36,6 @@ namespace YTSvrLib {
 		virtual int OnRecved(const char* msg, int nLen) = 0;
 	protected:
 		virtual void OnError(int nErrCode);
-	private:
 		void Close();
 	protected:
 		ITCPCONTROL* m_pSvrMgr;
@@ -99,6 +98,7 @@ namespace YTSvrLib {
 			return m_bConnected;
 		}
 	private:
+		CLock m_lockStatus;
 		BOOL m_bIsConnecting;
 		BOOL m_bConnected;
 	};
@@ -117,6 +117,7 @@ namespace YTSvrLib {
 
 		BOOL StartListen(int nPort);
 		
+		void StopListen();
 	private:
 		virtual void ProcessDisconnectEvent(ITCPBASE* pConn) override;
 	protected:
@@ -132,15 +133,8 @@ namespace YTSvrLib {
 		ITCPCLIENTMGR();
 
 		void CreateThread();
-
-		int GetClientCount() const;
-
-		void AddClient(ITCPCLIENT* pConn);
-
-		void RemoveClient(ITCPCLIENT* pConn);
-	protected:
-		std::unordered_set<ITCPCLIENT*> m_setClients;
-		CLock m_lockClientCount;
+	private:
+		virtual void ProcessDisconnectEvent(ITCPBASE* pConn) override;
 	};
 }
 

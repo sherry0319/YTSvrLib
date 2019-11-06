@@ -5,9 +5,9 @@
 /// This file mostly takes care of platform differences.
 
 /***********************************************************************
- Copyright (c) 1998 by Kevin Atkinson, (c) 1999-2001 by MySQL AB,
- (c) 2004-2009 by Educational Technology Resources, Inc., and
- (c) 2009 by Warren Young.  Others may also hold copyrights on code
+ Copyright © 1998 by Kevin Atkinson, © 1999-2001 by MySQL AB,
+ © 2004-2009, 2018  by Educational Technology Resources, Inc., and
+ © 2009 by Warren Young.  Others may also hold copyrights on code
  in this file.  See the CREDITS.txt file in the top directory of the
  distribution for details.
 
@@ -89,6 +89,19 @@
 		// Disable nagging about new "secure" functions like strncpy_s()
 #		pragma warning(disable: 4996)
 
+		// Disable warning about exporting a class from a DLL which is
+		// derived from a non-exported class in another DLL.  This is
+		// safe to do with Standard C++ library types per:
+		//
+		//  https://msdn.microsoft.com/en-us/library/3tdb471s.aspx
+		//
+		// We don't hit this any other way in MySQL++.
+#		pragma warning(disable: 4275)
+
+		// Squish warning about passing no args to MAY_THROW() when
+		// building with newer C++ support.  We're doing it on purpose.
+#		pragma warning(disable: 4003)
+
 		// Prior to Visual C++ 2015, we must use _snprintf()
 #		if _MSC_VER < 1900
 #			define snprintf _snprintf
@@ -130,11 +143,35 @@
 	#define MYSQLPP_PATH_SEPARATOR '/'
 #endif
 
-#if defined(MYSQLPP_MYSQL_HEADERS_BURIED)
-#	include <mysql/mysql_version.h>
+// Workarounds for deprecations in C++11 and newer.  We must still
+// support systems whose contemporaneous C++ compiler only understands
+// C++98.  Because of the large gap between C++98 and C++11, it will
+// likely be years yet until we can start using C++11 unconditionally
+// within MySQL++, then years more until we can use C++14, etc.
+//
+// C++11 deprecated throwspecs, a feature of C++ that is only used by
+// the oldest parts of MySQL++.  We can't drop the throwspecs until
+// MySQL++ 4, if we ever get around to that, since that would break
+// the library's ABI on systems whose C++ compiler still supports
+// throwspecs.  This feature isn't completely gone until C++17, but we
+// don't want the warnings on certain newer compilers expecting C++11
+// or newer C++ dialects.
+#if __cplusplus < 201103L
+#	define MAY_THROW(what) throw(what)
 #else
-#	include <mysql_version.h>
+#	define MAY_THROW(junk) noexcept(false)
 #endif
+
+// C++11 added unique_ptr as a replacement for auto_ptr.  We don't have
+// the ABI problem above with this one, so we switch to it with the
+// oldest release possible.  As with the above ifdef, this one only
+// currently works for g++ and clang++.
+#if __cplusplus >= 201103L
+#	define UNIQUE_PTR(what) std::unique_ptr<what>
+#else
+#	define UNIQUE_PTR(what) std::auto_ptr<what>
+#endif
+
 
 namespace mysqlpp {
 
@@ -192,6 +229,32 @@ typedef unsigned long ulong;
 #	include <mysql/mysql.h>
 #else
 #	include <mysql.h>
+#endif
+
+// The Unicode chapter of the user manual justifies the following.
+#if MYSQL_VERSION_ID >= 50500
+    /// \brief Use this macro in CREATE TABLE strings to get the best
+    /// available UTF-8 character set.
+    ///
+    /// MySQL++ is built against MySQL or MariaDB 5.5 or newer, so these
+    /// macros are defined so that programs using them get the complete
+    /// UTF-8 character set.
+#   define MYSQLPP_UTF8_CS  "utf8mb4"
+
+    /// \brief Use this macro in CREATE TABLE strings to get a matching
+    /// collation to the character set selected by MYSQLPP_UTF8_CS
+#   define MYSQLPP_UTF8_COL "utf8mb4_general_ci"
+#else
+    /// \brief Use this macro in CREATE TABLE strings to get the best
+    /// available UTF-8 character set and correpsonding collation.
+    ///
+    /// MySQL++ is built against a version of MySQL or MariaDB older than
+    /// 5.5, so we must use the legacy 3-byte-limited subset of UTF-8.
+#   define MYSQLPP_UTF8_CS  "utf8"
+
+    /// \brief Use this macro in CREATE TABLE strings to get a matching
+    /// collation to the character set selected by MYSQLPP_UTF8_CS
+#   define MYSQLPP_UTF8_COL "utf8_general_ci"
 #endif
 
 #endif // !defined(MYSQLPP_COMMON_H)

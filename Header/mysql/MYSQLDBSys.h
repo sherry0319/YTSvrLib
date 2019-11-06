@@ -92,7 +92,7 @@ namespace YTSvrLib
 		BOOL	Lock();
 		void	Unlock();
 
-		UINT EscapeString(char* out, const char* src, size_t len);
+		UINT EscapeString(std::string* out, const char* src, size_t len);
 	public:
 		MYSQLLIB::CMYSQLRecordSet* ApplyRecSet()
 		{
@@ -191,7 +191,7 @@ namespace YTSvrLib
 		virtual void Clear()
 		{}
 
-		UINT EscapeString(char* out, const char* src, size_t len);
+		UINT EscapeString(std::string* out, const char* src, size_t len);
 
 		void SetConnectionInfo(MYSQLCONNECT_INFO& sConnect);
 

@@ -3414,6 +3414,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
     if ((*obj.include)[0]) { \
       s << obj.manip << obj.obj->I1;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -3423,6 +3424,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
     if ((*obj.include)[0]) { \
       s << obj.manip << '`' << obj.obj->names[0] << '`';\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -3432,6 +3434,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
     if ((*obj.include)[0]) { \
       s << '`' << obj.obj->names[0] << '`' << obj.comp << obj.manip << obj.obj->I1;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -3863,6 +3866,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << obj.obj->I2;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -3877,6 +3881,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << '`' << obj.obj->names[1] << '`';\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -3891,6 +3896,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << '`' << obj.obj->names[1] << '`' << obj.comp << obj.manip << obj.obj->I2;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -4343,6 +4349,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << obj.obj->I3;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -4362,6 +4369,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << '`' << obj.obj->names[2] << '`';\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -4381,6 +4389,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << '`' << obj.obj->names[2] << '`' << obj.comp << obj.manip << obj.obj->I3;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -4854,6 +4863,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << obj.obj->I4;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -4878,6 +4888,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << '`' << obj.obj->names[3] << '`';\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -4902,6 +4913,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << '`' << obj.obj->names[3] << '`' << obj.comp << obj.manip << obj.obj->I4;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -5396,6 +5408,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << obj.obj->I5;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -5425,6 +5438,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << '`' << obj.obj->names[4] << '`';\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -5454,6 +5468,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << '`' << obj.obj->names[4] << '`' << obj.comp << obj.manip << obj.obj->I5;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -5969,6 +5984,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << obj.obj->I6;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -6003,6 +6019,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << '`' << obj.obj->names[5] << '`';\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -6037,6 +6054,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << '`' << obj.obj->names[5] << '`' << obj.comp << obj.manip << obj.obj->I6;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -6573,6 +6591,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << obj.obj->I7;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -6612,6 +6631,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << '`' << obj.obj->names[6] << '`';\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -6651,6 +6671,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << '`' << obj.obj->names[6] << '`' << obj.comp << obj.manip << obj.obj->I7;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -7208,6 +7229,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << obj.obj->I8;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -7252,6 +7274,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << '`' << obj.obj->names[7] << '`';\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -7296,6 +7319,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << '`' << obj.obj->names[7] << '`' << obj.comp << obj.manip << obj.obj->I8;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -7874,6 +7898,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << obj.obj->I9;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -7923,6 +7948,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << '`' << obj.obj->names[8] << '`';\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -7972,6 +7998,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << '`' << obj.obj->names[8] << '`' << obj.comp << obj.manip << obj.obj->I9;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -8571,6 +8598,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << obj.obj->I10;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -8625,6 +8653,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << '`' << obj.obj->names[9] << '`';\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -8679,6 +8708,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << '`' << obj.obj->names[9] << '`' << obj.comp << obj.manip << obj.obj->I10;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -9299,6 +9329,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << obj.obj->I11;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -9358,6 +9389,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << '`' << obj.obj->names[10] << '`';\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -9417,6 +9449,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << '`' << obj.obj->names[10] << '`' << obj.comp << obj.manip << obj.obj->I11;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -10058,6 +10091,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << obj.obj->I12;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -10122,6 +10156,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << '`' << obj.obj->names[11] << '`';\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -10186,6 +10221,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << '`' << obj.obj->names[11] << '`' << obj.comp << obj.manip << obj.obj->I12;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -10848,6 +10884,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << obj.obj->I13;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -10917,6 +10954,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << '`' << obj.obj->names[12] << '`';\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -10986,6 +11024,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << '`' << obj.obj->names[12] << '`' << obj.comp << obj.manip << obj.obj->I13;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -11669,6 +11708,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << obj.obj->I14;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -11743,6 +11783,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << '`' << obj.obj->names[13] << '`';\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -11817,6 +11858,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << '`' << obj.obj->names[13] << '`' << obj.comp << obj.manip << obj.obj->I14;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -12521,6 +12563,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << obj.obj->I15;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -12600,6 +12643,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << '`' << obj.obj->names[14] << '`';\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -12679,6 +12723,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << '`' << obj.obj->names[14] << '`' << obj.comp << obj.manip << obj.obj->I15;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -13404,6 +13449,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << obj.obj->I16;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -13488,6 +13534,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << '`' << obj.obj->names[15] << '`';\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -13572,6 +13619,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << '`' << obj.obj->names[15] << '`' << obj.comp << obj.manip << obj.obj->I16;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -14318,6 +14366,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << obj.obj->I17;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -14407,6 +14456,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << '`' << obj.obj->names[16] << '`';\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -14496,6 +14546,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << '`' << obj.obj->names[16] << '`' << obj.comp << obj.manip << obj.obj->I17;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -15263,6 +15314,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << obj.obj->I18;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -15357,6 +15409,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << '`' << obj.obj->names[17] << '`';\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -15451,6 +15504,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << '`' << obj.obj->names[17] << '`' << obj.comp << obj.manip << obj.obj->I18;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -16239,6 +16293,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << obj.obj->I19;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -16338,6 +16393,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << '`' << obj.obj->names[18] << '`';\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -16437,6 +16493,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << '`' << obj.obj->names[18] << '`' << obj.comp << obj.manip << obj.obj->I19;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -17246,6 +17303,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << obj.obj->I20;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -17350,6 +17408,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << '`' << obj.obj->names[19] << '`';\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -17454,6 +17513,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << '`' << obj.obj->names[19] << '`' << obj.comp << obj.manip << obj.obj->I20;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -18284,6 +18344,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << obj.obj->I21;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -18393,6 +18454,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << '`' << obj.obj->names[20] << '`';\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -18502,6 +18564,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << '`' << obj.obj->names[20] << '`' << obj.comp << obj.manip << obj.obj->I21;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -19353,6 +19416,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << obj.obj->I22;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -19467,6 +19531,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << '`' << obj.obj->names[21] << '`';\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -19581,6 +19646,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << '`' << obj.obj->names[21] << '`' << obj.comp << obj.manip << obj.obj->I22;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -20453,6 +20519,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << obj.obj->I23;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -20572,6 +20639,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << '`' << obj.obj->names[22] << '`';\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -20691,6 +20759,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << '`' << obj.obj->names[22] << '`' << obj.comp << obj.manip << obj.obj->I23;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -21584,6 +21653,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << obj.obj->I24;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -21708,6 +21778,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << '`' << obj.obj->names[23] << '`';\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -21832,6 +21903,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << '`' << obj.obj->names[23] << '`' << obj.comp << obj.manip << obj.obj->I24;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -22746,6 +22818,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << obj.obj->I25;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -22875,6 +22948,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << obj.manip << '`' << obj.obj->names[24] << '`';\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\
@@ -23004,6 +23078,7 @@ inline int sql_cmp(const mysqlpp::Null<T>& a, const mysqlpp::Null<T>& b)
       if (before) s << obj.delim;\
       s << '`' << obj.obj->names[24] << '`' << obj.comp << obj.manip << obj.obj->I25;\
      } \
+        (void)before;\
 		return s;\
 	}\
 	template <class Manip>\

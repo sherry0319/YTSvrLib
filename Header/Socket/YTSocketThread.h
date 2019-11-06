@@ -28,7 +28,7 @@ SOFTWARE.*/
 
 namespace YTSvrLib
 {
-	constexpr __time32_t THREAD_DELAY_MSEC = 1; // 工作线程退出循环延迟毫秒数.不加延迟会导致线程循环CPU高占用
+	// constexpr __time32_t THREAD_DELAY_MSEC = 1; // 工作线程退出循环延迟毫秒数.不加延迟会导致线程循环CPU高占用
 
 	class YTSVRLIB_EXPORT ITHREAD {
 	public:
