@@ -81,164 +81,27 @@ namespace YTSvrLib
 
 	//////////////////////////////////////////////////////////////////////////
 
-	template<size_t size>
 	class CBuffer
 	{
 	public:
-		//CBuffer(const CBuffer& rSrc){  }
-		//void operator=(const CBuffer& rSrc);
-		CBuffer() : m_nLength(0)
-		{
-			m_nBufSize = size;
-			m_pbuf = new char[size];
-			ZeroMemory(m_pbuf, size);
-			m_nBufSizeMax = size * 16;
-		}
-		~CBuffer()
-		{
-			if (m_pbuf)
-			{
-				delete[] m_pbuf;
-				m_pbuf = NULL;
-			}
-			m_nBufSize = 0;
-		}
-		CBuffer<size>(CBuffer<size>& other) : m_nLength(other.GetLength())
-		{
-			m_nBufSize = other.GetCapacity();
-			m_pbuf = new char[m_nBufSize];
-			memcpy(m_pbuf, other.GetBuffer(), other.GetLength());
-			m_nBufSizeMax = other.GetBufSizeMax();
-			m_nLength = other.GetLength();
-		}
-		CBuffer<size>(CBuffer<size>&& other) : m_nLength(other.GetLength())
-		{
-			m_nBufSize = other.GetCapacity();
-			m_pbuf = other.GetBuffer();
-			m_nBufSizeMax = other.GetBufSizeMax();
-			m_nLength = other.GetLength();
-		}
+		CBuffer();
 
-		///获取缓冲区的总容量
-		size_t GetCapacity()
-		{
-			return m_nBufSize;
-		}
-		void SetBufSizeMax(size_t nMax)
-		{
-			m_nBufSizeMax = nMax;
-		}
-		size_t GetBufSizeMax()
-		{
-			return m_nBufSizeMax;
-		}
-		BOOL ReSize(size_t nNewSize)
-		{
-			if (nNewSize < m_nLength)
-				return FALSE;
-			char* pNewBuf = new char[nNewSize];
-			if (pNewBuf == NULL)
-				return FALSE;
-			ZeroMemory(pNewBuf, nNewSize);
-			if (m_pbuf)
-			{
-				if (m_nLength > 0)
-					memcpy(pNewBuf, m_pbuf, m_nLength);
-				delete[] m_pbuf;
-			}
-			else
-				m_nLength = 0;
-			m_pbuf = pNewBuf;
-			m_nBufSize = nNewSize;
-			if (m_nBufSize > m_nBufSizeMax)
-				m_nBufSizeMax = m_nBufSize;
-			return TRUE;
-		}
+		const char* GetBuffer();
 
-		///获取当前缓冲区中已填充的内容的长度
-		size_t GetLength()
-		{
-			return m_nLength;
-		}
+		std::string& GetRecvingBuffer();
 
-		char * GetIdleBuffer()
-		{
-			return m_pbuf + m_nLength;
-		}
+		void AddBuffer(const char* buf, size_t len);
 
-		size_t GetIdleLength()
-		{
-			return m_nBufSize - m_nLength;
-		}
+		int GetLength();
 
-		///向缓冲区中增加一段内容，若增加后缓冲区将越界，则撤销增加并返回失败
-		BOOL AddBuffer(const char* buf, size_t nSize)
-		{
-			if (m_nLength + nSize > m_nBufSize)
-			{
-				size_t nNeedSizeMin = m_nLength + nSize;
-				size_t nNewBufSize = m_nBufSize + ((nNeedSizeMin - m_nBufSize) / size + 1)*size;
-				if (nNewBufSize > m_nBufSizeMax)
-					return FALSE;
-				if (FALSE == ReSize(nNewBufSize))
-					return FALSE;
-			}
-			memcpy((unsigned char*) &m_pbuf[m_nLength], buf, nSize);
-			m_nLength += nSize;
-			return TRUE;
-		}
+		void ReleaseBuffer(size_t nRead);
 
-		//增加缓冲区中内容的长度
-		BOOL AddBuffer(size_t nSize)
-		{
-			if (m_nLength + nSize > m_nBufSize)
-			{
-				return FALSE;
-			}
-			m_nLength += nSize;
-			return TRUE;
-		}
+		void Clear();
 
-		///获取缓冲区头的地址
-		char* GetBuffer()
-		{
-			return m_pbuf;
-		}
-
-		///释放从缓冲区开始到指定长度的内容空间
-		void ReleaseBuffer(size_t nLength)
-		{
-			if (nLength >= m_nLength)
-			{
-				m_nLength = 0;
-			}
-			else
-			{
-				if (nLength > 0)
-				{
-					m_nLength -= nLength;
-					memcpy(&m_pbuf[0], &m_pbuf[nLength], m_nLength);
-				}
-				else
-				{
-					// 如果用户没有处理掉任何数据，同时缓冲区已经满了，清空缓冲
-					if (m_nLength >= m_nBufSize)
-					{
-						m_nLength = 0;
-					}
-				}
-			}
-		}
-
-		///恢复初始状态
-		void Clear()
-		{
-			m_nLength = 0;
-		}
+		void ReSize(size_t nNewSize = 0);
 	private:
-		size_t m_nLength;
-		size_t m_nBufSize;
-		size_t m_nBufSizeMax;
-		char* m_pbuf;
+		std::string _curRecving;
+		std::string _buffer;
+		size_t _recvingBuffSize;
 	};
 }

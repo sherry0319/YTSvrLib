@@ -187,4 +187,54 @@ namespace YTSvrLib
 	{
 		m_nQueueLenMax = nMax;
 	}
+
+
+	//////////////////////////////////////////////////////////////////////////
+	// ½ÓÊÕBuffer
+
+	CBuffer::CBuffer()
+	{
+		_buffer.clear();
+		_curRecving.clear();
+		ReSize(BLOCK_RECV_BUFFER_SIZE);
+	}
+
+	const char* CBuffer::GetBuffer() {
+		return _buffer.c_str();
+	}
+
+	std::string& CBuffer::GetRecvingBuffer() {
+		return _curRecving;
+	}
+
+	void CBuffer::AddBuffer(const char* buf, size_t len) {
+		_buffer.append(buf, len);
+	}
+
+	int CBuffer::GetLength() {
+		return (int)_buffer.size();
+	}
+
+	void CBuffer::ReleaseBuffer(size_t nRead) {
+		_buffer.erase(0, nRead);
+	}
+
+	void CBuffer::Clear()
+	{
+		_buffer.clear();
+		_buffer.shrink_to_fit();
+
+		_curRecving.clear();
+		_curRecving.shrink_to_fit();
+
+		ReSize();
+	}
+
+	void CBuffer::ReSize(size_t nNewSize /*= 0*/) {
+		if (nNewSize > 0)
+		{
+			_recvingBuffSize = nNewSize;
+		}
+		_curRecving.resize(_recvingBuffSize);
+	}
 }

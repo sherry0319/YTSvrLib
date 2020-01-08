@@ -35,28 +35,21 @@ namespace YTSvrLib {
 	}
 
 	void ITCPBASE::DoRead() {
-		char* buf = m_recvBuf.GetBuffer() + m_recvBuf.GetLength();
-		int nMaxLen = (int)(m_recvBuf.GetCapacity() - m_recvBuf.GetLength());
+		std::string& buf = m_recvBuf.GetRecvingBuffer();
 
-		m_Socket->async_read_some(asio::buffer(buf, nMaxLen), [this](std::error_code ec, size_t readLength) {
+		m_Socket->async_read_some(asio::buffer(buf), [this,&buf](std::error_code ec, size_t readLength) {
 			if (!ec)
 			{
 				if (readLength > 0)
 				{
-					m_recvBuf.AddBuffer(readLength);
+					m_recvBuf.AddBuffer(buf.c_str(),readLength);
 
 					size_t nRead = OnRecved(m_recvBuf.GetBuffer(), (int)m_recvBuf.GetLength());
 
-					if (nRead == 0 && m_recvBuf.GetLength() >= (int)m_recvBuf.GetCapacity()
-						&& m_recvBuf.GetCapacity() < m_recvBuf.GetBufSizeMax())
+					if (nRead > 0)
 					{
-						size_t nNewBufSize = m_recvBuf.GetCapacity() + BLOCK_RECV_BUFFER_SIZE;
-						if (nNewBufSize > m_recvBuf.GetBufSizeMax())
-							nNewBufSize = m_recvBuf.GetBufSizeMax();
-						m_recvBuf.ReSize(nNewBufSize);
+						m_recvBuf.ReleaseBuffer(nRead);
 					}
-
-					m_recvBuf.ReleaseBuffer(nRead);
 				}
 
 				DoRead();
@@ -141,12 +134,14 @@ namespace YTSvrLib {
 			{
 				try {
 					m_Socket->shutdown(asio::socket_base::shutdown_both);
+					if (m_Socket)
+					{
+						m_Socket->close();
+					}
 				}
 				catch (std::exception& ec) {
 					LOG("Close Socket Exception : [%s]", ec.what());
 				}
-
-				m_Socket->close();
 			}
 			m_Socket = NULL;
 		}
