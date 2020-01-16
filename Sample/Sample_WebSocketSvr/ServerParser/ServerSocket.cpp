@@ -28,33 +28,34 @@ int CServerSocket::OnRecved(const char* pBuf, int nLen)
 	while (nLen >= HEADER_SIZE)
 	{
 		sGWMsg_Head* pMsgHead = (sGWMsg_Head*)pHead;
-		nPkgLen = pMsgHead->m_nTotalMsgLen;
-
-		if (pMsgHead->m_nTcpFlag != TCPFLAG_GWMSG || nPkgLen < HEADER_SIZE)
+		int nDelData = 0;
+		while (pMsgHead->m_nTcpFlag != TCPFLAG_GWMSG && nLen > 0)
 		{
-			LOG("GameSock=%x Msg=0x%x Data=%d/%d Head=%d error!", this, pMsgHead->m_nMsgType, nLen, nPkgLen, HEADER_SIZE);
-			int nOffset = 0;
-			while (nLen > 0)
-			{
-				nLen--;
-				nOffset++;
-				pMsgHead = (sGWMsg_Head*)(pHead + nOffset);
-				if (pMsgHead->m_nTcpFlag == TCPFLAG_GWMSG && pMsgHead->m_nTotalMsgLen >= HEADER_SIZE)
-				{
-					break;
-				}
-				nRead += nOffset;
-				pHead += nOffset;
-			}
-			if (nLen == 0)
-			{
-				break;
-			}
+			pHead++;
+			nLen--;
+			nDelData++;
+			pMsgHead = (sGWMsg_Head*)pHead;
+		}
+		if (nDelData > 0)
+		{
+			LOG("Svr=%d Socket=%d DelData=%d", GetSvrID(), GetSocket(), nDelData);
+			nRead += nDelData;
+		}
+		if (nLen < HEADER_SIZE)
+		{
+			break;
+		}
+		if (pMsgHead->m_nTcpFlag != TCPFLAG_GWMSG)
+			break;
+		nPkgLen = pMsgHead->m_nTotalMsgLen;
+		if (nPkgLen > nLen || nPkgLen <= 0)//ÄÚÈÝ²»È«
+		{
+			break;
 		}
 
 		PostMsg(pHead, nPkgLen);
 		pHead += nPkgLen;
-		nLen -= nPkgLen;
+		nLen = nLen - nPkgLen;
 		nRead += nPkgLen;
 	}
 	return nRead;/*(pHead - pBuf);*/

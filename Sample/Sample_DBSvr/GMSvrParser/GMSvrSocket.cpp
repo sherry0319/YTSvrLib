@@ -3,7 +3,6 @@
 
 CGMSvrSocket::CGMSvrSocket(void)
 {
-	m_recvBuf.SetBufSizeMax(32 * 1024 * 1024);
 	m_recvBuf.ReSize(8 * 1024 * 1024);
 }
 
@@ -15,35 +14,38 @@ int CGMSvrSocket::OnRecved(const char* pBuf, int nLen)
 	const char* pHead = pBuf;
 	int nPkgLen = 0;
 	int nRead = 0;
-	while( nLen >= HEADER_SIZE )
-	{   
+	while (nLen >= HEADER_SIZE)
+	{
 		LPSDBMsgHead pMsgHead = (LPSDBMsgHead)pHead;
-		UINT nDelData = 0;
-		while( pMsgHead->m_dwTcpFlag != DBTCP_DEF_FLAG && nLen > HEADER_SIZE )
+		int nDelData = 0;
+		while (pMsgHead->m_dwTcpFlag != DBTCP_DEF_FLAG && nLen > 0)
 		{
 			pHead++;
 			nLen--;
 			nDelData++;
 			pMsgHead = (LPSDBMsgHead)pHead;
 		}
-		if( nDelData > 0 )
+		if (nDelData > 0)
 		{
-			LOG("GMSocket=%d DelData=%d", GetSocket(), nDelData );
+			LOG("GMSocket=%d DelData=%d", GetSocket(), nDelData);
 			nRead += nDelData;
 		}
-		nPkgLen = pMsgHead->m_dwLen;
-		if( pMsgHead->m_dwTcpFlag != DBTCP_DEF_FLAG  )
+		if (nLen < HEADER_SIZE) {
 			break;
-		if ( nPkgLen > nLen )
+		}
+		nPkgLen = pMsgHead->m_dwLen;
+		if (pMsgHead->m_dwTcpFlag != DBTCP_DEF_FLAG)
+			break;
+		if (nPkgLen > nLen /*|| pMsgHead->m_dwContentLen < HEADER_SIZE*/)//ÄÚÈÝ²»È«
 		{
 			break;
 		}
-
 		PostMsg(pHead, nPkgLen);
 		pHead += nPkgLen;
 		nLen = nLen - nPkgLen;
 		nRead += nPkgLen;
 	}
+	//return (pHead - pBuf);
 	return nRead;
 }
 

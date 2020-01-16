@@ -42,7 +42,7 @@ namespace YTSvrLib {
 		std::shared_ptr<asio::ip::tcp::socket> m_Socket;
 		std::string m_strDstIP;
 		int m_nPort;
-		CBuffer<BLOCK_RECV_BUFFER_SIZE> m_recvBuf;
+		CBuffer m_recvBuf;
 		CSendBuffer m_sendBuf;
 		YTSvrLib::CLock m_sendLock;
 		BOOL m_bIsSending;

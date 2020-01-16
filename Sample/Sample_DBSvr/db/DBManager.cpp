@@ -1,8 +1,5 @@
 #include "stdafx.h"
 #include <time.h>
-#ifdef LIB_WINDOWS
-#include <atlcomtime.h>
-#endif // LIB_WINDOWS
 
 #define DBCMD_AND_QUERY_APPLY(pc, pq) { pc = m_DBSys.ApplyCmd(); \
 										if( pc == NULL ) {	\

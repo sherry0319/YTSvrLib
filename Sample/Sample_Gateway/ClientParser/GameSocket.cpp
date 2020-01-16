@@ -34,47 +34,45 @@ void GameSocket::OnClosed()
 
 int GameSocket::OnRecved( const char* pBuf, int nLen )
 {
-	const static int HEADER_SIZE = sizeof(sClientMsg_Head);
+	int nRead = 0;
+	const int HEADER_SIZE = sizeof(sClientMsg_Head);
 	const char* pHead = pBuf;
 	int nPkgLen = 0;
-	int nRead = 0;
-	while( nLen >= HEADER_SIZE )
+	while (nLen >= HEADER_SIZE)
 	{
 		sClientMsg_Head* pMsgHead = (sClientMsg_Head*)pHead;
-		nPkgLen = pMsgHead->m_nMsgLenTotal;
-		if( nPkgLen > nLen )//内容不全
-			break;
-		if ( pMsgHead->m_nTCPFlag != TCPFLAG_SIGN_CLIENTMSG || nPkgLen < HEADER_SIZE )				
+		int nDelData = 0;
+		while (pMsgHead->m_nTCPFlag != TCPFLAG_SIGN_CLIENTMSG && nLen > 0)
 		{
-			LOG("GameSock=%x Msg=0x%x Data=%d/%d Head=%d error!",this, pMsgHead->m_nMsgType, nLen, nPkgLen, HEADER_SIZE);
-			int nOffset = 0;
-			while (nLen > 0)
-			{
-				nLen--;
-				nOffset++;
-				pMsgHead = (sClientMsg_Head*)(pHead + nOffset);
-				if (pMsgHead->m_nTCPFlag == TCPFLAG_SIGN_CLIENTMSG && pMsgHead->m_nMsgLenTotal >= HEADER_SIZE)
-				{
-					break;
-				}
-				nRead += nOffset;
-				pHead += nOffset;
-			}
-			if (nLen == 0)
-			{
-				break;
-			}
+			pHead++;
+			nLen--;
+			nDelData++;
+			pMsgHead = (sClientMsg_Head*)pHead;
 		}
+		if (nDelData > 0)
+		{
+			LOG("GameSocket=0x%x[%d] DelData=%d", this, GetSocket(), nDelData);
+			nRead += nDelData;
+		}
+		if (nLen < HEADER_SIZE)
+		{
+			break;
+		}
+		nPkgLen = pMsgHead->m_nMsgLenTotal;
+
+		if (nPkgLen > nLen)//内容不全
+			break;
+
 		PostMsg(pHead, nPkgLen);
 		pHead += nPkgLen;
 		nLen -= nPkgLen;
 		nRead += nPkgLen;
 	}
 
-	if (nRead > 0) {
-		m_tIdleExpired = time32() + 600;
+	if (nRead > 0)
+	{
+		m_tIdleExpired = time32() + DEFAULT_KEEP_ALIVE_EXPIRED;
 	}
-
 	return nRead;
 }
 
