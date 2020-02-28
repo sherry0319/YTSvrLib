@@ -220,6 +220,7 @@ using namespace std;
 #include "./Service/TimerThread.h"
 #include "./Service/TimerHandler.h"
 #include "./Socket/TCPSocket/TCPSocket.h"
+#include "./Socket/RUDP/UDPSocket.h"
 #include "./Socket/MessageMapping.h"
 
 #ifdef YTSVRLIB_WITH_REDIS
