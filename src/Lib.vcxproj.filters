@@ -120,6 +120,9 @@
     <Filter Include="Socket\HTTPSocket\Lib">
       <UniqueIdentifier>{cbac0544-4d82-493b-aedd-a5656fba9be6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Socket\RUDP">
+      <UniqueIdentifier>{dcbbd8a9-f683-426a-b2df-5a14ee1a6054}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -229,6 +232,12 @@
     </ClCompile>
     <ClCompile Include="Socket\TCPSocket\TCPSocket.cpp">
       <Filter>Socket\TCPSocket</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket\RUDP\UDPSocket.cpp">
+      <Filter>Socket\RUDP</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket\RUDP\ikcp.cpp">
+      <Filter>Socket\RUDP</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -416,12 +425,6 @@
       <Filter>urlwriter</Filter>
     </ClInclude>
     <ClInclude Include="iconv\iconv.h">
-      <Filter>iconv</Filter>
-    </ClInclude>
-    <ClInclude Include="iconv\libcharset.h">
-      <Filter>iconv</Filter>
-    </ClInclude>
-    <ClInclude Include="iconv\localcharset.h">
       <Filter>iconv</Filter>
     </ClInclude>
     <ClInclude Include="jsoncpp\json\assertions.h">
@@ -993,6 +996,12 @@
     </ClInclude>
     <ClInclude Include="Socket\HTTPSocket\HTTPSocket.hpp">
       <Filter>Socket\HTTPSocket</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\RUDP\UDPSocket.h">
+      <Filter>Socket\RUDP</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\RUDP\ikcp.h">
+      <Filter>Socket\RUDP</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
