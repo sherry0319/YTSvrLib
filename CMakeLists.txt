@@ -44,6 +44,8 @@ src/Service/TimerHandler.cpp
 src/Socket/SendBuffer.cpp 
 src/Socket/YTSocketThread.cpp 
 src/Socket/TCPSocket/TCPSocket.cpp
+src/Socket/RUDP/UDPSocket.cpp
+src/Socket/RUDP/ikcp.cpp
 src/Socket/WebSocket/YTWSServer.cpp
 src/Socket/WebSocket/YTWSConnector.cpp
 src/Socket/WebSocket/WSSendBuffer.cpp
@@ -70,7 +72,6 @@ ENDIF()
 
 IF(WITH_REDIS)
   ADD_DEFINITIONS(-DYTSVRLIB_WITH_REDIS)
-  INCLUDE_DIRECTORIES(src/redis/)
 ENDIF()
 
 IF(WITH_HTTP)
