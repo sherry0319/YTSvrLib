@@ -156,6 +156,9 @@ static inline int native_strncasecmp(const char *s1, const char *s2, size_t n)
 #endif
 }
 
+size_t my_snprintf(char* to, size_t n, const char* fmt, ...);
+size_t my_vsnprintf(char *to, size_t n, const char* fmt, va_list ap);
+
 /* Prototypes of normal stringfunctions (with may ours) */
 #ifndef HAVE_STRNLEN
 extern size_t strnlen(const char *s, size_t n);

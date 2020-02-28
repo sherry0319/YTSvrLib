@@ -86,15 +86,33 @@ namespace YTSvrLib
 		return ConnectDB();
 	}
 
-	bool CMYSQLClient::PreLoopFunc()
+	BOOL CMYSQLClient::CheckConnection()
 	{
-		if (FALSE == ConnectDB())
+		if (!IsConnected())
 		{
-			LOG("Connect DB error!");
-			return false;
+			if (ConnectDB())
+			{
+				LOG("Connect DB success!");
+				return TRUE;
+			}
+
+			return FALSE;
 		}
 
-		LOG("Connect DB success!");
+		return TRUE;
+	}
+
+	bool CMYSQLClient::PreLoopFunc()
+	{
+		if (ConnectDB())
+		{
+			LOG("Connect DB success!");
+		}
+		else
+		{
+			LOG("Connect DB error!");
+		}
+
 		return true;
 	}
 
@@ -277,6 +295,15 @@ namespace YTSvrLib
 				m_bNeedReset = FALSE;
 				m_PoolLock.UnLock();
 			}
+
+			CheckConnection();
+
+			if (!IsConnected())
+			{
+				Sleep(1000);
+				continue;
+			}
+
 			pSqlReq = NULL;
 			bResCode = m_hSemaphore.Lock(2000);
 			if (!bResCode)

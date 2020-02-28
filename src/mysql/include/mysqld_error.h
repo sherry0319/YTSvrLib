@@ -4,7 +4,7 @@
 #define MYSQLD_ERROR_INCLUDED
 
 static const int errmsg_section_start[] = { 1000, 3000 };
-static const int errmsg_section_size[] = { 886, 195 };
+static const int errmsg_section_size[] = { 886, 194 };
 
 #define ER_HASHCHK 1000
 #define ER_NISAMCHK 1001
@@ -1086,5 +1086,4 @@ static const int errmsg_section_size[] = { 886, 195 };
 #define ER_GROUP_REPLICATION_MAX_GROUP_SIZE 3191
 #define ER_CANNOT_ADD_FOREIGN_BASE_COL_STORED 3192
 #define ER_TABLE_REFERENCED 3193
-#define ER_PARTITION_ENGINE_DEPRECATED_FOR_TABLE 3194
 #endif
