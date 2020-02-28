@@ -180,6 +180,7 @@ namespace YTSvrLib
 		///Á¬½ÓMYSQL DB
 		BOOL	ConnectDB(void);
 		BOOL	ReconnectDB();
+		BOOL	CheckConnection();
 		BOOL	IsConnected()
 		{
 			return (BOOL) m_DBSys.connected();

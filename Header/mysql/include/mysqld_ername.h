@@ -1080,4 +1080,3 @@
 { "ER_GROUP_REPLICATION_MAX_GROUP_SIZE", 3191, "The START GROUP_REPLICATION command failed since the group already has 9 members." },
 { "ER_CANNOT_ADD_FOREIGN_BASE_COL_STORED", 3192, "Cannot add foreign key on the base column of stored column. " },
 { "ER_TABLE_REFERENCED", 3193, "Cannot complete the operation because table is referenced by another connection." },
-{ "ER_PARTITION_ENGINE_DEPRECATED_FOR_TABLE", 3194, "The partition engine, used by table \'%-.192s.%-.192s\', is deprecated and will be removed in a future release. Please use native partitioning instead." },

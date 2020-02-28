@@ -13,7 +13,7 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA */
 
-/* 
+/*
    Data structures for mysys/my_alloc.c (root memory allocator)
 */
 
@@ -47,24 +47,11 @@ typedef struct st_mem_root
   size_t min_malloc;
   size_t block_size;               /* initial block size */
   unsigned int block_num;          /* allocated blocks counter */
-  /* 
-     first free block in queue test counter (if it exceed 
+  /*
+     first free block in queue test counter (if it exceed
      MAX_BLOCK_USAGE_BEFORE_DROP block will be dropped in 'used' list)
   */
   unsigned int first_block_usage;
-
-  /*
-    Maximum amount of memory this mem_root can hold. A value of 0
-    implies there is no limit.
-  */
-  size_t max_capacity;
-
-  /* Allocated size for this mem_root */
-
-  size_t allocated_size;
-
-  /* Enable this for error reporting if capacity is exceeded */
-  my_bool error_for_capacity_exceeded;
 
   void (*error_handler)(void);
 
