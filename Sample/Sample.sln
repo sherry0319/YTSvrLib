@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
+VisualStudioVersion = 15.0.28307.902
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sample", "Sample\Sample.vcxproj", "{537F1A67-98B2-4C09-B11C-A6E77C6255FA}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sample_CallDB", "Sample_CallDB\Sample_CallDB.vcxproj", "{50582D1A-3354-48A2-B7C4-F59D79B252CE}"
@@ -15,6 +17,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sample_URLWriter", "Sample_
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sample_WebsocketSvr", "Sample_WebSocketSvr\WSGateway.vcxproj", "{48CC01D7-27F1-426F-BC2B-F1220F97B3B6}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sample_UDP", "Sample_UDP\Sample_UDP.vcxproj", "{E65D773A-4F45-42D8-B5E7-9D006471E06B}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -25,8 +29,8 @@ Global
 		Release64|x64 = Release64|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{537F1A67-98B2-4C09-B11C-A6E77C6255FA}.Debug64|x64.ActiveCfg = Release64|x64
-		{537F1A67-98B2-4C09-B11C-A6E77C6255FA}.Debug64|x64.Build.0 = Release64|x64
+		{537F1A67-98B2-4C09-B11C-A6E77C6255FA}.Debug64|x64.ActiveCfg = Debug64|x64
+		{537F1A67-98B2-4C09-B11C-A6E77C6255FA}.Debug64|x64.Build.0 = Debug64|x64
 		{537F1A67-98B2-4C09-B11C-A6E77C6255FA}.Release64|x64.ActiveCfg = Release64|x64
 		{537F1A67-98B2-4C09-B11C-A6E77C6255FA}.Release64|x64.Build.0 = Release64|x64
 		{50582D1A-3354-48A2-B7C4-F59D79B252CE}.Debug64|x64.ActiveCfg = Debug64|x64
@@ -53,8 +57,15 @@ Global
 		{48CC01D7-27F1-426F-BC2B-F1220F97B3B6}.Debug64|x64.Build.0 = Debug64|x64
 		{48CC01D7-27F1-426F-BC2B-F1220F97B3B6}.Release64|x64.ActiveCfg = Release64|x64
 		{48CC01D7-27F1-426F-BC2B-F1220F97B3B6}.Release64|x64.Build.0 = Release64|x64
+		{E65D773A-4F45-42D8-B5E7-9D006471E06B}.Debug64|x64.ActiveCfg = Debug64|x64
+		{E65D773A-4F45-42D8-B5E7-9D006471E06B}.Debug64|x64.Build.0 = Debug64|x64
+		{E65D773A-4F45-42D8-B5E7-9D006471E06B}.Release64|x64.ActiveCfg = Release64|x64
+		{E65D773A-4F45-42D8-B5E7-9D006471E06B}.Release64|x64.Build.0 = Release64|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B1DC71E2-CEC0-4BD7-96C6-832DC27604BB}
 	EndGlobalSection
 EndGlobal
